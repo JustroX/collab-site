@@ -22,7 +22,7 @@ app.get('/',function(req,res)
 
 //getting-started
 app.get('/try/*',function(req,res){
-	var path = req.originalUrl.substr(17,req.originalUrl.length-17);
+	var path = req.originalUrl.substr(5,req.originalUrl.length-5);
 	res.sendFile(pth.join(__dirname,"/try/",path));
 });
 
