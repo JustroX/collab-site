@@ -20,6 +20,20 @@ app.get('/',function(req,res)
 	res.render('pages/welcome')
 });
 
+
+//angular tutorial
+var names = [];
+app.get('/angular-tutorial-1/names',function(req,res)
+{
+	res.send(JSON.stringify(names));
+});
+app.post('/angular-tutorial-1/names',function(req,res)
+{
+	names.push(req.body.form);
+	res.send({ success: "Yey	" });
+});
+
+
 //getting-started
 app.get('/try/*',function(req,res){
 	var path = req.originalUrl.substr(5,req.originalUrl.length-5);
@@ -29,3 +43,6 @@ app.get('/try/*',function(req,res){
 app.listen(PORT , (err)=> {
 	console.log("We are at port "+PORT);
 } );
+
+
+
