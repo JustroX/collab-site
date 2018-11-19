@@ -2,14 +2,38 @@
 <html>
 <head>
   <title>Sandbox</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		function addAnswer () {
+			var msg = $("input:text").val();
+		        $("#answer").append("<li>"+msg +"</li>");
+		        $("input:text").val("");
+		}
+		$(document).ready(function(){
+		    $("#addAns").click(function(){
+				addAnswer();
+		    });
+		    $("input:text").keyup(function (e) {
+			    if (e.keyCode === 13) {
+			       addAnswer();
+			    }
+			});
+		});
+	</script>
 </head>
 <body>
-<h1>Sandbox</h1>
-<p>
-  darryl anne alang
-</p>
 
-<i> she sells seashells by the seashore idk <br> bakit sandbox??? </i>
+<h1>Sandbox</h1>
+
+<p> darryl anne alang </p>
+<p><i> she sells seashells by the seashore idk</i></p>
+<h2> bakit sandbox??? </h2>
+<ul id="answer">
+	<lh>KASI...</lh>
+</ul>
+
+<input type="text">
+<input type="button" id="addAns" value="send">	
 
 </body>
 </html>
