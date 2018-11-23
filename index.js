@@ -40,6 +40,10 @@ app.get('/try/*',function(req,res){
 	res.sendFile(pth.join(__dirname,"/try/",path));
 });
 
+//api route 
+app.use('/api', require('./routes/api.js'));
+
+
 app.listen(PORT , (err)=> {
 	console.log("We are at port "+PORT);
 } );
