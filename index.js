@@ -36,7 +36,7 @@ app.set('view engine','ejs');
 
 app.get('/',function(req,res)
 {
-	res.render('pages/welcome')
+	res.render('pages/index')
 });
 
 //test for passport and mongoose
