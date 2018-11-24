@@ -5,7 +5,7 @@ var router = require('express').Router();
 module.exports = (passport) =>
 {
 	router.get('/', function(req, res){
-		res.render('tutorial-pages/index');
+		res.render('tutorial-pages/index',{ user: "just" });
 	});
 	router.get('/first', function(req, res){
 		res.render('tutorial-pages/first');

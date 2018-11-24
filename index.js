@@ -51,8 +51,9 @@ app.get('/angular-tutorial-1/names',function(req,res)
 });
 app.post('/angular-tutorial-1/names',function(req,res)
 {
+	if(!req.body.form) return res.send({ err: "Invalid Parameter"});
 	names.push(req.body.form);
-	res.send({ success: "Yey	" });
+	res.send({ success: "Done" });
 });
 
 

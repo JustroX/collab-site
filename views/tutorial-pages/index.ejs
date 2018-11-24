@@ -4,21 +4,122 @@
 	<title>User Database</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-
+	<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 </head>
-<body>
-	<div class="container">
+<body ng-app='site'>
+	<div class="container text-center">
+		<br><br><br>
 		<h1>Gumagana bes!</h1>
 	</div>
-	<div class="container">
-		<div class="jumbotron">
-			<div class="container">
-				<h2>List of all users</h2>
-			</div>
-			<div class="container">
-				<h2>Certain User</h2>
+	<br><br><br>
+
+		<div class="container" ng-controller='main' >
+			<div class="container-fluid">
+				<h2>API tester	</h2>
+				<!-- this is for api tutorial -->
+				<div class="container-fluid">
+					<div class="row">
+
+						<div class="col-md-3">
+							<div class="container-fluid">
+								 <h3>Request settings</h3>
+								 <form>
+								 		URL
+								 	<div class="row">
+								 		<div class="col-md-12">
+								 			 <input ng-model='form.url' placeholder="URL" class="form form-control" type="text">
+								 		</div>
+								 	</div>
+								 		method
+								 	<div class="row">
+								 		<div class="col-md-12">
+									 		<select ng-model='form.method' class="form form-control">
+									 			<option value="GET"  selected="selected">GET</option>
+									 			<option value="POST" >POST</option>
+									 			<option value="PUT" >PUT</option>
+									 			<option value="DELETE" >DELETE</option>
+									 		</select>
+								 		</div>
+								 	</div>
+								 </form>
+							</div>
+						</div>
+						<div class="col-md-9">
+
+							<br>
+							Request:
+							<pre><code>Method: {{form.method}}
+URL: {{form.url}}</code></pre>
+							<div ng-if='form.method!="GET"'>
+							Parameter
+								<textarea ng-model='form.json' class="form form-control"></textarea>
+							</div>
+							<br>
+							<button ng-click='run()' class="btn btn-bg btn-success">Run</button> <br>
+							<br><br>
+							Response:
+							<pre><code>{{form.res}}</code></pre>
+							<br>
+						</div>
+					</div>
+					
+				</div>
+				<br><br><br><br>
 			</div>
 		</div>
-	</div>
+
+		<script type="text/javascript">
+			var app = angular.module("site",[]);
+			app.controller("main",function($scope,$http)
+			{
+				$scope.form = { url: '' , method :'GET' , json: '{}' , res: '' };
+				$scope.run = () =>
+				{
+					if( $scope.form.method == "GET" )
+						$http.get($scope.form.url).then($scope.setdata1);
+					else
+					{
+						if($scope.validate())
+						{
+
+							if( $scope.form.method == "POST" )
+								$http.post($scope.form.url, JSON.parse($scope.form.json) ).then($scope.setdata);
+							if( $scope.form.method == "PUT" )
+								$http.put($scope.form.url, JSON.parse($scope.form.json) ).then($scope.setdata);
+							if( $scope.form.method == "DELETE" )
+								$http.delete($scope.form.url, JSON.parse($scope.form.json) ).then($scope.setdata);
+						}
+					}
+				}
+				$scope.setdata1 =(res)=>
+				{
+					$scope.form.res = JSON.stringify(res.data);
+				}
+				$scope.setdata =(res)=>
+				{
+					$scope.form.res = JSON.stringify(res.data);
+				}
+				$scope.validate = ()=>
+				{
+					if(IsJsonString($scope.form.json)) 
+					{
+						return true;
+					}
+					else
+					{
+						alert('Invalid JSON Parameter');
+						return false;
+					}
+				}
+			});
+			function IsJsonString(str) {
+			    try {
+			        JSON.parse(str);
+			    } catch (e) {
+			        return false;
+			    }
+			    return true;
+			}
+		</script>
 </body>
 </html>
