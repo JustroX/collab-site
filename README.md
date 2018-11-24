@@ -32,6 +32,7 @@ Closed-group learning platform for Bicolano students.
  2. Rhunzted Cyrus Completo
  3. Jose O. Pan Jr.
  4. Levi Gamba
+ 5. Kyle Martin Villagen
  
  ##### Back-end Developers
  1. Jude Wincel P. Marino
