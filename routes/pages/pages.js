@@ -6,6 +6,10 @@ module.exports = function(passport)
 	{
 		res.render('pages/welcome');
 	});
+	router.get('/dashboard',(req,res)=>
+	{
+		res.render('pages/dashboard');
+	});
 
 	router.use('/tutorial', require('./tutorial/tutorial.js')(passport) )
 	return router;
