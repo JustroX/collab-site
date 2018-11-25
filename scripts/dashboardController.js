@@ -4,6 +4,10 @@ app.controller("dashboardController",function($scope,$http)
 	setTimeout(
 		function()
 		{
+			
+			  $('pre code').each(function(i, block) {
+			    hljs.highlightBlock(block);
+			  });
 			hljs.initHighlightingOnLoad();
 			// hljs.configure({   // optionally configure hljs
 			//   languages: ['javascript', 'ruby', 'python']

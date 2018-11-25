@@ -1,8 +1,3 @@
-$(document).ready(function() {
-  $('pre code').each(function(i, block) {
-    hljs.highlightBlock(block);
-  });
-});
 
 var app = angular.module("site", ["ngRoute"]);
 
