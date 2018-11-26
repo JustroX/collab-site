@@ -9,7 +9,11 @@ router.get('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-
+	let user = req.params.id;
+	User.findById(user,'-private -__v ' ,function(err,user)
+	{
+		res.send(user);
+	});
 });
 
 router.post('/', function(req, res){
