@@ -35,7 +35,6 @@
 			        <li><a class="uk-padding-remove" href="#">Using Math</a></li>
 			        <li><a class="uk-padding-remove" href="#">Game development</a></li>
 			    </ul>
-				
 			</div>
 
 		</div>
@@ -71,8 +70,8 @@
 
 
 			<hr class="uk-divider-icon">
-			<br><br>
 			<div class="uk-text-center uk-text-muted uk-text-center">Here's what your friends are up to</div>			
+			<br>
 
 			<div ng-repeat='i in [1,2,3,4,5]'>
 				<div class="uk-card uk-card-hover uk-card-body">
@@ -116,6 +115,24 @@ print('Yehey')
 		</div>
 		<div class="uk-width-1-4">
 			
+			<div uk-sticky="offset: 100">
+				<div class="uk-padding">
+					<small>
+						<ul uk-accordion>
+						    <li class="uk-open">
+						        <a class="uk-accordion-title" href="#">  <small><span uk-icon="icon: user" class="uk-icon-button"></span> Active Friends </small> </a>
+						        <div class="uk-accordion-content">
+								    <ul class="uk-nav uk-nav-default">
+								        <li><a href="#"><span class="uk-badge uk-label-success" style="padding: 0px">1</span> &nbsp;&nbsp;Justine Che T. Romero</a></li>
+								        <li><a href="#"><span class="uk-badge uk-label-success" style="padding: 0px"></span> &nbsp;&nbsp;Darryl Anne D. Alang</a></li>
+								        <li><a href="#"><span class="uk-badge uk-label-danger" style="padding: 0px">7</span> &nbsp;&nbsp;Gerard Marcial Sopsop</a></li>
+								    </ul>
+						        </div>
+						    </li>
+						</ul>
+					</small>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

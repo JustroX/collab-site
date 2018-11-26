@@ -64,4 +64,12 @@ UserSchema.methods.validPassword  = function(password)
 	return bcrypt.compareSync(password,this.private.local.password);
 }
 
+UserSchema.methods.validateInputs = function()
+{
+	return this.name && this.birthday && 
+		(
+			( this.private.local.email && this.private.local.password  )
+		) 
+}
+
 module.exports = mongoose.model('User', UserSchema);
