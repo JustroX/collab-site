@@ -17,11 +17,11 @@ var UserSchema = mongoose.Schema({
    // likes : [post_id],
    // shares : [post_id],
 
-   // modules: [module_id],
-   // articles : [article_id],
-   // submissions: [submission_id],  
+   // - modules: [module_id],
+   // - articles : [article_id],
+   // - submissions: [submission_id],  
 
-   // badges: [badge_id], 
+   // - badges: [badge_id], 
    // follows: [user_id],
    // followed_by : [user_id]
 
