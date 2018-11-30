@@ -50,7 +50,7 @@
 							Request:
 							<pre><code>Method: {{form.method}}
 URL: {{form.url}}</code></pre>
-							<div ng-if='form.method!="GET"'>
+							<div ng-if='form.method!="GET" and form.method!="DELETE"'>
 							Parameter
 								<textarea ng-model='form.json' class="form form-control"></textarea>
 							</div>
@@ -78,6 +78,9 @@ URL: {{form.url}}</code></pre>
 					if( $scope.form.method == "GET" )
 						$http.get($scope.form.url).then($scope.setdata1);
 					else
+					if( $scope.form.method == "DELETE" )
+						$http.delete($scope.form.url).then($scope.setdata);
+					else
 					{
 						if($scope.validate())
 						{
@@ -86,8 +89,6 @@ URL: {{form.url}}</code></pre>
 								$http.post($scope.form.url, JSON.parse($scope.form.json) ).then($scope.setdata);
 							if( $scope.form.method == "PUT" )
 								$http.put($scope.form.url, JSON.parse($scope.form.json) ).then($scope.setdata);
-							if( $scope.form.method == "DELETE" )
-								$http.delete($scope.form.url, JSON.parse($scope.form.json) ).then($scope.setdata);
 						}
 					}
 				}

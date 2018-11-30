@@ -20,16 +20,16 @@ exports.fields  =function(req,PERMISSIONS)
 
 exports.sort = function(req,PERMISSIONS)
 {
-	let sort = [];
+	let sort = {};
 	if(req.query.sort)
 	{
-		var q_fields = req.query.fields.split(",");
+		var q_fields = req.query.sort.split(",");
 		for(let i of q_fields)
 		{
-			var str = (i[0]='-')? i.substring(1) : i;
-			if(PERMISSIONS[str] && PERMISSIONS[str]&1)
+			var str = (i[0]=='-')? i.substring(1) : i;
+			if(PERMISSIONS[str])
 			{
-				sort.push({ field: str, desc: i[0]=='-'  });
+				sort[str] = 1 - 2*(i[0]=='-');
 			}
 		}
 	}
@@ -73,4 +73,35 @@ exports.filter = function(req,PERMISSIONS)
 		}
 	}
 	return query;
+}
+
+
+exports.sanitize = function(req,PERMISSIONS)
+{
+	let body = req.body;
+
+	let query = {};
+
+	for(let i in body)
+	{
+		if(PERMISSIONS[i]&4)
+		{
+			query[i] = body[i];
+		}
+	}
+
+	return query;
+}
+
+exports.hide_fields = function(obj,PERMISSIONS)
+{
+	let a = {};
+	for(let i in obj)
+	{
+		if(PERMISSIONS[i])
+		{
+			a[i] = obj[i];
+		}
+	}
+	return a;
 }

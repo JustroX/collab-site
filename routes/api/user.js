@@ -37,7 +37,20 @@ router.get('/', function(req, res){
 	let query = parser.filter(req,PERMISSIONS);
 	let options = req.query.option;
 
-	User.find(query,fields.join(' '),function(err,docs)
+	let limit =  (req.query.limit || 10)-1+1;
+	let offset = (req.query.offset || 0)-1+1;
+
+	if(options)
+	{
+		let opt = {};
+		User.count({},function(err,count)
+		{
+			opt.collectionCount = count;
+			res.send(opt);
+		});
+	}
+	else
+	User.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -45,8 +58,12 @@ router.get('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-	let user = req.params.id;
-	User.findById(user,'-private -__v ' ,function(err,user)
+	let user_id = req.params.id;
+	let fields = parser.fields(req,PERMISSIONS);
+	let sort = parser.sort(req,PERMISSIONS);
+	let options = req.query.option;
+
+	User.findById(user_id,fields.join(' ') ,function(err,user)
 	{
 		res.send(user);
 	});
@@ -79,16 +96,39 @@ router.post('/', function(req, res){
 	}
 	else
 		res.send({ code: 400, err: 'JSON syntax is wrong.'});
-
-
 });
 
-router.put('/', function(req, res){
+router.put('/:id', function(req, res){
+	let user_id = req.params.id;
+	let query = parser.sanitize(req,PERMISSIONS);
 
+	User.findById(user_id, function(err, user)
+	{
+		if(err) throw err;
+
+		for(let i in query)
+		{
+			user[i] = query[i];
+		}
+		user.save(function(err, updatedUser)
+		{
+			if(err) throw err;
+
+			let output = parser.hide_fields(updatedUser,PERMISSIONS);
+
+			res.send(output);
+		});
+	});
 });
 
-router.delete('/', function(req, res){
-
+router.delete('/:id', function(req, res){
+	let user_id = req.params.id;
+	User.deleteOne({ _id: user_id },function(err)
+	{
+		if(err) return res.send({ err : "Unknown Error" });
+		else
+			return res.send({ success: "Delete successful" })
+	})
 });
 
 module.exports = router;
