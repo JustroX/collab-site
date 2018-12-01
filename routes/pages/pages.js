@@ -10,6 +10,14 @@ module.exports = function(passport)
 	{
 		res.render('pages/dashboard');
 	});
+	router.get('/profile',(req,res)=>
+	{
+		res.render('pages/profile');
+	});
+	router.get('/register',(req,res)=>
+	{
+		res.render('pages/register');
+	});
 
 	router.use('/tutorial', require('./tutorial/tutorial.js')(passport) )
 	return router;
