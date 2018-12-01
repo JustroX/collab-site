@@ -21,6 +21,7 @@ var parser = require('./parse_params.js');
 
 var PERMISSIONS = 
 {	
+   _id : 1,
    name: 7,
    description: 7,
    ranks: 5,
@@ -34,13 +35,11 @@ var PERMISSIONS =
 }
 
 router.post('/', function(req, res){
-
-	/*
-		authenticate via passport
-		check if legit rank
-	*/
+	let user   = req.session.passport.user;
+	if(!user) return res.send({ message: 'Please login to continue'});
 
 	let body = req.body;
+	body.created_by = user ;
 
 	let complete = true;
 	for(let i in PERMISSIONS)
@@ -62,16 +61,18 @@ router.post('/', function(req, res){
 			guild[i] = body[i];
 		}
 	}
-	
+	guild.ranks = [ { user : user , 
+   				permission_settings : 3,
+   				permission_members  : 7,
+   				permission_posts    : 1 } ];
+
 
 	guild.save(function(err)
 	{
 		if(err) throw err;
 		let output = parser.hide_fields(guild,PERMISSIONS);
-		return res.send({ guild : output });
+		return res.send(output);
 	});
-
-
 });
 
 router.get('/', function(req, res){
@@ -109,18 +110,39 @@ router.get('/:id', function(req, res){
 
 	Guild.findById(guild_id,fields.join(' ') ,function(err,guild)
 	{
+		if(!guild) return res.send({ code: 500 , message: 'Guild not found.' });
 		res.send(guild);
 	});
 });
 
 
 router.put('/:id', function(req, res){
+
+	let user   = req.session.passport.user;
+	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+
+
+
+
 	let guild_id = req.params.id;
 	let query = parser.sanitize(req,PERMISSIONS);
 
 	Guild.findById(guild_id, function(err, guild)
 	{
-		if(err) throw err;
+		if(err) throw err;	
+
+		if(!guild) return res.send({ code: 500 , message: 'Guild not found.' });
+
+		let find = false;
+		for(let i in guild.ranks)
+		{
+			let cur = guild.ranks[i];
+			if( cur.user==user && (cur.permission_settings & 1) )
+			{
+				find = true
+			}
+		}
+		if(!find) return res.send({ code: 403, message: "Permission Denied"});
 
 		for(let i in query)
 		{
@@ -135,18 +157,37 @@ router.put('/:id', function(req, res){
 			res.send(output);
 		});
 	});
-
 });
 
 
 router.delete('/:id', function(req, res){
 	let guild_id = req.params.id;
-	Guild.deleteOne({ _id: guild_id },function(err)
+	let user   = req.session.passport.user;
+	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+	
+
+	Guild.findById(guild_id, function(err, guild)
 	{
-		if(err) return res.send({ err : "Unknown Error" });
-		else
-			return res.send({ success: "Delete successful" })
-	})
+		if(err) return res.send({ err : "Databasse Error" });
+		if(!guild) return res.send({ code: 500 , message: 'Guild not found.' });
+		let find = false;
+		for(let i in guild.ranks)
+		{
+			let cur = guild.ranks[i];
+			if( cur.user==user && (cur.permission_settings & 2) )
+			{
+				find = true
+			}
+		}
+		if(!find) return res.send({ code: 403, message: "Permission Denied"});
+		
+		Guild.deleteOne({ _id: guild_id },function(err)
+		{
+			if(err) return res.send({ err : "Databasse Error" });
+			return res.send({ message: "Delete successful" })
+
+		});
+	});
 });
 
 module.exports = router;
