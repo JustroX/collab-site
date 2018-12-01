@@ -95,7 +95,7 @@ router.post('/', function(req, res){
 		});
 	}
 	else
-		res.send({ code: 400, err: 'JSON syntax is wrong.'});
+		res.send({ code: 400, err: 'Invalid request.'});
 });
 
 router.put('/:id', function(req, res){

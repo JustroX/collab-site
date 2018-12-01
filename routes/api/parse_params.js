@@ -98,7 +98,7 @@ exports.hide_fields = function(obj,PERMISSIONS)
 	let a = {};
 	for(let i in obj)
 	{
-		if(PERMISSIONS[i])
+		if(PERMISSIONS[i]&1)
 		{
 			a[i] = obj[i];
 		}

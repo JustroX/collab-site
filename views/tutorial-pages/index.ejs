@@ -50,7 +50,7 @@
 							Request:
 							<pre><code>Method: {{form.method}}
 URL: {{form.url}}</code></pre>
-							<div ng-if='form.method!="GET" and form.method!="DELETE"'>
+							<div ng-if='form.method!="GET" && form.method!="DELETE"'>
 							Parameter
 								<textarea ng-model='form.json' class="form form-control"></textarea>
 							</div>
