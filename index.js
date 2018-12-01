@@ -18,6 +18,7 @@ var session = require('express-session');
 var urlencodedParser = bodyParser.urlencoded({extended: true});
 
 var configDB = require('./config/database.js');
+var MongoStore = require('connect-mongo')(session);
 mongoose.connect(configDB.url);
 
 require('./config/passport.js')(passport);
@@ -27,7 +28,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 //required for passport
-app.use(session({ secret : '18BB2B8E71D3D158F759B6A7C98D0EC2B3BF80189296C0198FD36761781FDE4C' }));
+app.use(session({ secret : '18BB2B8E71D3D158F759B6A7C98D0EC2B3BF80189296C0198FD36761781FDE4C' ,
+    maxAge: new Date(Date.now() + 3600000),
+    store: new MongoStore({mongooseConnection:mongoose.connection}) }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
