@@ -10,20 +10,35 @@ var UserSchema = mongoose.Schema({
    school: String,
    privileges : [ String ],
 
-   // guilds: [ { type: Schema.Types.ObjectId, ref : 'Guild' } ],
-   // // *guilds_created: [ guild_id ],     
+   admin_user_permissions : Number,
+   admin_guild_permissions : Number, 
+   /*
+		   add edit delete
+		0    0    0      0
+		1    1    0      0
+		2    0    1      0
+		3    1    1      0
+		4    0    0      1
+		5    1    0      1
+		6    0    1      1
+		7    1    1      1
+   */
 
-   // posts: [ { type: Schema.Types.ObjectId, ref : 'Post' } ],
-   // likes : [post_id],
-   // shares : [post_id],
 
-   // - modules: [module_id],
-   // - articles : [article_id],
-   // - submissions: [submission_id],  
+   guilds: [ Schema.Types.ObjectId ],
+   // *guilds_created: [ guild_id ],     
 
-   // - badges: [badge_id], 
-   // follows: [user_id],
-   // followed_by : [user_id]
+   	posts: [ Schema.Types.ObjectId ],
+   	likes : [Schema.Types.ObjectId],
+   	shares : [Schema.Types.ObjectId],
+
+   	modules: [Schema.Types.ObjectId],
+   	articles : [Schema.Types.ObjectId],
+   	submissions: [Schema.Types.ObjectId],  
+
+	badges: [Schema.Types.ObjectId], 
+   	follows: [Schema.Types.ObjectId],
+   	followed_by : [Schema.Types.ObjectId],
 
    private:
    {

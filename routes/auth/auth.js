@@ -4,10 +4,14 @@ var router = require('express').Router();
 
 module.exports = (passport) =>
 {
+	router.get('/login',function(req,res)
+	{
+		res.send(req.isAuthenticated())
+	});
 	router.post('/login',function(req,res,next)
 	{
 		if(req.isAuthenticated())
-			return res.send('Already authenticated');
+			return res.send({err:'Already authenticated'});
 		next();
 	}
 	,function(req,res,next)
@@ -26,9 +30,9 @@ module.exports = (passport) =>
 			}
 			else
 			if(info)
-				res.send(info);
+				res.send({ err: info});
 			else
-				res.send(req.flash('loginMessage')[0])
+				res.send({err:req.flash('loginMessage')[0]})
 			next()
 		})(req,res,next);
 	});

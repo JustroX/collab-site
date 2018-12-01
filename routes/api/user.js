@@ -70,6 +70,10 @@ router.get('/:id', function(req, res){
 });
 
 router.post('/', function(req, res){
+
+	//auntenticate admin settings
+	
+
 	var body = req.body;
 	var user = new User();
 

@@ -1,13 +1,19 @@
-
-app.controller("dashboardController",function($scope,$http)
+app.controller("dashboardController",function($scope,$http,$location)
 {
+
+	$http.get('/auth/login').then((res)=>
+	{
+		if(!(res.data === 'true'))
+			$location.path("/");
+	});
+
 	setTimeout(
 		function()
 		{
 			
-			  $('pre code').each(function(i, block) {
+			$('pre code').each(function(i, block) {
 			    hljs.highlightBlock(block);
-			  });
+			});
 			hljs.initHighlightingOnLoad();
 			// hljs.configure({   // optionally configure hljs
 			//   languages: ['javascript', 'ruby', 'python']

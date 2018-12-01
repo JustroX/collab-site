@@ -1,4 +1,4 @@
-<nav class="uk-navbar-container uk-margin" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky" uk-navbar>
+<nav ng-controller='navbarController' class="uk-navbar-container uk-margin" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky" uk-navbar>
     <div class="uk-navbar-center">
 
         <div class="uk-navbar-center-left"><div>
@@ -23,7 +23,7 @@
                             <li><a href="#">Privacy Policy</a></li>
                             <li><a href="#">Terms and Agreements</a></li>
                             <hr>
-                            <li><a href="#">Logout</a></li>
+                            <li><a ng-click='logout()' href="javascript:void(0)" >Logout</a></li>
                         </ul>
                     </div>
                 </li>

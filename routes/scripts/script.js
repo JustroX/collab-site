@@ -3,17 +3,10 @@ var pth = require('path');
 
 module.exports = function(passport)
 {
-	router.get('/main.js',(req,res)=>
+	router.get('/*',(req,res)=>
 	{
-		res.sendFile(pth.join(__dirname,"../../scripts/main.js"));
-	});
-	router.get('/loginController.js',(req,res)=>
-	{
-		res.sendFile(pth.join(__dirname,"../../scripts/loginController.js"));
-	});
-	router.get('/dashboardController.js',(req,res)=>
-	{
-		res.sendFile(pth.join(__dirname,"../../scripts/dashboardController.js"));
+		var path = req.originalUrl.substr(9,req.originalUrl.length-9);
+		res.sendFile(pth.join(__dirname,"/../../scripts/",path));
 	});
 	return router;
 };
