@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var Guild = require('../../models/guild.js');
-var parser = require('./parse_params.js');
+var lib = require('./api-helper.js');
 
 /*
 	In group permissions
@@ -31,27 +31,14 @@ var PERMISSIONS =
    posts: 1,
    badges_required: 1,
 
-   created_by : 3
+   created_by : 1
 }
 
-router.post('/', function(req, res){
-	let user   = req.session.passport.user;
-	if(!user) return res.send({ message: 'Please login to continue'});
+router.post('/', lib.logged,  function(req, res){
 
 	let body = req.body;
-	body.created_by = user ;
-
-	let complete = true;
-	for(let i in PERMISSIONS)
-	{
-		if(PERMISSIONS[i]&2)
-		{
-			complete &= body[i] != null
-		}
-	}
-
-	if(!complete)
-		return res.send({ code: 400, err: "Invalid request." });
+	
+	if(! lib.validate_fields(req,res,PERMISSIONS)) return;
 
 	let guild = new Guild();
 	for(let i in PERMISSIONS)
@@ -61,7 +48,8 @@ router.post('/', function(req, res){
 			guild[i] = body[i];
 		}
 	}
-	guild.ranks = [ { user : user , 
+	guild.created_by = req.session.passport.user ;
+	guild.ranks = [ { user : req.session.passport.user  , 
    				permission_settings : 3,
    				permission_members  : 7,
    				permission_posts    : 1 } ];
@@ -70,16 +58,16 @@ router.post('/', function(req, res){
 	guild.save(function(err)
 	{
 		if(err) throw err;
-		let output = parser.hide_fields(guild,PERMISSIONS);
+		let output = lib.hide_fields(guild,PERMISSIONS);
 		return res.send(output);
 	});
 });
 
 router.get('/', function(req, res){
 
-	let fields = parser.fields(req,PERMISSIONS);
-	let sort = parser.sort(req,PERMISSIONS);
-	let query = parser.filter(req,PERMISSIONS);
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
+	let query = lib.filter(req,PERMISSIONS);
 	let options = req.query.option;
 
 	let limit =  (req.query.limit || 10)-1+1;
@@ -104,8 +92,8 @@ router.get('/', function(req, res){
 
 router.get('/:id', function(req, res){
 	let guild_id = req.params.id;
-	let fields = parser.fields(req,PERMISSIONS);
-	let sort = parser.sort(req,PERMISSIONS);
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
 	Guild.findById(guild_id,fields.join(' ') ,function(err,guild)
@@ -116,16 +104,15 @@ router.get('/:id', function(req, res){
 });
 
 
-router.put('/:id', function(req, res){
+router.put('/:id', lib.logged , function(req, res){
 
 	let user   = req.session.passport.user;
-	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
 
 
 
 
 	let guild_id = req.params.id;
-	let query = parser.sanitize(req,PERMISSIONS);
+	let query = lib.sanitize(req,PERMISSIONS);
 
 	Guild.findById(guild_id, function(err, guild)
 	{
@@ -152,7 +139,7 @@ router.put('/:id', function(req, res){
 		{
 			if(err) throw err;
 
-			let output = parser.hide_fields(updatedUser,PERMISSIONS);
+			let output = lib.hide_fields(updatedUser,PERMISSIONS);
 
 			res.send(output);
 		});

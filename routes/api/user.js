@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var User = require('../../models/user.js');
-var parser = require('./parse_params.js');
+var lib = require('./api-helper.js');
 
 
 var PERMISSIONS = 
@@ -32,9 +32,9 @@ var PERMISSIONS =
 
 router.get('/', function(req, res){
 
-	let fields = parser.fields(req,PERMISSIONS);
-	let sort = parser.sort(req,PERMISSIONS);
-	let query = parser.filter(req,PERMISSIONS);
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
+	let query = lib.filter(req,PERMISSIONS);
 	let options = req.query.option;
 
 	let limit =  (req.query.limit || 10)-1+1;
@@ -59,8 +59,8 @@ router.get('/', function(req, res){
 
 router.get('/:id', function(req, res){
 	let user_id = req.params.id;
-	let fields = parser.fields(req,PERMISSIONS);
-	let sort = parser.sort(req,PERMISSIONS);
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
 	User.findById(user_id,fields.join(' ') ,function(err,user)
@@ -104,7 +104,7 @@ router.post('/', function(req, res){
 
 router.put('/:id', function(req, res){
 	let user_id = req.params.id;
-	let query = parser.sanitize(req,PERMISSIONS);
+	let query = lib.sanitize(req,PERMISSIONS);
 
 	User.findById(user_id, function(err, user)
 	{
@@ -118,7 +118,7 @@ router.put('/:id', function(req, res){
 		{
 			if(err) throw err;
 
-			let output = parser.hide_fields(updatedUser,PERMISSIONS);
+			let output = lib.hide_fields(updatedUser,PERMISSIONS);
 
 			res.send(output);
 		});

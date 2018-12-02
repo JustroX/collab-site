@@ -105,3 +105,29 @@ exports.hide_fields = function(obj,PERMISSIONS)
 	}
 	return a;
 }
+
+exports.logged	 = function(req,res,next)
+{
+	let user   = req.session.passport.user;
+	if(!user)	
+		return res.send({ message: 'Please login to continue'})
+	next();
+}
+
+exports.validate_fields = function(req,res,PERMISSIONS)
+{
+	let body = req.body;
+
+	let complete = true;
+	for(let i in PERMISSIONS)
+	{
+		if(PERMISSIONS[i]&2)
+		{
+			complete &= body[i] != null
+		}
+	}
+
+	if(!complete)
+		res.send({ code: 400, err: "Invalid request." });
+	return complete
+}
