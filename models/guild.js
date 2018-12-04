@@ -28,6 +28,17 @@ var Schema = mongoose.Schema;
    0      0
    1      1
 
+   Modules
+   - add edit  delete
+   0    0   0       0
+   1    1   0       0
+   2    0   1       0
+   3    1   1       0
+   4    0   0       1
+   5    1   0       1
+   6    0   1       1
+   7    1   1       1
+
 
 
 */
@@ -39,10 +50,12 @@ var GuildSchema = mongoose.Schema({
    description: String,
    ranks: [ 
    			{ 
-   				user : String,
+   				name : String,
+               description: String,
    				permission_settings : Number,
    				permission_members  : Number,
-   				permission_posts    : Number,
+               permission_posts    : Number,
+               permission_modules    : Number,
    			} ],
 
    users: [ { user: Schema.Types.ObjectId , ranks: [] } ],
@@ -54,12 +67,36 @@ var GuildSchema = mongoose.Schema({
   
 });
 
-GuildSchema.methods.validateInputs = function()
+GuildSchema.methods.is_permitted_module = function(user,num)
 {
-	return this.name && this.birthday && 
-		(
-			( this.private.local.email && this.private.local.password  )
-		) 
+   let permited = false;
+   let guild = this;
+   for( let i in guild.users )
+   {
+      if(guild.users[i].user.equals(user))
+      {
+         let done = false
+         for(let j in guild.ranks)
+         {
+            for(let k in guild.users[i].ranks)
+            {
+               if(guild.users[i].ranks[k] == guild.ranks[j].name)
+               {
+                  let permission_modules =  guild.ranks[j].permission_modules;
+                  permited = permission_modules & num
+                  done = true;
+                  break;
+               }
+            }
+            if(done)
+               break
+
+         }
+
+         break;
+      }
+   }
+   return permited;
 }
 
 module.exports = mongoose.model('Guild', GuildSchema);

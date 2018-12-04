@@ -3,7 +3,7 @@ app.controller("loginController", function($scope,$location,$http)
 
 	$http.get('/auth/login').then((res)=>
 	{
-		if(res.data === 'true')
+		if(res.data == true)
 			$location.path("/dashboard");
 	});
 	let form = 

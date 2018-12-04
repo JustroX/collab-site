@@ -49,10 +49,12 @@ router.post('/', lib.logged,  function(req, res){
 		}
 	}
 	guild.created_by = req.session.passport.user ;
-	guild.ranks = [ { user : req.session.passport.user  , 
+	guild.ranks = [ { name: "admin"  , 
    				permission_settings : 3,
    				permission_members  : 7,
-   				permission_posts    : 1 } ];
+   				permission_posts    : 1,
+   				permission_modules    : 7 } ];
+   	guild.users = [ { user: req.session.passport.user, ranks: ["admin"] } ] 
 
 
 	guild.save(function(err)
