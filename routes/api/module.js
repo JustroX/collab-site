@@ -11,7 +11,7 @@ var PERMISSIONS  =
 	badges: 5,
 	articles: 5,
 	challenges:5,
-	users: 5
+	users: 1
   
 }
 

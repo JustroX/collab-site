@@ -13,7 +13,8 @@ var PERMISSIONS  =
 	testcases: 0,
 	module: 3,
 	authors: 1,
-  
+	output_type: 5,
+ 	submissions: 1 
 }
 
 router.post('/', lib.logged, function(req, res){
@@ -42,6 +43,7 @@ router.post('/', lib.logged, function(req, res){
 				}
 			}
 			challenge.authors = [req.session.passport.user];
+			challenge.output_type  =0;
 
 			challenge.save(function(err)
 			{
