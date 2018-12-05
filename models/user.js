@@ -24,6 +24,19 @@ var UserSchema = mongoose.Schema({
 		7    1    1      1
    */
 
+   badge_permission : Number,
+   /*
+		   add edit delete
+		0    0    0      0
+		1    1    0      0
+		2    0    1      0
+		3    1    1      0
+		4    0    0      1
+		5    1    0      1
+		6    0    1      1
+		7    1    1      1
+   */
+
 
    guilds: [ Schema.Types.ObjectId ],
    // *guilds_created: [ guild_id ],     
