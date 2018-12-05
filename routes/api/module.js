@@ -76,12 +76,12 @@ router.get('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-	let guild_id = req.params.id;
+	let mod_id = req.params.id;
 	let fields = lib.fields(req,PERMISSIONS);
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Module.findById(guild_id,fields.join(' ') ,function(err,mod)
+	Module.findById(mod_id,fields.join(' ') ,function(err,mod)
 	{
 		if(!mod) return res.send({ code: 500 , message: 'Module not found.' });
 		res.send(mod);
