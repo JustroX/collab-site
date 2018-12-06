@@ -1,6 +1,6 @@
 <div ng-include="'pages/shared/navbar'" ></div>
 
-<div ng-controller='dashboardController'>
+<div ng-controller='guildController'>
 	<br><br>
 	<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
 		<div class="uk-padding uk-padding-large uk-padding-remove-top uk-width-1-4">
@@ -8,7 +8,7 @@
 			<div ng-include="'pages/dashboard/guild-navigation'" ></div>
 		</div>
 		<div class="uk-width-1-2">	
-			<div onload="onload_newsfeed()" ng-include="'pages/dashboard/newsfeed'" ></div>			
+			<div onload="onload_list()" ng-include="'pages/guild/list'" ></div>			
 		</div>
 		<div class="uk-width-1-4">
 			<div ng-include="'pages/dashboard/contacts'" ></div>			

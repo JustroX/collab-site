@@ -13,6 +13,9 @@ app.config(function($routeProvider) {
     .when("/dashboard", {
         templateUrl : "/pages/dashboard"
     })
+    .when("/guild", {
+        templateUrl : "/pages/guild"
+    })
     .when("/profile", {
         templateUrl : "/pages/profile"
     })

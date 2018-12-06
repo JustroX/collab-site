@@ -1,0 +1,72 @@
+<div ng-show='false'  class="uk-card uk-card-body uk-card-default">
+				<h2>Write something</h2>
+				<input class="uk-input" type="" placeholder="Write something ...">
+			</div>
+			<div ng-show='false' class="uk-card uk-card-default uk-card-hover uk-card-body uk-padding">
+				<!-- Create the editor container -->
+				<h2>Write something</h2>
+				<div id="editor" style="height: 20vh;">
+				  <p>Write something ...</p>
+				</div>
+				<br>
+				<button class="uk-button uk-button-danger ">Post</button>
+			</div>
+			
+			<hr class="uk-divider-icon">
+			
+			<div class="uk-text-center uk-card-default uk-card uk-card-hover uk-card-body">
+				<span uk-icon="icon: pencil; ratio: 4.3"></span>
+				<h2>Have anything in mind?</h2>
+				<a href="#">
+					<span uk-icon="icon: plus-circle; ratio: 1.3"></span>
+					<i>Write something</i>
+				</a>
+				<br>
+				<br>
+				<br><br>
+			</div>
+
+
+
+			<hr class="uk-divider-icon">
+			<div class="uk-text-center uk-text-muted uk-text-center">Here's what your friends are up to</div>			
+			<br>
+
+			<div ng-repeat='i in [1,2,3,4,5]'>
+				<div class="uk-card uk-card-default uk-card-hover uk-card-body">
+					<article class="uk-article">
+						<div>
+				    		<img data-src="https://storage.googleapis.com/neris/public/images/types/faces/INFJ-female.svg" width="50px" height="50px" uk-img>
+				    		<b class="uk-ali">Random Name</b> <small> <i><a href="">@randomName</a></i> &middot; 5hrs </small>							
+						</div>
+					    <p>
+					    	<p>
+					    		Random lines that won't make sense. <br>
+					    		I can put edit lines of code.
+					    		<pre style=" padding: 0px"><code class="lang-python">import wew
+
+print('Yehey')
+
+</code></pre>
+								<b>Bold</b> , <i>Italic</i> and <small>font</small> <big> sizes</big>
+					    	</p>
+				            <!-- <br><a class="uk-button uk-button-text" href="#">Read more</a> -->
+					    </p>
+					    <div class="uk-grid-small uk-child-width-auto" uk-grid>
+					        <div>
+					            <a class=" " href="#"> <span uk-icon="icon: heart"></span> </a>
+					        </div>
+					        <div>
+					            <a class=" " href="#"> <span uk-icon="icon: refresh"></span> </a>
+					        </div>
+					        <div>
+					          	<a class=" " href="#"> <span uk-icon="icon: comment"></span> </a>
+					        </div>
+					    </div>
+					</article>
+				</div>
+				<hr>
+				<br>
+				
+			</div>
+
