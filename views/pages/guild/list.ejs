@@ -1,47 +1,94 @@
 <div class="uk-text-muted">YOUR GUILDS</div>
 <br><br>
-<div class="uk-child-width-1-2@s uk-grid-match" uk-grid>
-    <div>
-        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-            <h3 class="uk-card-title">Default</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-        </div>
-    </div>
-    <div>
-        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-            <h3 class="uk-card-title">Default</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-        </div>
-    </div>
-    <div>
-        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-            <h3 class="uk-card-title">Default</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-        </div>
-    </div>
-    <div>
-        <div class="uk-card uk-card-secondary uk-card-hover uk-card-body ">
-            <div style="text-align: center;">
-                <h3 style="text-align: center; margin-bottom: 10px" class="uk-card-title uk-align-center">See More</h3>
-                <span uk-icon="icon: plus-circle; ratio: 2"></span>
-            </div>
 
+
+<div ng-repeat='i in [1,2,3]'>
+    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-3@s uk-margin" uk-grid>
+        <div class="uk-card-media-left uk-cover-container">
+            <img src="/assets/guild-blank.png" alt="" uk-cover>
+            <canvas width="100" height="100"></canvas>
+        </div>
+        <div class="uk-width-expand">
+            <div class="uk-card-body">
+                <h3 class="uk-card-title">Introduction Guild</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+            </div>
         </div>
     </div>
+    <br>
+</div>
+<div style="text-align: center;">
+    <button class="uk-button uk-button-secondary">SHOW MORE</button>
 </div>
 
-<br><br><br>
+<br>
 <hr class="uk-divider-icon">
 <div class="uk-text-center uk-text-muted uk-text-center "><a class="uk-text-muted" href="">DISCOVER MORE GUILDS</a></div>           
 <br>
 
 
 <div ng-repeat='i in [1,2,3,4,5,6]'>
-    <div class="uk-width-expand">
-        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
-            <h3 class="uk-card-title">Default</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-3@s uk-margin" uk-grid>
+        <div class="uk-card-media-left uk-cover-container">
+            <img src="/assets/guild-blank.png" alt="" uk-cover>
+            <canvas width="100" height="100"></canvas>
+        </div>
+        <div class="uk-width-expand">
+            <div class="uk-card-body">
+                <h3 class="uk-card-title">Introduction Guild</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                <button class="uk-button uk-button-primary" uk-toggle="target: #modal-guild">JOIN</button>
+            </div>
         </div>
     </div>
     <br>
+</div>
+
+<div style="text-align: center;">
+    <button class="uk-button uk-button-secondary">SHOW MORE</button>
+</div>
+
+<br><br><br>
+
+<div id="modal-guild" class="uk-modal-full" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+        <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+            <div class="uk-background-cover" style="background-image: url('assets/guild-cover-default.jpg');" uk-height-viewport></div>
+            <div class="uk-padding-large">
+                <h1>Hello World Guild</h1>
+                <ul uk-accordion>
+                    <li class="uk-open">
+                        <a class="uk-accordion-title" href="#">Guild Description</a>
+                        <div class="uk-accordion-content">
+                            <p>Guild for introductory programming course. Here masters will teach you how to think like a programmer and Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">Join by Badge</a>
+                        <div class="uk-accordion-content">
+                            <p>
+                                Badge requirements
+                                <ol>
+                                    <li><a href=""> Hello World Badge </a></li>
+                                    <li><a href=""> Competitive Programming Badge </a></li>
+                                    <li><a href=""> Ultimate Badge </a></li>
+                                </ol>
+                                &nbsp;&nbsp;&nbsp;<button class="uk-button uk-button-primary">JOIN</button> 
+
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="uk-accordion-title" href="#">Join by Request</a>
+                        <div class="uk-accordion-content">
+                            Guild administrators will  review your request first before admiting you. <br><br>
+                            &nbsp;&nbsp;&nbsp;<button class="uk-button uk-button-primary ">REQUEST MEMBERSHIP</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
