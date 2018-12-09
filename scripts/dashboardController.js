@@ -1,3 +1,5 @@
+
+
 app.controller("dashboardController",function($scope,$http,$location)
 {
 
@@ -9,11 +11,12 @@ app.controller("dashboardController",function($scope,$http,$location)
 
 	$scope.onload_newsfeed = function()
 	{
-		
-		$('pre code').each(function(i, block) {
-		    hljs.highlightBlock(block);
-		});
-		hljs.initHighlightingOnLoad();
+		// $('pre.code').each(function(i, block) {
+		//     hljs.highlightBlock(block);
+		//     alert('ere');
+		// });
+		// hljs.initHighlighting();
+
 		// hljs.configure({   // optionally configure hljs
 		//   languages: ['javascript', 'ruby', 'python']
 		// });

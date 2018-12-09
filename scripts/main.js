@@ -1,5 +1,5 @@
 
-var app = angular.module("site", ["ngRoute"]);
+var app = angular.module("site", ["ngRoute","hljs"]);
 
 
 app.config(function($routeProvider) {
@@ -16,13 +16,19 @@ app.config(function($routeProvider) {
     .when("/guild", {
         templateUrl : "/pages/guild"
     })
+    .when("/guild/:id", {
+        templateUrl : "/pages/guild/main"
+    })
     .when("/profile", {
         templateUrl : "/pages/profile"
     })
     .when("/register", {
         templateUrl : "/pages/register"
-    })
+    }).
+    otherwise({
+        redirectTo: '/dashboard'
+    });
 });
 
 
-var quill , hljs;
+var quill ;
