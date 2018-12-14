@@ -2,9 +2,20 @@
 app.controller("moduleViewerController",function($scope,$http,$location)
 {
 	document.body.style.backgroundColor = "white";
-	$scope.open_sidebar = function()
+
+	$scope.init_codebox = function()
 	{
-		UIkit.offcanvas("#module-sidebar").hide();
-		UIkit.offcanvas("#module-sidebar").show();
+		 var editor = CodeMirror.fromTextArea(document.getElementById("editor-challenge"), {
+		    lineNumbers: true,
+		    keyMap: "sublime",
+		    theme: "monokai",
+		    mode: "python"
+		  });
 	}
+
+	setTimeout(function()
+	{
+		$scope.init_codebox();
+	},1);
+
 });

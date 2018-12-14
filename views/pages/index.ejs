@@ -6,6 +6,8 @@
 	<!-- Include your favorite highlight.js stylesheet -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/monokai-sublime.min.css" rel="stylesheet">
 
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.0/codemirror.min.css">
+	<link rel="stylesheet" type="text/css" href="https://codemirror.net/theme/monokai.css">
 	<!-- Include the highlight.js library -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
 	
@@ -24,6 +26,12 @@
 
 	<!-- Quill -->	
 	<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+
+	<!-- CODEMIRROR Editor -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.0/codemirror.js"></script>
+	<script type="text/javascript" src="https://codemirror.net/keymap/sublime.js"></script>
+	<script type="text/javascript" src="https://codemirror.net/mode/python/python.js"></script>
 
 	<style type="text/css">
 		body
@@ -45,7 +53,7 @@
 	<ng-view></ng-view>
 
 	
-
+	<!-- <div ng-include="'pages/shared/footer'"></div> -->
 	<!-- SCRIPTS -->
 
 	<script type="text/javascript" src='/scripts/main.js'></script>
