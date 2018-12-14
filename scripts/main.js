@@ -24,10 +24,16 @@ app.config(function($routeProvider) {
     })
     .when("/register", {
         templateUrl : "/pages/register"
+    })
+    .when("/module/:id/edit", {
+        templateUrl : "/pages/module/editor"
+    })
+    .when("/module/:id/", {
+        templateUrl : "/pages/module/viewer"
     }).
     otherwise({
         redirectTo: '/dashboard'
-    });
+    })
 });
 
 

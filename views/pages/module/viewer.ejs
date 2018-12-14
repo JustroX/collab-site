@@ -1,0 +1,45 @@
+<!-- <div ng-include="'pages/shared/navbar'" ></div> -->
+<div ng-controller="moduleViewerController" class="uk-padding-large uk-padding-remove-top">
+	
+
+	<div id="module-sidebar" uk-offcanvas='overflow: true; mode: push'>
+	    <div class="uk-offcanvas-bar">
+
+	        <ul class="uk-nav uk-nav-default">
+	            <li class="uk-nav-header">Introduction to Programming</li>
+	            <li class="uk-active"><a href="#">Navigation</a></li>
+	            <li><a href="#/">Home</a></li>
+	            <li class="uk-nav-header">Pages</li>
+	            <li><a href="#">Page 1</a></li>
+	            <li><a href="#">Page 2</a></li>
+	            <li><a href="#">Page 3</a></li>
+	            <li class="uk-nav-divider"></li>
+	            <li><a href="#">Item</a></li>
+	        </ul>
+
+	    </div>
+	</div>
+	
+
+	<div class="uk-padding">
+		<a href="javascript:void(0)" class="uk-icon-button uk-margin-small-right" uk-toggle="target: #module-sidebar" uk-icon="menu"></a>
+	</div>
+	
+	<div class="uk-padding-large uk-padding-remove-top">
+		<article class="uk-article">
+		    <h1 class="uk-article-title uk"><a class="uk-link-reset" href="">Heading</a></h1>
+
+		    <p class="uk-article-meta">Written by <a href="#">Super User</a> on 12 April 2012. Posted in <a href="#">Blog</a></p>
+
+		    <p class="uk-text-lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+
+		    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+		</article>
+		<ul class="uk-pagination">
+		    <li><a href="#"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+			<li style="text-align: center;">Introduction to Programming</li>
+		    <li class="uk-margin-auto-left"><a href="#">Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
+		</ul>
+	</div>
+</div>
