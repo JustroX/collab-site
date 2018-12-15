@@ -28,6 +28,9 @@ app.config(function($routeProvider) {
     .when("/module/:id/edit", {
         templateUrl : "/pages/module/editor"
     })
+    .when("/module/:id/overview", {
+        templateUrl : "/pages/module/overview"
+    })
     .when("/module/:id/", {
         templateUrl : "/pages/module/viewer"
     }).
