@@ -11,7 +11,7 @@ Please don't put sensitive information there.
 1. [x] `Dec 2, 2018` Phase 0 - Laying out the Groundwork
    * Establish project management environment. 
    * Planning website's features and functions
-2. [ ] `Dec 30, 2018` Phase 1 - Establishing Structure
+2. [x] `Dec 30, 2018` Phase 1 - Establishing Structure
    * Creation of front end pages
    * Creation of back end APIs
 3. [ ] `Jan 15, 2019` Phase 2 - Prototyping
