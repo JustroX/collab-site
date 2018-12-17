@@ -9,6 +9,11 @@ app.controller("dashboardController",function($scope,$http,$location)
 			$location.path("/");
 	});
 
+	$scope.editor_focus = function()
+	{
+		quill.focus();
+	}
+
 	$scope.onload_newsfeed = function()
 	{
 		// $('pre.code').each(function(i, block) {

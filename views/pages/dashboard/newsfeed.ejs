@@ -1,21 +1,22 @@
-<div ng-controller='newsfeedController'>
-			<div ng-show='false'  class="uk-card uk-card-body uk-card-default">
+<div ng-controller='newsfeedController' ng-init='group = ""'>
+			<div  ng-show='!is_editor_active' class="uk-card uk-card-body uk-card-default">
 				<h2>Write something</h2>
-				<input class="uk-input" type="" placeholder="Write something ...">
+				<input  ng-click='is_editor_active =  true; editor_focus()' onclick="this.blur();this.value=''" class="uk-input" type="" placeholder="Write something ...">
 			</div>
-			<div ng-show='false' class="uk-card uk-card-default uk-card-hover uk-card-body uk-padding">
+			<div  ng-show='is_editor_active'   class="uk-card uk-card-default uk-card-hover uk-card-body uk-padding">
 				<!-- Create the editor container -->
 				<h2>Write something</h2>
 				<div id="editor" style="height: 20vh;">
-				  <p>Write something ...</p>
+				  <!-- <p>Write something ...</p> -->
 				</div>
 				<br>
-				<button class="uk-button uk-button-danger ">Post</button>
+				<button class="uk-button uk-button-danger " ng-click='post()'>Post</button> &nbsp;&nbsp;
+				<button class="uk-button uk-button-secondary " ng-click='is_editor_active=false'>Cancel</button>
 			</div>
 			
-			<hr class="uk-divider-icon">
-			
-			<div class="uk-text-center uk-card-default uk-card uk-card-hover uk-card-body">
+			<!-- <hr class="uk-divider-icon"> -->
+			<!-- 
+			<div  ng-click='is_editor_active =  true '   class="uk-text-center uk-card-default uk-card uk-card-hover uk-card-body">
 				<span uk-icon="icon: pencil; ratio: 4.3"></span>
 				<h2>Have anything in mind?</h2>
 				<a href="#">
@@ -25,7 +26,7 @@
 				<br>
 				<br>
 				<br><br>
-			</div>
+			</div> -->
 
 
 

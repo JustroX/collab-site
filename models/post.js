@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var PostSchema = mongoose.Schema({
 	
    content: String,
-   group : Schema.Types.ObjectId,
+   group : Schema.Types.Mixed,
    
    liked_by  : [ Schema.Types.ObjectId ],
    shared_by : [{ user:  Schema.Types.ObjectId , group: Schema.Types.ObjectId  }],
