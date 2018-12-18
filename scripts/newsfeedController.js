@@ -5,9 +5,35 @@ app.controller("newsfeedController", function($scope,$location,$http,$sanitize)
 
 	var post_form = { content: "" };
 	var previous_content = "";
-	$scope.loading = false;
+	var user = 
+	{
+		obj : null,
+		following : [],
+		following_posts : {},
+		//{ page: 1, contents: [] }
+	};
 
+
+
+	$scope.loading = false;
 	$scope.post_form = post_form;
+	$scope.user = user;
+	$scope.posts = [];
+
+	$http.get('/api/user/self').then((res)=>
+	{
+		res = res.data;
+		user.obj = res;
+
+		for(i in user.obj.following)
+		{
+			user.following.push(user.obj.following[i]);
+			user.following_posts[user.obj.following[i]] = { page: 0 , contents: []}
+		}
+
+		fetch_post();
+	});
+
 
 	$scope.post = () =>
 	{
@@ -51,7 +77,6 @@ app.controller("newsfeedController", function($scope,$location,$http,$sanitize)
 	}
 
 
-
 	$scope.view_details = function()
 	{
 		var toolbarOptions = [
@@ -76,4 +101,53 @@ app.controller("newsfeedController", function($scope,$location,$http,$sanitize)
 		});
 	
 	}
+
+
+	let refresh_posts = function()
+	{
+		let arr = []
+		let merge = (a,b)=>
+		{
+			let r = [...a,...b];
+			r.sort((a,b)=> new Date(b.date) - new Date(a.date))
+		}
+		for(let u of user.following)
+		{
+			arr = merge(arr,user.following_posts[u].contents);
+			arr = arr.slice(0,10);
+		}
+		$scope.posts = arr;
+	}
+
+	let fetch_post = function()
+	{
+		let i = 0;
+		let get = function()
+		{
+			let u = user.following[i];
+			fetch_post_user(u,user.following_posts[u].page,function()
+			{
+				if(i<user.following.length)
+				{
+					i+=1;
+					get();
+				}
+			});
+		}
+	}
+
+	let fetch_post_user = function(u,p,n)
+	{
+		$http.get("/api/post?author="+u+"&limit=10&offset="+p).then((res)=>
+		{
+			res = res.data;
+			if(res.err)
+				UIkit.notification( res.err,  {status:'danger',pos:'bottom-center'});
+			user.following_posts[u].contents = res;
+			user.following_posts[u].page += 1;
+			refresh_posts();
+			n();
+		});
+	}
+
 });

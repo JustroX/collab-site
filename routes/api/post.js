@@ -7,6 +7,7 @@ var PERMISSIONS  =
    _id: 1,
    content: 7,
    group : 3,
+   date: 1,
    
    liked_by  : 1,
    shared_by : 1,
@@ -28,7 +29,8 @@ router.post('/', lib.logged , function(req, res){
 			post[i] = req.body[i];
 		}
 	}
-	post.author = req.session.passport.user
+	post.author = req.session.passport.user;
+	post.date = new Date();
 	post.save(function(err)
 	{
 		if(err) throw err;

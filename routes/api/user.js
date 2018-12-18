@@ -57,6 +57,20 @@ router.get('/', function(req, res){
 	});
 });
 
+router.get('/self', lib.logged ,function(req, res){
+	let user_id = req.session.passport.user;
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
+	let options = req.query.option;
+
+	User.findById(user_id,fields.join(' ') ,function(err,user)
+	{
+		res.send(user);
+	});
+});
+
+
+
 router.get('/:id', function(req, res){
 	let user_id = req.params.id;
 	let fields = lib.fields(req,PERMISSIONS);
@@ -68,6 +82,15 @@ router.get('/:id', function(req, res){
 		res.send(user);
 	});
 });
+
+
+
+
+
+
+
+
+
 
 router.post('/', function(req, res){
 
