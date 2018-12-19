@@ -25,11 +25,15 @@ app.controller("newsfeedController", function($scope,$location,$http,$sanitize)
 		res = res.data;
 		user.obj = res;
 
+		user.following.push(user.obj._id);
+		user.following_posts[user.obj._id] = { page: 0 , contents: []}
+
 		for(i in user.obj.following)
 		{
 			user.following.push(user.obj.following[i]);
 			user.following_posts[user.obj.following[i]] = { page: 0 , contents: []}
 		}
+
 
 		fetch_post();
 	});
@@ -110,6 +114,7 @@ app.controller("newsfeedController", function($scope,$location,$http,$sanitize)
 		{
 			let r = [...a,...b];
 			r.sort((a,b)=> new Date(b.date) - new Date(a.date))
+			return r
 		}
 		for(let u of user.following)
 		{
@@ -127,13 +132,14 @@ app.controller("newsfeedController", function($scope,$location,$http,$sanitize)
 			let u = user.following[i];
 			fetch_post_user(u,user.following_posts[u].page,function()
 			{
+				i+=1;
 				if(i<user.following.length)
 				{
-					i+=1;
 					get();
 				}
 			});
 		}
+		get();
 	}
 
 	let fetch_post_user = function(u,p,n)

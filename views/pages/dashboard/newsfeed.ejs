@@ -34,14 +34,18 @@
 			<div class="uk-text-center uk-text-muted uk-text-center">Here's what your friends are up to</div>			
 			<br>
 
-			<div ng-repeat='i in user.posts'>
+			<div ng-repeat='i in posts'>
 				<div class="uk-card uk-card-default uk-card-hover uk-card-body">
 					<article class="uk-article">
 						<div>
 				    		<img data-src="https://storage.googleapis.com/neris/public/images/types/faces/INFJ-female.svg" width="50px" height="50px" uk-img>
-				    		<b class="uk-ali">Random Name</b> <small> <i><a href="">@randomName</a></i> &middot; Hello World Guild &middot; 5hrs </small>							
+				    		<b class="uk-ali">{{i.author}}</b> <small> <i><a href="">@randomName</a></i> &middot; Hello World Guild &middot; 5hrs </small>							
 						</div>
-					    <p>
+
+						<p>
+							<div ng-bind-html='i.content'></div>
+						</p>
+					    <!-- <p>
 					    	<p>
 					    		Random lines that won't make sense. <br>
 					    		I can put edit lines of code.
@@ -51,7 +55,7 @@ print('Yehey')
 
 </div>
 								<b>Bold</b> , <i>Italic</i> and <small>font</small> <big> sizes</big>
-					    	</p>
+					    	</p> -->
 					    </p>
 					    <div class="uk-grid-small uk-child-width-auto" uk-grid>
 					        <div>
