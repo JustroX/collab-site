@@ -1,0 +1,19 @@
+<div ng-controller="textEditorController">
+	
+
+	<div  ng-hide='editor.active' class="uk-card uk-card-body uk-card-default">
+		<h2>Write something</h2>
+		<input  ng-click='editor.active =  true; editor_focus()' onclick="this.blur();this.value=''" class="uk-input" type="" placeholder="Write something ...">
+	</div>
+	<div  ng-show='editor.active'   class="uk-card uk-card-default uk-card-hover uk-card-body uk-padding">
+
+		<h2>Write something</h2>
+		<div id="text-editor" style="height: 20vh;"></div>
+
+		<br>
+		<button ng-disabled="get_form_content()==''" class="uk-button uk-button-danger" ng-click='post()'>Post</button> &nbsp;&nbsp;
+		<button class="uk-button uk-button-secondary " ng-click='is_editor_active=false'>Cancel</button>
+	</div>
+
+	
+</div>
