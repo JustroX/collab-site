@@ -5,10 +5,11 @@ app.controller("textEditorController",function($scope,$http,$location,$timeout)
 		id: "text-editor",
 		active: false,
 		content: "",
-		obj : null,
+		quill : null,
+		content: "",
 		is_empty: function()
 		{
-			return 
+			return  editor.content == "<p><br></p>"
 		},
 		init: function()
 		{
@@ -19,19 +20,42 @@ app.controller("textEditorController",function($scope,$http,$location,$timeout)
 			  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
 			  ['clean']
 			];
-			editor.obj = new Quill('#'+editor.id, {
+			editor.quill = new Quill('#'+editor.id, {
 				 modules: {
 				    syntax: true,
 				    toolbar: toolbarOptions
 				  },
 				theme: 'snow',
 			});
+			editor.quill.on('text-change',()=>
+			{
+				editor.content = editor.quill.root.innerHTML;
+			})
 		},
-		getvalue: function()
+		toggle: function()
 		{
-
-		}
+			editor.active = !editor.active
+			if(editor.active) editor.focus();
+		},
+		focus: function()
+		{
+			$timeout(function()
+			{
+				editor.quill.blur()
+				editor.quill.focus()
+			},1);
+		},
 	}
+
+	$scope.editor = editor;
+
+	$scope.post   = post;
+	var post = 
+	{
+		content: '',
+		group: null
+	}
+
 
 	$timeout(editor.init , 1);
 });
