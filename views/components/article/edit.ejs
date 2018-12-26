@@ -1,0 +1,34 @@
+<div ng-controller='articleEditController' ng-init='editor.init("article-editor-edit")'>
+	
+	<input type="text" class="uk-input" ng-model='api.view.target'>
+
+
+
+
+	<a href="javascript:void(0)" ng-click="api.view.load()">Load</a>
+	
+
+	<input type="text" class="uk-input" ng-model='article.title' placeholder="Title">
+	
+	<div>
+		<div id='article-editor-edit'></div>
+	</div>	
+	
+	<br>
+	<input type="text" class="uk-input" ng-model='article.module' placeholder="Module">
+	
+
+
+
+	<div ng-if='api.view.loading' uk-spinner></div>
+	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+	    <a class="uk-alert-close" uk-close></a>
+		{{ api.error }}
+	</div>
+	<div ng-if='api.loading' uk-spinner></div>
+	
+
+
+	<button ng-click='api.submit()' class="uk-button uk-button-primary">UPDATE</button>
+
+</div>

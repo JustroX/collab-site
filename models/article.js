@@ -6,8 +6,8 @@ var Schema = mongoose.Schema;
 var ArticleSchema = mongoose.Schema({
 	title: String,
 	content: String,
-	authors: [Schema.Types.ObjectId],
-	module: Schema.Types.ObjectId
+	authors: [{ type: Schema.Types.ObjectId , ref: "User"}],
+	module: { type: Schema.Types.ObjectId, ref: "Module"}
 });
 
 

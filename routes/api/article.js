@@ -72,7 +72,9 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Article.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
+	Article.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset)
+	.populate("authors","name username")
+	.exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -86,7 +88,7 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Article.findById(article_id,fields.join(' ') ,function(err,mod)
+	Article.find({_id: article_id},fields.join(' ') ).populate("authors","name username").exec(function(err,mod)
 	{
 		if(!mod) return res.send({ code: 500 , message: 'Article not found.' });
 		res.send(mod);

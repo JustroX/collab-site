@@ -83,7 +83,11 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Post.findById(post_id,fields.join(' ') ,function(err,post)
+	Post.find({_id: post_id},fields.join(' ')).populate("group")
+		.populate("liked_by","name username")
+		.populate("shared_by","name username")
+		.populate("replies")
+		.populate("author","name username").exec(function(err,post)
 	{
 		if(!post) return res.send({ code: 500 , message: 'Post not found.' });
 		res.send(post[0] || post);
