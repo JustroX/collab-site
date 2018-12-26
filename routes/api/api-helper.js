@@ -79,7 +79,6 @@ exports.filter = function(req,PERMISSIONS)
 exports.sanitize = function(req,PERMISSIONS)
 {
 	let body = req.body;
-
 	let query = {};
 
 	for(let i in body)

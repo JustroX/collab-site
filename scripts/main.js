@@ -5,36 +5,150 @@ var app = angular.module("site", ["ngRoute","hljs","ngSanitize"]);
 app.config(function($routeProvider) {
     $routeProvider
     .when("/", {
-        templateUrl : "/pages/welcome",
+        templateUrl : "/pages/static/welcome",
     })
+
+
+    
+    //static
     .when("/welcome", {
-        templateUrl : "/pages/welcome"
+        templateUrl : "/pages/static/welcome"
     })
     .when("/dashboard", {
-        templateUrl : "/pages/dashboard"
+        templateUrl : "/pages/static/dashboard"
     })
+
+
+    //User
+    .when("/user/new", {
+        templateUrl : "/pages/user/new"
+    })
+    // .when("/user", {
+    //     templateUrl : "/pages/user/list"
+    // })
+    .when("/user/:id", {
+        templateUrl : "/pages/user/view"
+    })
+    .when("/user/edit/", {
+        templateUrl : "/pages/user/edit"
+    })
+
+
+    //Guild
+    // .when("/guild/new", {
+    //     templateUrl : "/pages/guild/new"
+    // })
     .when("/guild", {
-        templateUrl : "/pages/guild"
+        templateUrl : "/pages/guild/list"
     })
     .when("/guild/:id", {
-        templateUrl : "/pages/guild/main"
+        templateUrl : "/pages/guild/view"
     })
-    .when("/profile", {
-        templateUrl : "/pages/profile"
+    .when("/guild/edit/:id", {
+        templateUrl : "/pages/guild/edit"
     })
-    .when("/register", {
-        templateUrl : "/pages/register"
+
+    
+    //Post    
+    .when("/post/new", {
+        templateUrl : "/pages/post/new"
     })
-    .when("/module/:id/edit", {
-        templateUrl : "/pages/module/editor"
+    // .when("/post", {
+    //     templateUrl : "/pages/post/list"
+    // })
+    .when("/post/:id", {
+        templateUrl : "/pages/post/view"
     })
-    .when("/module/:id/overview", {
-        templateUrl : "/pages/module/overview"
+    .when("/post/edit/:id", {
+        templateUrl : "/pages/post/edit"
     })
-    .when("/module/:id/", {
-        templateUrl : "/pages/module/viewer"
-    }).
-    otherwise({
+
+
+    
+    //Module
+    .when("/module/new", {
+        templateUrl : "/pages/module/new"
+    })
+    .when("/module", {
+        templateUrl : "/pages/module/list"
+    })
+    .when("/module/:id", {
+        templateUrl : "/pages/module/view"
+    })
+    .when("/module/edit/:id", {
+        templateUrl : "/pages/module/edit"
+    })
+    
+    //---for challenges  / articles
+    .when("/module/:id/:page", {
+        templateUrl : "/pages/module/view"
+    })
+    
+
+
+    
+    //Badge    
+    .when("/badge/new", {
+        templateUrl : "/pages/badge/new"
+    })
+    .when("/badge", {
+        templateUrl : "/pages/badge/list"
+    })
+    .when("/badge/:id", {
+        templateUrl : "/pages/badge/view"
+    })
+    .when("/badge/edit/:id", {
+        templateUrl : "/pages/badge/edit"
+    })
+
+    
+    //Articles    
+    .when("/article/new", {
+        templateUrl : "/pages/article/new"
+    })
+    .when("/article", {
+        templateUrl : "/pages/article/list"
+    })
+    .when("/article/:id", {
+        templateUrl : "/pages/article/view"
+    })
+    .when("/article/edit/:id", {
+        templateUrl : "/pages/article/edit"
+    })
+
+    
+    //Challenges
+
+    .when("/challenge/new", {
+        templateUrl : "/pages/challenge/new"
+    })
+    .when("/challenge", {
+        templateUrl : "/pages/challenge/list"
+    })
+    .when("/challenge/:id", {
+        templateUrl : "/pages/challenge/view"
+    })
+    .when("/challenge/edit/:id", {
+        templateUrl : "/pages/challenge/edit"
+    })
+
+    
+    //Submissions
+
+    .when("/submission/new", {
+        templateUrl : "/pages/submission/new"
+    })
+    .when("/submission", {
+        templateUrl : "/pages/submission/list"
+    })
+    .when("/submission/:id", {
+        templateUrl : "/pages/submission/view"
+    })
+    .when("/submission/edit/:id", {
+        templateUrl : "/pages/submission/edit"
+    })
+
+    .otherwise({
         redirectTo: '/dashboard'
     })
 });

@@ -1,0 +1,14 @@
+<div ng-controller='postViewController'>
+	
+	<pre><code>{{ api.value }}</code></pre>
+
+	<input type="text" class="uk-input" ng-model='api.target'>
+	<a href="javascript:void(0)" ng-click="api.load()">Load</a>
+
+	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+	    <a class="uk-alert-close" uk-close></a>
+		{{ api.error }}
+	</div>
+	<div ng-if='api.loading' uk-spinner></div>
+	
+</div>

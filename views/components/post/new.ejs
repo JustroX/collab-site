@@ -1,0 +1,15 @@
+<div ng-init="editor.init()" ng-controller='postNewController'>
+
+	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+	    <a class="uk-alert-close" uk-close></a>
+		{{ api.error }}
+	</div>
+
+	<div>
+		<div id='text-editor'></div>
+	</div>
+	
+	<div ng-if='api.loading' uk-spinner></div>
+	
+	<button ng-if='!api.loading' class="uk-button uk-button-primary" ng-click='api.submit()'>POST</button>
+</div>

@@ -5,13 +5,13 @@ var Schema = mongoose.Schema;
 var PostSchema = mongoose.Schema({
 	
    content: String,
-   group : Schema.Types.Mixed,
+   group : { type: Schema.Types.ObjectId, ref: 'Guild'},
    date : Date,
    
-   liked_by  : [ Schema.Types.ObjectId ],
-   shared_by : [{ user:  Schema.Types.ObjectId , group: Schema.Types.ObjectId  }],
-   replies   : [ Schema.Types.ObjectId ],
-   author    : Schema.Types.ObjectId
+   liked_by  : [  { type: Schema.Types.ObjectId, ref: 'User'} ],
+   shared_by : [{ user:   { type: Schema.Types.ObjectId, ref: 'User'} , group:  { type: Schema.Types.ObjectId, ref: 'User'}  }],
+   replies   : [  { type: Schema.Types.ObjectId, ref: 'Post'} ],
+   author    : { type: Schema.Types.ObjectId, ref: 'User'}
   
 });
 

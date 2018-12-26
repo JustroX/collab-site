@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var lib = require('./api-helper.js')
 var Post = require('../../models/post.js');
+var max = function(a,b){ return (a>b)? a : b; };
 
 var PERMISSIONS  = 
 {	
@@ -59,7 +60,15 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Post.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
+	Post.find(query,fields.join(' '))
+		.sort(sort)
+		.limit(limit).skip(max(0,limit*offset))
+		.populate("group")
+		.populate("liked_by","name username")
+		.populate("shared_by","name username")
+		.populate("replies")
+		.populate("author","name username")	
+	.exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -77,13 +86,14 @@ router.get('/:id', function(req, res){
 	Post.findById(post_id,fields.join(' ') ,function(err,post)
 	{
 		if(!post) return res.send({ code: 500 , message: 'Post not found.' });
-		res.send(post);
+		res.send(post[0] || post);
 	});
 
 });
 
 
 router.put('/:id', lib.logged, function(req, res){
+
 
 	let user   = req.session.passport.user;
 	let post_id = req.params.id;

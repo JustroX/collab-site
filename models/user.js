@@ -8,6 +8,7 @@ var UserSchema = mongoose.Schema({
    bio: String,
    birthday: Date,
    school: String,
+   username: String,
    privileges : [ String ],
 
    admin_user_permissions : Number,
