@@ -80,6 +80,7 @@ app.controller("postEditController",function($scope,$http,$location,$timeout,ses
 			$timeout(function()
 			{
 				$scope.post = res;
+				post = res;
 			},1);
 		},
 	}

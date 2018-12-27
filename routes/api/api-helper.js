@@ -1,3 +1,4 @@
+var User = require('../../models/user.js');
 
 exports.fields  =function(req,PERMISSIONS)
 {
@@ -112,6 +113,24 @@ exports.logged	 = function(req,res,next)
 		return res.send({ message: 'Please login to continue'})
 	next();
 }
+
+exports.admin_user = function(perm)
+{
+	return function(req,res,next)
+	{
+		let id = req.session.passport.user;
+		User.findById(id, function(err,user)
+		{
+			if(user.admin_user_permissions & perm )
+				next();
+			else
+				return res.send({message: 'Permission Denied'});
+		});
+		
+	}
+}
+
+
 
 exports.validate_fields = function(req,res,PERMISSIONS)
 {

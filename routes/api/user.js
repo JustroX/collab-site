@@ -12,6 +12,7 @@ var PERMISSIONS =
    school: 7,
    privileges : 1,
    private: 0,
+   username: 7,
 
    guilds : 1,
 
@@ -92,20 +93,23 @@ router.get('/:id', function(req, res){
 
 
 
-router.post('/', function(req, res){
+router.post('/', lib.logged, lib.admin_user(1) , function(req, res){
 
 	//auntenticate admin settings
 	
 
 	var body = req.body;
+	if(! lib.validate_fields(req,res,PERMISSIONS)) return;
+	
 	var user = new User();
 
-	//sanitize
-	user.name     	= body.name;
-	user.bio 	  	= body.bio;
-	user.birthday 	= body.birthday;
-	user.school   	= body.school;
-	user.privileges = body.privileges;
+	for(let i in PERMISSIONS)
+	{
+		if(PERMISSIONS[i]&2)
+		{
+			user[i] = req.body[i];
+		}
+	}
 
 	//save stuff
 	if(body.private && body.private.local)
@@ -125,7 +129,7 @@ router.post('/', function(req, res){
 		res.send({ code: 400, err: 'Invalid request.'});
 });
 
-router.put('/:id', function(req, res){
+router.put('/:id', lib.logged, lib.admin_user(2), function(req, res){
 	let user_id = req.params.id;
 	let query = lib.sanitize(req,PERMISSIONS);
 
@@ -148,7 +152,7 @@ router.put('/:id', function(req, res){
 	});
 });
 
-router.delete('/:id', function(req, res){
+router.delete('/:id', lib.logged,  lib.admin_user(4), function(req, res){
 	let user_id = req.params.id;
 	User.deleteOne({ _id: user_id },function(err)
 	{

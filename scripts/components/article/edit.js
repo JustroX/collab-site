@@ -140,7 +140,7 @@ app.controller("articleEditController",function($scope,$http,$location,$timeout,
 			$timeout(function()
 			{
 				$scope.article = res;
-				alert(JSON.stringify(res));
+				article = res;
 				editor.quill.setText(res.content);
 			},1);
 		},

@@ -1,0 +1,24 @@
+<div ng-controller='userNewController'>
+
+	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+	    <a class="uk-alert-close" uk-close></a>
+		{{ api.error }}
+	</div>
+
+	{{ model }}
+
+	<form ng-submit='api.submit()'>
+		<input type="text" class="uk-input" ng-model='model.name'  placeholder="Name" >
+		<input type="text" class="uk-input" ng-model='model.username'  placeholder="Username" >
+		<input type="email" class="uk-input" ng-model='model.private.local.email'  placeholder="Email" >
+		<input type="password" class="uk-input" ng-model='model.private.local.password'  placeholder="Password" >
+		<textarea type="text" class="uk-input" ng-model='model.bio'  placeholder="Bio" ></textarea>
+		<input type="date" class="uk-input" ng-model='model.birthday'  placeholder="Birthday" >
+		<input type="text" class="uk-input" ng-model='model.school'  placeholder="School" >
+		<button type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">New</button>
+	</form>
+
+
+	<div ng-if='api.loading' uk-spinner></div>
+	
+</div>
