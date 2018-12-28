@@ -3,6 +3,7 @@ var router = require('express').Router();
 module.exports = function(passport)
 {
 
+	router.use('/tutorial', require('./tutorial/tutorial.js')(passport) )
 	router.get('/components/*',(req,res)=>
 	{
 		var path = req.originalUrl.substr(7,req.originalUrl.length-5);
@@ -15,6 +16,5 @@ module.exports = function(passport)
 		res.render(path);
 	})
 
-	router.use('/tutorial', require('./tutorial/tutorial.js')(passport) )
 	return router;
 };

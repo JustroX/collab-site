@@ -115,7 +115,9 @@ router.post('/', lib.logged, lib.admin_user(1) , function(req, res){
 	if(body.private && body.private.local)
 	{
 		user.private.local = body.private.local;
+		user.private.local.password = user.generateHash(user.private.local.password);
 	}
+	
 
 	if(user.validateInputs())
 	{
@@ -141,6 +143,9 @@ router.put('/:id', lib.logged, lib.admin_user(2), function(req, res){
 		{
 			user[i] = query[i];
 		}
+		if(query.private && query.private.local && query.private.local.password)
+			user.private.local.password = user.generateHash(user.private.local.password);
+
 		user.save(function(err, updatedUser)
 		{
 			if(err) throw err;

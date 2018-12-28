@@ -85,7 +85,10 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Guild.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
+	Guild.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset)
+	.populate("users","name username private.local.email")
+	.populate("created_by","name username private.local.email")
+	.exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -98,10 +101,13 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Guild.findById(guild_id,fields.join(' ') ,function(err,guild)
+	Guild.find({ _id: guild_id},fields.join(' '))
+	.populate("users","name username private.local.email")
+	.populate("created_by","name username private.local.email")
+	.exec(function(err,guild)
 	{
-		if(!guild) return res.send({ code: 500 , message: 'Guild not found.' });
-		res.send(guild);
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		res.send(guild[0]);
 	});
 });
 
@@ -120,18 +126,29 @@ router.put('/:id', lib.logged , function(req, res){
 	{
 		if(err) throw err;	
 
-		if(!guild) return res.send({ code: 500 , message: 'Guild not found.' });
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
 
 		let find = false;
-		for(let i in guild.ranks)
+		for(let i in guild.users)
 		{
-			let cur = guild.ranks[i];
-			if( cur.user==user && (cur.permission_settings & 1) )
+			let cur = guild.users[i];
+			if( cur.user==user )
 			{
-				find = true
+				for(let x in guild.ranks)
+				{
+					for(let y in cur.ranks)
+					{
+						if(guild.ranks[x].name == cur.ranks[y])
+						{
+							// console.log(cur.user+" "+user);
+							if( guild.ranks[x].permission_settings & 1 )
+								find = true
+						}
+					}
+				}
 			}
 		}
-		if(!find) return res.send({ code: 403, message: "Permission Denied"});
+		if(!find) return res.send({ code: 403, err: "Permission Denied"});
 
 		for(let i in query)
 		{
@@ -152,28 +169,39 @@ router.put('/:id', lib.logged , function(req, res){
 router.delete('/:id', function(req, res){
 	let guild_id = req.params.id;
 	let user   = req.session.passport.user;
-	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+	if(!user) return res.send({ code: 403, err: 'Please login to continue'});
 	
 
 	Guild.findById(guild_id, function(err, guild)
 	{
 		if(err) return res.send({ err : "Databasse Error" });
-		if(!guild) return res.send({ code: 500 , message: 'Guild not found.' });
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
 		let find = false;
-		for(let i in guild.ranks)
+		for(let i in guild.users)
 		{
-			let cur = guild.ranks[i];
-			if( cur.user==user && (cur.permission_settings & 2) )
+			let cur = guild.users[i];
+			if( cur.user==user )
 			{
-				find = true
+				for(let x in guild.ranks)
+				{
+					for(let y in cur.ranks)
+					{
+						if(guild.ranks[x].name == cur.ranks[y])
+						{
+							// console.log(cur.user+" "+user);
+							if( guild.ranks[x].permission_settings & 2 )
+								find = true
+						}
+					}
+				}
 			}
 		}
-		if(!find) return res.send({ code: 403, message: "Permission Denied"});
+		if(!find) return res.send({ code: 403, err: "Permission Denied"});
 		
 		Guild.deleteOne({ _id: guild_id },function(err)
 		{
 			if(err) return res.send({ err : "Databasse Error" });
-			return res.send({ message: "Delete successful" })
+			return res.send({ err: "Delete successful" })
 
 		});
 	});

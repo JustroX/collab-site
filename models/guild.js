@@ -58,12 +58,12 @@ var GuildSchema = mongoose.Schema({
                permission_modules    : Number,
    			} ],
 
-   users: [ { user: Schema.Types.ObjectId , ranks: [] } ],
+   users: [ { user:{ type: Schema.Types.ObjectId, ref : "User"} , ranks: [] } ],
    modules: [Schema.Types.ObjectId],
    posts: [Schema.Types.ObjectId],
    badges_required: [Schema.Types.ObjectId],
 
-   created_by : Schema.Types.ObjectId
+   created_by : { type: Schema.Types.ObjectId, ref: "User"}
   
 });
 
