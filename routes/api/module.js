@@ -67,7 +67,9 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Module.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
+	Module.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset)
+	.populate("users","name username private.local.email")
+	.exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -81,10 +83,12 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Module.findById(mod_id,fields.join(' ') ,function(err,mod)
+	Module.find({ _id: mod_id},fields.join(' '))
+	.populate("users","name username private.local.email")
+	.exec(function(err,mod)
 	{
-		if(!mod) return res.send({ code: 500 , message: 'Module not found.' });
-		res.send(mod);
+		if(!mod[0]) return res.send({ code: 500 , err: 'Module not found.' });
+		res.send(mod[0]);
 	});
 
 });
@@ -98,7 +102,7 @@ router.put('/:id', lib.logged, function(req, res){
 	Module.findById(mod_id, function(err, mod)
 	{
 		if(err) throw err;	
-		if(!mod) return res.send({ code: 500 , message: 'Module not found.' });
+		if(!mod) return res.send({ code: 500 , err: 'Module not found.' });
 	
 		Guild.findById(mod.guild, function(err, guild){
 
@@ -126,13 +130,13 @@ router.put('/:id', lib.logged, function(req, res){
 router.delete('/:id', lib.logged, function(req, res){
 	let mod_id = req.params.id;
 	let user   = req.session.passport.user;
-	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+	if(!user) return res.send({ code: 403, err: 'Please login to continue'});
 	
 
 	Module.findById(mod_id, function(err, mod)
 	{
 		if(err) return res.send({ err : "Databasse Error" });
-		if(!mod) return res.send({ code: 500 , message: 'Module not found.' });
+		if(!mod) return res.send({ code: 500 , err: 'Module not found.' });
 
 		Guild.findById(mod.guild, function(err, guild){
 
@@ -145,7 +149,7 @@ router.delete('/:id', lib.logged, function(req, res){
 			Module.deleteOne({ _id: mod_id },function(err)
 			{
 				if(err) return res.send({ err : "Databasse Error" });
-				return res.send({ message: "Delete successful" })
+				return res.send({ err: "Delete successful" })
 
 			});
 		});
