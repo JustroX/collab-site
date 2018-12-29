@@ -73,7 +73,8 @@ GuildSchema.methods.is_permitted_module = function(user,num)
    let guild = this;
    for( let i in guild.users )
    {
-      if(guild.users[i].user.equals(user))
+
+      if( typeof guild.users[i] == "object" &&  guild.users[i].user && guild.users[i].user.equals(user))
       {
          let done = false
          for(let j in guild.ranks)

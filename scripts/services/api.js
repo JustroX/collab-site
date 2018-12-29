@@ -14,9 +14,9 @@ app.service('apiService', function(session,$http,$timeout)
 		{
 			let api_ = this;
 			this.error ="";
+			if(!this.target) return this.error="API: Target not specified";
 			this.loading = true;
-			if(!this.target) this.error="API: Target not specified";
-			$http.delete('/api/badge/'+api_.target).then((res)=>
+			$http.delete('/api/'+api_.url+'/'+api_.target).then((res)=>
 			{
 				res = res.data;
 				api_.loading = false;
@@ -58,7 +58,7 @@ app.service('apiService', function(session,$http,$timeout)
 			}	
 			api_.error = '';
 			api_.loading = true;
-			$http.post('/api/badge',this.$scope.model).then((res)=>
+			$http.post('/api/'+api_.url+'',this.$scope.model).then((res)=>
 			{
 				res = res.data;
 
@@ -111,7 +111,7 @@ app.service('apiService', function(session,$http,$timeout)
 			session.onready(function()
 			{
 				api_.loading = true;
-				$http.get('/api/badge?limit='+api_.limit+'&offset='+api_.page+'&'+api_.param).then((res)=>
+				$http.get('/api/'+api_.url+'?limit='+api_.limit+'&offset='+api_.page+'&'+api_.param).then((res)=>
 				{
 					api_.load_options();
 					res = res.data;
@@ -126,7 +126,7 @@ app.service('apiService', function(session,$http,$timeout)
 		load_options()
 		{
 			let api_ = this;
-			$http.get('/api/badge?options=true').then((res)=>
+			$http.get('/api/'+api_.url+'?options=true').then((res)=>
 			{
 				res = res.data;
 				api_.options = res;
@@ -141,7 +141,7 @@ app.service('apiService', function(session,$http,$timeout)
 
 		prev()
 		{
-			this.page = (this.page < 0) ? 0 : (this.page - 1);
+			this.page = (this.page <= 0) ? 0 : (this.page - 1);
 			this.load();
 		}
 
@@ -185,7 +185,7 @@ app.service('apiService', function(session,$http,$timeout)
 			session.onready(function()
 			{
 				api_.loading = true;
-				$http.get('/api/badge/'+api_.target+'?'+api_.param).then((res)=>
+				$http.get('/api/'+api_.url+'/'+api_.target+'?'+api_.param).then((res)=>
 				{
 					api_.load_options();
 					res = res.data;
@@ -198,10 +198,11 @@ app.service('apiService', function(session,$http,$timeout)
 		}
 		load_options()
 		{
-			$http.get('/api/badge?options=true').then((res)=>
+			let api_ = this;
+			$http.get('/api/'+api_.url+'?options=true').then((res)=>
 			{
 				res = res.data;
-				this.options = res;
+				api_.options = res;
 			});
 		}
 		err(mes)
@@ -234,7 +235,7 @@ app.service('apiService', function(session,$http,$timeout)
 			}	
 			api_.error = '';
 			api_.loading = true;
-			$http.put('/api/badge/'+api_.view.target,this.$scope.model).then((res)=>
+			$http.put('/api/'+api_.url+'/'+api_.view.target,this.$scope.model).then((res)=>
 			{
 				res = res.data;
 				api_.loaded(res);
@@ -265,25 +266,35 @@ app.service('apiService', function(session,$http,$timeout)
 	}
 
 
-	this.delete = function(...args)
+	this.delete = function(model,...args)
 	{
-		return new deleteAPI(...args)
+		let a = new deleteAPI(...args);
+		a.url = model;
+		return a;
 	}
-	this.new = function(...args)
+	this.new = function(model,...args)
 	{
-		return new newAPI(...args)
+		let a = new newAPI(...args);
+		a.url = model;
+		return a;
 	}
-	this.list = function(...args)
+	this.list = function(model,...args)
 	{
-		return new listAPI(...args)
+		let a = new listAPI(...args);
+		a.url = model;
+		return a;
 	}
-	this.view = function(...args)
+	this.view = function(model,...args)
 	{
-		return new viewAPI(...args)
+		let a = new viewAPI(...args);
+		a.url = model;
+		return a;
 	}
-	this.edit =  function(...args)
+	this.edit =  function(model,...args)
 	{
-		return new editAPI(...args);
+		let a = new editAPI(...args);
+		a.url = model;
+		return a;
 	}
 });
 

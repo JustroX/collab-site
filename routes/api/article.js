@@ -20,12 +20,18 @@ router.post('/', lib.logged ,function(req, res){
 
 	Module.findById(body.module,function(err, mod)
 	{
-		if(err) throw err;
+		if(err)
+		{
+			return res.send({ err: "Database Error"})
+		}
 		if(!mod) return res.send({ code: 501, err:"Module not found." });
 
 		Guild.findById(mod.guild, function(err, guild){
 
-			if(err) throw err;
+			if(err)
+			{
+				return res.send({ err: "Database Error"})
+			}
 			if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 			let permited = guild.is_permitted_module(req.session.passport.user,2);
@@ -43,7 +49,10 @@ router.post('/', lib.logged ,function(req, res){
 
 			article.save(function(err)
 			{
-				if(err) throw err;
+				if(err)
+				{
+					return res.send({ err: "Database Error"})
+				}
 				let output = lib.hide_fields(article,PERMISSIONS);
 				return res.send(output);
 			});
@@ -76,7 +85,10 @@ router.get('/', function(req, res){
 	.populate("authors","name username")
 	.exec(function(err,docs)
 	{
-		if(err) throw err;
+		if(err)
+		{
+			return res.send({ err: "Database Error"})
+		}
 		res.send(docs);
 	});
 
@@ -90,8 +102,8 @@ router.get('/:id', function(req, res){
 
 	Article.find({_id: article_id},fields.join(' ') ).populate("authors","name username").exec(function(err,mod)
 	{
-		if(!mod) return res.send({ code: 500 , message: 'Article not found.' });
-		res.send(mod);
+		if(!mod[0]) return res.send({ code: 500 , err: 'Article not found.' });
+		res.send(mod[0]);
 	});
 
 });
@@ -103,17 +115,26 @@ router.put('/:id', lib.logged, function(req, res){
 
 	Article.findById(article_id,function(err,article)
 	{
-		if(err) throw err;	
-		if(!article) return res.send({ code: 500 , message: 'Article not found.' });
+		if(err)
+		{
+			return res.send({ err: "Database Error"})
+		}	
+		if(!article) return res.send({ code: 500 , err: 'Article not found.' });
 
 		Module.findById(article.module,function(err, mod)
 		{
-			if(err) throw err;
+			if(err)
+			{
+				return res.send({ err: "Database Error"})
+			}
 			if(!mod) return res.send({ code: 501, err:"Module not found." });
 
 			Guild.findById(mod.guild, function(err, guild){
 
-				if(err) throw err;
+				if(err)
+				{
+					return res.send({ err: "Database Error"})
+				}
 				if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 				let permited = guild.is_permitted_module(req.session.passport.user,2);
@@ -139,7 +160,10 @@ router.put('/:id', lib.logged, function(req, res){
 
 				article.save(function(err, updated)
 				{
-					if(err) throw err;
+					if(err)
+					{
+						return res.send({ err: "Database Error"})
+					}
 					let output = lib.hide_fields(updated,PERMISSIONS);
 					res.send(output);
 				});
@@ -152,23 +176,29 @@ router.put('/:id', lib.logged, function(req, res){
 router.delete('/:id', lib.logged, function(req, res){
 	let article_id = req.params.id;
 	let user   = req.session.passport.user;
-	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+	if(!user) return res.send({ code: 403, err: 'Please login to continue'});
 	
 
 
 	Article.findById(article_id, function(err, article)
 	{
 		if(err) return res.send({ err : "Databasse Error" });
-		if(!article) return res.send({ code: 500 , message: 'Article not found.' });
+		if(!article) return res.send({ code: 500 , err: 'Article not found.' });
 
 		Module.findById(article.module,function(err, mod)
 		{
-			if(err) throw err;
+			if(err)
+			{
+				return res.send({ err: "Database Error"})
+			}
 			if(!mod) return res.send({ code: 501, err:"Module not found." });
 	
 			Guild.findById(mod.guild, function(err, guild){
 
-				if(err) throw err;
+				if(err)
+				{
+					return res.send({ err: "Database Error"})
+				}
 				if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 				let permited = guild.is_permitted_module(user,4);

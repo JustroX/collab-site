@@ -11,6 +11,7 @@ var PERMISSIONS =
    birthday: 7,
    school: 7,
    privileges : 1,
+   "private.local.email": 1,
    private: 0,
    username: 7,
 
@@ -41,6 +42,9 @@ router.get('/', function(req, res){
 	let limit =  (req.query.limit || 10)-1+1;
 	let offset = (req.query.offset || 0)-1+1;
 
+	if(fields.includes("-private"))
+		fields = ["_id","name","bio","birthday","school","private.local.email","guilds","posts","likes","shares","badges","follows","followed_by","username"]
+
 	if(options)
 	{
 		let opt = {};
@@ -53,7 +57,7 @@ router.get('/', function(req, res){
 	else
 	User.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
 	{
-		if(err) throw err;
+		if(err) return res.send({ err: "Database Error" , code: 500 });
 		res.send(docs);
 	});
 });
@@ -77,6 +81,9 @@ router.get('/:id', function(req, res){
 	let fields = lib.fields(req,PERMISSIONS);
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
+
+	if(fields.includes("-private"))
+		fields = ["_id","name","bio","birthday","school","private.local.email","guilds","posts","likes","shares","badges","follows","followed_by","username"]
 
 	User.findById(user_id,fields.join(' ') ,function(err,user)
 	{
@@ -137,14 +144,16 @@ router.put('/:id', lib.logged, lib.admin_user(2), function(req, res){
 
 	User.findById(user_id, function(err, user)
 	{
-		if(err) throw err;
+		if(err) return res.send({ err: "Database Error" , code: 500 });
 
 		for(let i in query)
 		{
 			user[i] = query[i];
 		}
-		if(query.private && query.private.local && query.private.local.password)
-			user.private.local.password = user.generateHash(user.private.local.password);
+		if(req.body.private && req.body.private.local && req.body.private.local.password)
+			user.private.local.password = user.generateHash(req.body.private.local.password);
+		if(req.body.private && req.body.private.local && req.body.private.local.email)
+			user.private.local.email = req.body.private.local.email;
 
 		user.save(function(err, updatedUser)
 		{
@@ -163,7 +172,7 @@ router.delete('/:id', lib.logged,  lib.admin_user(4), function(req, res){
 	{
 		if(err) return res.send({ err : "Unknown Error" });
 		else
-			return res.send({ success: "Delete successful" })
+			return res.send({ message: "Delete successful" })
 	})
 });
 

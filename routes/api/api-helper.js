@@ -80,6 +80,9 @@ exports.filter = function(req,PERMISSIONS)
 exports.sanitize = function(req,PERMISSIONS)
 {
 	let body = req.body;
+	
+	console.log(body);
+
 	let query = {};
 
 	for(let i in body)
@@ -124,7 +127,7 @@ exports.admin_user = function(perm)
 			if(user.admin_user_permissions & perm )
 				next();
 			else
-				return res.send({message: 'Permission Denied'});
+				return res.send({err: 'Permission Denied'});
 		});
 		
 	}

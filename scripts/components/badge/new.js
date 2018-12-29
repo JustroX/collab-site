@@ -7,7 +7,7 @@ app.controller("badgeNewController",function($scope,$http,$location,$timeout,ses
 
 	$scope.model   = model;
 
-	let api = apiService.new($scope);
+	let api = apiService.new("badge",$scope);
 	api.loaded = function(res)
 	{
 		model = 
@@ -18,7 +18,7 @@ app.controller("badgeNewController",function($scope,$http,$location,$timeout,ses
 	};
 	api.validate = function()
 	{
-		return model.name!="" ;
+		return $scope.model.name!="" ;
 	};
 
 

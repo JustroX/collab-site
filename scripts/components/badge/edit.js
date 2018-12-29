@@ -6,8 +6,8 @@ app.controller("badgeEditController",function( apiService, $scope,$http,$locatio
 	};
 	$scope.model = model;
 
-	let api = apiService.edit($scope);
-	let view = apiService.view($scope);
+	let api = apiService.edit("badge",$scope);
+	let view = apiService.view("badge",$scope);
 	
 	api.loaded = function(res)
 	{

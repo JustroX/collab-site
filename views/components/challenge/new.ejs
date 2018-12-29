@@ -1,4 +1,4 @@
-<div ng-init="editor.init('article-editor')" ng-controller='articleNewController'>
+<div ng-init="editor.init('challenge-editor')" ng-controller='challengeNewController'>
 
 	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
 	    <a class="uk-alert-close" uk-close></a>
@@ -10,7 +10,7 @@
 	<input type="text" class="uk-input" ng-model='model.module' placeholder="Module">
 
 	<div>
-		<div id='article-editor'></div>
+		<div id='challenge-editor'></div>
 	</div>
 	
 	<div ng-if='api.loading' uk-spinner></div>

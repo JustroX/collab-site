@@ -76,7 +76,7 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Challenge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
+	Challenge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).populate("authors").exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -90,10 +90,10 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Challenge.findById(challenge_id,fields.join(' ') ,function(err,mod)
+	Challenge.find({_id: challenge_id},fields.join(' ') ).populate("authors").exec(function(err,mod)
 	{
-		if(!mod) return res.send({ code: 500 , message: 'Challenge not found.' });
-		res.send(mod);
+		if(!mod[0]) return res.send({ code: 500 , err: 'Challenge not found.' });
+		res.send(mod[0]);
 	});
 });
 
@@ -102,10 +102,13 @@ router.put('/:id', lib.logged, function(req, res){
 	let challenge_id = req.params.id;
 	let query = lib.sanitize(req,PERMISSIONS);
 
+	if(query.output_type)
+		query.output_type = parseInt(query.output_type);
+
 	Challenge.findById(challenge_id,function(err,challenge)
 	{
 		if(err) throw err;	
-		if(!challenge) return res.send({ code: 500 , message: 'Challenge not found.' });
+		if(!challenge) return res.send({ code: 500 , err: 'Challenge not found.' });
 
 		Module.findById(challenge.module,function(err, mod)
 		{
@@ -153,14 +156,14 @@ router.put('/:id', lib.logged, function(req, res){
 router.delete('/:id', lib.logged, function(req, res){
 	let challenge_id = req.params.id;
 	let user   = req.session.passport.user;
-	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+	if(!user) return res.send({ code: 403, err: 'Please login to continue'});
 	
 
 
 	Challenge.findById(challenge_id, function(err, challenge)
 	{
 		if(err) return res.send({ err : "Databasse Error" });
-		if(!challenge) return res.send({ code: 500 , message: 'Challenge not found.' });
+		if(!challenge) return res.send({ code: 500 , err: 'Challenge not found.' });
 
 		Module.findById(challenge.module,function(err, mod)
 		{

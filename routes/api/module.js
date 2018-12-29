@@ -22,7 +22,7 @@ router.post('/',  lib.logged , function(req, res){
 
 	Guild.findById(body.guild, function(err, guild){
 
-		if(err) throw err;
+		if(err) return res.send({ code: 500, err: "Database Error"});
 		if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 		let permited = guild.is_permitted_module(req.session.passport.user,1);
@@ -39,7 +39,7 @@ router.post('/',  lib.logged , function(req, res){
 
 		mod.save(function(err)
 		{
-			if(err) throw err;
+			if(err) return res.send({ code: 500, err: "Database Error"});
 			let output = lib.hide_fields(mod,PERMISSIONS);
 			return res.send(output);
 		});
@@ -71,7 +71,7 @@ router.get('/', function(req, res){
 	.populate("users","name username private.local.email")
 	.exec(function(err,docs)
 	{
-		if(err) throw err;
+		if(err) return res.send({ code: 500, err: "Database Error"});
 		res.send(docs);
 	});
 
@@ -101,12 +101,12 @@ router.put('/:id', lib.logged, function(req, res){
 
 	Module.findById(mod_id, function(err, mod)
 	{
-		if(err) throw err;	
+		if(err) return res.send({ code: 500, err: "Database Error"});	
 		if(!mod) return res.send({ code: 500 , err: 'Module not found.' });
 	
 		Guild.findById(mod.guild, function(err, guild){
 
-			if(err) throw err;
+			if(err) return res.send({ code: 500, err: "Database Error"});
 			if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 			let permited = guild.is_permitted_module(user,2);
@@ -118,7 +118,7 @@ router.put('/:id', lib.logged, function(req, res){
 			}
 			mod.save(function(err, updated)
 			{
-				if(err) throw err;
+				if(err) return res.send({ code: 500, err: "Database Error"});
 				let output = lib.hide_fields(updated,PERMISSIONS);
 				res.send(output);
 			});
@@ -140,7 +140,7 @@ router.delete('/:id', lib.logged, function(req, res){
 
 		Guild.findById(mod.guild, function(err, guild){
 
-			if(err) throw err;
+			if(err) return res.send({ code: 500, err: "Database Error"});
 			if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 			let permited = guild.is_permitted_module(user,4);
@@ -149,7 +149,7 @@ router.delete('/:id', lib.logged, function(req, res){
 			Module.deleteOne({ _id: mod_id },function(err)
 			{
 				if(err) return res.send({ err : "Databasse Error" });
-				return res.send({ err: "Delete successful" })
+				return res.send({ message: "Delete successful" })
 
 			});
 		});

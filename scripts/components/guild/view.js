@@ -1,46 +1,5 @@
-app.controller("guildViewController",function($scope,$http,$location,$timeout,session)
+app.controller("guildViewController",function($scope,$http,$location,$timeout,session,apiService)
 {
-	let api = 
-	{
-		loading: false,
-		error: '',
-		value: null,
-		target:  ($scope.parent_api && $scope.parent_api.target) || '',
-		param: '',
-		load: function()
-		{
-			session.onready(function()
-			{
-				api.loading = true;
-				$http.get('/api/guild/'+api.target+'?'+api.param).then((res)=>
-				{
-					api.load_options();
-					res = res.data;
-					api.loading = false;
-					if(res.err)
-						return api.err(res.err);
-					api.success(res);
-				});
-			});
-		},
-		load_options: function()
-		{
-			$http.get('/api/guild?options=true').then((res)=>
-			{
-				res = res.data;
-				api.options = res;
-			});
-		},
-		err: function(mes)
-		{
-			api.error = mes;
-			console.log("API ERROR: "+mes);
-		},
-		success: function(res)
-		{
-			api.value = res;
-		},
-	}
-
+	let api = apiService.view("guild",$scope);
 	$scope.api    = api;
 });

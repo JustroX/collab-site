@@ -10,7 +10,8 @@ var ChallengeSchema = mongoose.Schema({
 	authors: [Schema.Types.ObjectId],
 	submissions: [ Schema.Types.ObjectId ],
 	
-	settings: { language: String , 	output_type: Number},
+	output_type: Number,
+	settings: { language: String },
 	/*
 		0 - code
 		1 - value

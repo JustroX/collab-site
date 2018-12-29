@@ -59,7 +59,7 @@ router.post('/', lib.logged,  function(req, res){
 
 	guild.save(function(err)
 	{
-		if(err) throw err;
+		if(err) return res.send({code:500, err: "Database Error"})
 		let output = lib.hide_fields(guild,PERMISSIONS);
 		return res.send(output);
 	});
@@ -90,7 +90,7 @@ router.get('/', function(req, res){
 	.populate("created_by","name username private.local.email")
 	.exec(function(err,docs)
 	{
-		if(err) throw err;
+		if(err) return res.send({code:500, err: "Database Error"})
 		res.send(docs);
 	});
 });
@@ -124,7 +124,7 @@ router.put('/:id', lib.logged , function(req, res){
 
 	Guild.findById(guild_id, function(err, guild)
 	{
-		if(err) throw err;	
+		if(err) return res.send({code:500, err: "Database Error"})	
 
 		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
 
@@ -156,7 +156,7 @@ router.put('/:id', lib.logged , function(req, res){
 		}
 		guild.save(function(err, updatedUser)
 		{
-			if(err) throw err;
+			if(err) return res.send({code:500, err: "Database Error"})
 
 			let output = lib.hide_fields(updatedUser,PERMISSIONS);
 
@@ -201,7 +201,7 @@ router.delete('/:id', function(req, res){
 		Guild.deleteOne({ _id: guild_id },function(err)
 		{
 			if(err) return res.send({ err : "Databasse Error" });
-			return res.send({ err: "Delete successful" })
+			return res.send({ message: "Delete successful" })
 
 		});
 	});
