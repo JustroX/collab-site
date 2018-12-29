@@ -23,12 +23,12 @@ router.post('/', lib.logged, function(req, res){
 
 	Module.findById(body.module,function(err, mod)
 	{
-		if(err) throw err;
+		if(err) return res.send({ err: "Database Error", code: 500 });
 		if(!mod) return res.send({ code: 501, err:"Module not found." });
 
 		Guild.findById(mod.guild, function(err, guild){
 
-			if(err) throw err;
+			if(err) return res.send({ err: "Database Error", code: 500 });
 			if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 			let permited = guild.is_permitted_module(req.session.passport.user,2);
@@ -47,7 +47,7 @@ router.post('/', lib.logged, function(req, res){
 
 			challenge.save(function(err)
 			{
-				if(err) throw err;
+				if(err) return res.send({ err: "Database Error", code: 500 });
 				let output = lib.hide_fields(challenge,PERMISSIONS);
 				return res.send(output);
 			});
@@ -78,7 +78,7 @@ router.get('/', function(req, res){
 	else
 	Challenge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).populate("authors").exec(function(err,docs)
 	{
-		if(err) throw err;
+		if(err) return res.send({ err: "Database Error", code: 500 });
 		res.send(docs);
 	});
 
@@ -107,17 +107,17 @@ router.put('/:id', lib.logged, function(req, res){
 
 	Challenge.findById(challenge_id,function(err,challenge)
 	{
-		if(err) throw err;	
+		if(err) return res.send({ err: "Database Error", code: 500 });	
 		if(!challenge) return res.send({ code: 500 , err: 'Challenge not found.' });
 
 		Module.findById(challenge.module,function(err, mod)
 		{
-			if(err) throw err;
+			if(err) return res.send({ err: "Database Error", code: 500 });
 			if(!mod) return res.send({ code: 501, err:"Module not found." });
 
 			Guild.findById(mod.guild, function(err, guild){
 
-				if(err) throw err;
+				if(err) return res.send({ err: "Database Error", code: 500 });
 				if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 				let permited = guild.is_permitted_module(req.session.passport.user,2);
@@ -143,7 +143,7 @@ router.put('/:id', lib.logged, function(req, res){
 
 				challenge.save(function(err, updated)
 				{
-					if(err) throw err;
+					if(err) return res.send({ err: "Database Error", code: 500 });
 					let output = lib.hide_fields(updated,PERMISSIONS);
 					res.send(output);
 				});
@@ -167,12 +167,12 @@ router.delete('/:id', lib.logged, function(req, res){
 
 		Module.findById(challenge.module,function(err, mod)
 		{
-			if(err) throw err;
+			if(err) return res.send({ err: "Database Error", code: 500 });
 			if(!mod) return res.send({ code: 501, err:"Module not found." });
 	
 			Guild.findById(mod.guild, function(err, guild){
 
-				if(err) throw err;
+				if(err) return res.send({ err: "Database Error", code: 500 });
 				if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 				let permited = guild.is_permitted_module(user,4);

@@ -9,7 +9,7 @@ var ModuleSchema = mongoose.Schema({
    badges: [Schema.Types.ObjectId ],
    articles: [{ page: Number, article: Schema.Types.ObjectId }],
    challenges: [{ page: Number, challenge: Schema.Types.ObjectId  }],
-   users: [Schema.Types.ObjectId ]
+   users: [{ type: Schema.Types.ObjectId , ref : "User" } ]
   
 });
 
@@ -20,7 +20,7 @@ ModuleSchema.methods.is_registered = function(user)
 
 	for(let i in this.users)
 	{
-		if(this.users[i].equals(user))
+		if( (typeof this.users[i] == "object") && (this.users[i].equals) && this.users[i].equals(user))
 			return true;
 	}
 	return false;

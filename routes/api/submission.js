@@ -21,16 +21,16 @@ router.post('/', lib.logged,  function(req, res){
 	
 	Challenge.findById(req.body.challenge, function(err,challenge)
 	{
-		if(err) throw err;
-		if(!challenge) return res.send({ code: 500 , message: 'Challenge not found.' });
+		if(err) return res.send({ err: "Module not found", code: 500});
+		if(!challenge) return res.send({ code: 500 , err: 'Challenge not found.' });
 
 		Module.findById(challenge.module, function(err,mod)
 		{
-			if(err) throw err;
-			if(!mod) return res.send({ code: 500 , message: 'Module not found.' });
+			if(err) return res.send({ err: "Module not found", code: 500});
+			if(!mod) return res.send({ code: 500 , err: 'Module not found.' });
 
 			if(!mod.is_registered(req.session.passport.user))
-				return res.send({code: 403, message: 'You are not registered in this module.'})
+				return res.send({code: 403, err: 'You are not registered in this module.'})
 			
 			let submission = new Submission();
 			for(let i in PERMISSIONS)
@@ -43,7 +43,7 @@ router.post('/', lib.logged,  function(req, res){
 			submission.author = req.session.passport.user
 			submission.save(function(err)
 			{
-				if(err) throw err;
+				if(err) return res.send({ err: "Module not found", code: 500});
 				let output = lib.hide_fields(submission,PERMISSIONS);
 				return res.send(output);
 			});
@@ -76,7 +76,7 @@ router.get('/', lib.logged, function(req, res){
 	else
 	Submission.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
 	{
-		if(err) throw err;
+		if(err) return res.send({ err: "Module not found", code: 500});
 		res.send(docs);
 	});
 });
@@ -90,7 +90,7 @@ router.get('/:id', function(req, res){
 
 	Submission.findById(submission_id,fields.join(' ') ,function(err,post)
 	{
-		if(!post) return res.send({ code: 500 , message: 'Submission not found.' });
+		if(!post) return res.send({ code: 500 , err: 'Submission not found.' });
 		res.send(post);
 	});
 });
