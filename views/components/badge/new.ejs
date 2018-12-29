@@ -1,0 +1,16 @@
+<div ng-controller='badgeNewController'>
+
+	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+	    <a class="uk-alert-close" uk-close></a>
+		{{ api.error }}
+	</div>
+
+	<form ng-submit='api.submit()'>
+		<input type="text" class="uk-input" ng-model='model.name'  placeholder="Name" >
+		<button type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">New</button>
+	</form>
+
+
+	<div ng-if='api.loading' uk-spinner></div>
+	
+</div>

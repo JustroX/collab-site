@@ -19,7 +19,7 @@ router.post('/', lib.logged , function(req, res){
 	{
 		if(err) throw err;
 
-		if(!(user.badge_permission & 1)) return res.send({ code: 403, message: "Permission Denied."})
+		if(!(user.badge_permission & 1)) return res.send({ code: 403, err: "Permission Denied."})
 
 		let badge = new Badge();
 		for(let i in PERMISSIONS)
@@ -59,7 +59,7 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Badge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).exec(function(err,docs)
+	Badge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).populate("created_by","name username private.local.email").exec(function(err,docs)
 	{
 		if(err) throw err;
 		res.send(docs);
@@ -73,10 +73,10 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Badge.findById(post_id,fields.join(' ') ,function(err,badge)
+	Badge.find({_id:post_id},fields.join(' ')).populate("created_by","name username private.local.email").exec(function(err,badge)
 	{
-		if(!badge) return res.send({ code: 500 , message: 'Badge not found.' });
-		res.send(badge);
+		if(!badge) return res.send({ code: 500 , err: 'Badge not found.' });
+		res.send(badge[0]);
 	});
 
 });
@@ -91,11 +91,11 @@ router.put('/:id', lib.logged , function(req, res){
 	{
 		if(err) throw err;
 
-		if(!(user.badge_permission & 2)) return res.send({ code: 403, message: "Permission Denied."})
+		if(!(user.badge_permission & 2)) return res.send({ code: 403, err: "Permission Denied."})
 		Badge.findById(badge_id, function(err, badge)
 		{
 			if(err) throw err;	
-			if(!badge) return res.send({ code: 500 , message: 'Badge not found.' });
+			if(!badge) return res.send({ code: 500 , err: 'Badge not found.' });
 
 			for(let i in query)
 			{
@@ -119,11 +119,11 @@ router.delete('/:id', lib.logged , function(req, res){
 	{
 		if(err) throw err;
 
-		if(!(user.badge_permission & 4)) return res.send({ code: 403, message: "Permission Denied."})
+		if(!(user.badge_permission & 4)) return res.send({ code: 403, err: "Permission Denied."})
 		Badge.findById(badge_id, function(err, badge)
 		{
 			if(err) return res.send({ err : "Databasse Error" });
-			if(!badge) return res.send({ code: 500 , message: 'Badge not found.' });
+			if(!badge) return res.send({ code: 500 , err: 'Badge not found.' });
 					
 			Badge.deleteOne({ _id: badge_id },function(err)
 			{
