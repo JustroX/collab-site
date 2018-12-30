@@ -1,0 +1,23 @@
+#ex-navbar-primary
+{
+	background: linear-gradient(45deg,#0086b3,#00b3b3);
+}
+#ex-input
+{
+	background: rgba(255,255,255,0.2);
+	color: white;
+	border-radius: 5px;
+	/*background: linear-gradient(-45deg,	#ffffff ,#d4c4c4);*/
+}
+
+#ex-card
+{
+	background: linear-gradient(45deg,	#ffffff ,#ffffff);
+	border: 1px solid #dedede;
+}
+
+
+body
+{
+	background: linear-gradient(135deg,	#ffffff ,#e6ffff)
+}

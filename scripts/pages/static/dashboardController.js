@@ -5,5 +5,5 @@ app.controller("staticDashboardController",function($scope,$http,$location)
 		if(!(res.data == true))
 			$location.path("/");
 	});
-
+	
 });

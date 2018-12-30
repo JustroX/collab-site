@@ -46,18 +46,33 @@ app.service('editorService', function(session,$http,$timeout)
 
 		toggle()
 		{
+			if(this.$scope.parent_editor && this.$scope.parent_editor.ontoggleBreak)
+				return this.$scope.parent_editor.ontoggleBreak(this.$scope.editor)
+			
 			this.active = !this.active
 			if(this.active) this.focus();
+
+			if(this.$scope.parent_editor && this.$scope.parent_editor.ontoggle)
+				this.$scope.parent_editor.ontoggle(this.active);
 		}
 
 		focus()
 		{
+			let editor_ = this;
 			$timeout(function()
 			{
-				this.quill.blur()
-				this.quill.focus()
+				editor_.quill.blur();
+				editor_.quill.focus();
 			},1);
 		}
+
+	}
+
+	this.toHTML= function(inputDelta)
+	{
+		let tempQuill=new Quill(document.createElement("div"));
+	    tempQuill.setContents(inputDelta);
+	    return tempQuill.root.innerHTML;
 	}
 
 	this.create = function($scope,div_id)

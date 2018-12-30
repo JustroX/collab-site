@@ -1,14 +1,22 @@
 <div ng-include="'pages/static/navbar'" ></div>
 <div ng-controller='staticDashboardController'>
-	<br><br>
 	<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
 		<div class="uk-padding uk-padding-large uk-padding-remove-top uk-width-1-4">
 		
 		</div>
 		<div class="uk-width-1-2">
-			<h1>Hello</h1>
 
+			<div class="uk-padding uk-padding-remove-top">
+				<ul class="uk-flex-center" uk-tab>
+					<li><a href="#">FEED</a></li>
+				    <li class="uk-active"><a href="#">DISCOVER</a></li>
+				    <li><a href="#">EVENTS</a></li>
+				</ul>
+			</div>
+			
 
+			<div ng-include="'pages/post/new'"></div>
+			<div ng-include="'pages/post/list'"></div>
 		</div>
 		<div class="uk-width-1-4">
 			

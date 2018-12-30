@@ -67,6 +67,9 @@ app.service('apiService', function(session,$http,$timeout)
 				api_.loading = false;
 				if(res.err)
 					return api_.err(res.err);
+
+				if(api_.$scope.parent_api)
+					api_.$scope.parent_api.new.success(res);
 				api_.success(res)
 			});
 		}
@@ -85,14 +88,13 @@ app.service('apiService', function(session,$http,$timeout)
 		}
 		success(res)
 		{
-			if(this.$scope.parent_api)
-				this.$scope.parent_api.new.success(res);
+			;
 		}
 	}
 
 	class listAPI
 	{
-		constructor(...args)
+		constructor($scope,...args)
 		{
 			this.loading = false;
 			this.error  = false;
@@ -103,6 +105,16 @@ app.service('apiService', function(session,$http,$timeout)
 
 			this.list = [];
 			this.param = "";
+			this.$scope = $scope;
+
+			let _api = this;
+			if($scope.parent_api && $scope.parent_api.post && $scope.parent_api.post.list && $scope.parent_api.post.list.ready)
+				$timeout(function()
+				{
+					_api.$scope.parent_api.post.list.ready(_api.$scope.api);
+				},1);
+
+
 		}
 
 		load()

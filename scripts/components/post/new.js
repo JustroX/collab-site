@@ -18,8 +18,19 @@ app.controller("postNewController",function($scope,$http,$location,$timeout,apiS
 	api.loaded = function(res)
 	{
 		editor.quill.setText('');
-		model.content = '';
-		model.title = '';
+		$scope.model.content = '';
+		$scope.model.title = '';
+	}
+	api.success = function(res)
+	{
+		$scope.editor.toggle();
+		UIkit.notification({
+		    message: 'Your post has been published!',
+		    status: 'success',
+		    pos: 'top',
+		    timeout: 3000
+		});
+
 	}
 	api.validate = function()
 	{

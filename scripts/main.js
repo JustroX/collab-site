@@ -1,5 +1,5 @@
 
-var app = angular.module("site", ["ngRoute","hljs","ngSanitize"]);
+var app = angular.module("site", ["ngRoute","hljs","ngSanitize","ngAnimate"]);
 
 
 app.config(function($routeProvider) {

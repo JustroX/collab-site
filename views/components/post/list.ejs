@@ -1,16 +1,34 @@
-<div ng-controller='postListController' ng-init="api.init()">
+<div ng-controller='postListController'>
 	
-	<a href="javascript:void(0)" ng-click="api.load()">Reload</a>
+<!-- 	<a href="javascript:void(0)" ng-click="api.load()">Reload</a>
 
 	<a href="javascript:void(0)" ng-click="api.next()">Next</a>
 	<a href="javascript:void(0)" ng-click="api.prev()">Previous</a>
-
+ -->
 	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
 	    <a class="uk-alert-close" uk-close></a>
 		{{ api.error }}
 	</div>
-	<div ng-if='api.loading' uk-spinner></div>
-	<ol>
-		<li ng-repeat='  i in api.list '>{{i}}</li>
-	</ol>
+	<div class="uk-text-center">
+		<div ng-if='api.loading' uk-spinner></div>
+	</div>
+	
+	<div ng-repeat='  i in api.list '>
+		<div uk-scrollspy="cls:uk-animation-slide-top-small" class=" uk-padding-small" id="ex-card" style="margin-bottom: 10px">
+		    <div class="uk-padding-small">
+		        <div class="uk-grid-small uk-flex-middle" uk-grid>
+		            <img class="uk-border-circle" width="50" height="50" src="https://storage.googleapis.com/neris/public/images/types/faces/INFJ-female.svg">
+	                <p class="uk-margin-remove-top"> <b>{{ i.author.name }}</b> &middot; <small> <time datetime="{{ i.date }}">{{ i.date | date: "MMMM d, y" }}</time> </small> </p>
+		        </div>
+		    </div>
+		    <div class="uk-padding-small">
+		    	<div ng-bind-html='i.content'></div>
+		    </div>
+		    <div style="text-align: center;">
+		    	<a href="" class="uk-icon-button uk-margin-small-right" uk-icon="heart"></a>
+				<a href="" class="uk-icon-button" uk-icon="refresh"></a>
+				<a href="" class="uk-icon-button  uk-margin-small-right" uk-icon="comment"></a>
+		    </div>
+		</div>
+	</div>
 </div>
