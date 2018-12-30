@@ -2,7 +2,7 @@
 <div ng-controller='staticDashboardController'>
 	<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
 		<div class="uk-padding uk-padding-large uk-padding-remove-top uk-width-1-4">
-		
+			<div ng-include="'pages/components/navigation/nav'"></div>
 		</div>
 		<div class="uk-width-1-2">
 
@@ -19,7 +19,7 @@
 			<div ng-include="'pages/post/list'"></div>
 		</div>
 		<div class="uk-width-1-4">
-			
+			<div ng-include="'pages/components/navigation/right'"></div>
 		</div>
 	</div>
 </div>
