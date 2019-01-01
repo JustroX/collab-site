@@ -13,5 +13,6 @@ router.use('/module', require('./api/module.js'));
 router.use('/post', require('./api/post.js'));
 router.use('/submission', require('./api/submission.js'));
 router.use('/user', require('./api/user.js'));
+router.use('/invitation', require('./api/invitation.js'));
 
 module.exports = router;

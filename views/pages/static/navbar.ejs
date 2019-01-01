@@ -1,50 +1,53 @@
-<nav ng-controller='staticNavbarController' class=" uk-navbar-container uk-margin uk-light" id="ex-navbar-primary" uk-navbar>
-    <div class="uk-navbar-left" style="margin-left: 5vw;">
-        <ul class="uk-navbar-nav">
-            <li><a style="color: white" href="#/dashboard">  &nbsp;  Home</a></li>
-            <li><a style="color: white" href="#">    &nbsp;  Profile</a></li>
-        </ul>
-    </div>
+<div ng-controller="pageNavigationNavbarController" style="padding: 0px; margin: 0px">
+    <nav uk-sticky="offset: 0" ng-controller='staticNavbarController' class=" uk-navbar-container uk-margin uk-light" id="ex-navbar-primary" uk-navbar>
+        <div class="uk-navbar-left" style="margin-left: 5vw;">
+            <ul class="uk-navbar-nav">
+                <li><a style="color: white" href="#/dashboard">  &nbsp;  Home</a></li>
+                <li><a style="color: white" href="#">    &nbsp;  Profile</a></li>
+                <li><a style="color: white" href="javascript:void(0)" ng-click="invite()">    &nbsp;  Invite Friends</a></li>
+            </ul>
+        </div>
 
-    <div class="uk-navbar-center" >
-        <a class="uk-navbar-item uk-logo" href="#" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a>
+        <div class="uk-navbar-center" >
+            <a class="uk-navbar-item uk-logo" href="#" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a>
 
-        
-    </div>
-
-    <div class="uk-navbar-right" style="margin-right: 5vw;">
-        <ul class="uk-navbar-nav">
-            <li>
-                <div style="padding-top: 20px">
-                    <form class="uk-search uk-search-default">
-                        <input class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
-                    </form>
-                </div>
-            </li>
             
-            <li>
-                <a href="#"><span uk-navbar-toggle-icon></span> </a>
-                <div class="uk-navbar-dropdown">
-                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li class="uk-active"><a href="#">Settings</a></li>
-                        <li><a href="#">Profile</a></li>
-                        <li><a href="#/guild">Guilds</a></li>
-                        <li><a href="#">Administration</a></li>
-                        <hr>
-                        <li><a href="#">Cookie Use Policy</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms and Agreements</a></li>
-                        <hr>
-                        <li><a ng-click='logout()' href="javascript:void(0)" >Logout</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li>
+        </div>
+
+        <div class="uk-navbar-right" style="margin-right: 5vw;">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <div style="padding-top: 20px">
+                        <form class="uk-search uk-search-default">
+                            <input class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
+                        </form>
+                    </div>
+                </li>
                 
-            </li>
-        </ul>
-    </div>
-</nav>
+                <li>
+                    <a href="#"><span uk-navbar-toggle-icon></span> </a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li class="uk-active"><a href="#">Settings</a></li>
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#/guild">Guilds</a></li>
+                            <li><a href="#">Administration</a></li>
+                            <hr>
+                            <li><a href="#">Cookie Use Policy</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms and Agreements</a></li>
+                            <hr>
+                            <li><a ng-click='logout()' href="javascript:void(0)" >Logout</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 
 
 

@@ -1,0 +1,16 @@
+<div ng-controller='invitationNewController'>
+
+	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+	    <a class="uk-alert-close" uk-close></a>
+		{{ api.error }}
+	</div>
+
+	<form ng-submit='api.submit()'>
+		<input type="email" class="uk-input" ng-model='model.email'  placeholder="Email" >
+		<button type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">Invite</button>
+	</form>
+
+
+	<div ng-if='api.loading' uk-spinner></div>
+	
+</div>

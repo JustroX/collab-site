@@ -1,0 +1,39 @@
+<div ng-controller='userSignupController' >
+
+	<div class="uk-padding uk-padding-remove-top uk-margin-remove-top uk-margin">
+
+		<form ng-submit='api.submit()'>
+			<div class="uk-grid uk-child-width-1-4 uk-animation-slide-top-small">
+				<div></div>
+				<div class="uk-padding uk-width-1-2">
+					<div style="height: 80vh; text-align: center;">
+						<div class="uk-padding">
+							<h3>Create your Account</h3>
+							
+							<img  width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-male.svg" >	
+							<br><br>	
+							<input style="width: 200px; border-radius: 5px" type="email" class="uk-input" ng-model='model.email'  placeholder="Email" >
+							<br>
+							<input style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='model.username'  placeholder="Username" >
+							<br><br>
+							<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='model.password'  placeholder="Password" >
+							<br>
+							<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='model.confirm_password'  placeholder="Confirm Password" >
+							<br><br>
+							<div ng-if='api.loading' uk-spinner></div>
+							<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+							    <a class="uk-alert-close" uk-close></a>
+								{{ api.error }}
+							</div>
+							<button type="submit" ng-if='!api.loading' class="uk-button uk-button-primary" style="color: white;background: linear-gradient(45deg,#0086b3,#00b3b3); border-radius: 5px">Next</button>
+						</div>
+					</div>
+				</div>
+				<div></div>
+			</div>
+
+		</form>
+
+	</div>
+	
+</div>

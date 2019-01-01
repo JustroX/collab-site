@@ -5,11 +5,15 @@ var Schema = mongoose.Schema;
 var UserSchema = mongoose.Schema({
 	
    name: String,
+   firstname: String,
+   lastname: String,
    bio: String,
    birthday: Date,
    school: String,
    username: String,
    privileges : [ String ],
+   sex: String,
+   confirmed: Boolean,
 
    admin_user_permissions : Number,
    admin_guild_permissions : Number, 

@@ -1,0 +1,33 @@
+<div ng-controller='invitationNewController' ng-init="modal.id = 'modal-invitation'">
+	
+	<div id="modal-invitation" uk-modal>
+	    <div class="uk-modal-dialog uk-modal-body" style="text-align: center;">
+	    	<div class="uk-padding uk-padding-remove-bottom">
+		        <img src="https://storage.googleapis.com/neris/public/images/types/scenes/diplomats_Advocate_INFJ_workplace_habits.svg">
+		        <h2 style="margin-bottom: 0px" class="uk-modal-title uk-animation-slide-top-small">The more the merrier!</h2>
+		        <p style="margin: 0px" class=" uk-animation-slide-top-small">Experience more fun when you have friends on your side.</p>
+		        <p style="margin-top: 0px" class="uk-text-meta uk-animation-slide-top-small">Invite your schoolmates, classmates, and friends.</p>
+				
+	        	<div ng-show='invitation.link'>
+	        		<b>Send this link to your friend</b><br>
+		        	<input uk-tooltip="title: Click to copy to clipboard" class="uk-input" style="border-radius: 2px; color: #229911; font-size: 10pt; cursor: pointer; text-align: center;" onclick=" this.select();document.execCommand('copy');" readonly type="text"  ng-model='invitation.link' >
+		        	<br>
+		        	<br>
+		        	<b>Invite others!</b>
+	        	</div>
+		        <div class="uk-padding uk-padding-remove-top">
+					<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+					    <a class="uk-alert-close" uk-close></a>
+						{{ api.error }}
+					</div>
+					<form ng-submit='api.submit()'>
+						<input type="email" style="border-radius: 2px; margin-bottom: 5px" class="uk-input" ng-model='model.email'  placeholder="Email" >
+						<button type="submit" style="border-radius: 2px" ng-if='!api.loading' class="uk-button uk-button-primary">Invite</button>
+						<div ng-if='api.loading' uk-spinner></div>
+					</form>
+		        </div>
+	    	</div>
+	    </div>
+	</div>
+
+</div>

@@ -16,6 +16,7 @@
 
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.42.0/codemirror.min.css">
 	<link rel="stylesheet" type="text/css" href="https://codemirror.net/theme/monokai.css">
+
 	<!-- Include the highlight.js library -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
 	
@@ -41,6 +42,10 @@
 	<!--Jquery-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+	<!-- slick library -->
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+	
 	<!-- Quill -->	
 	<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
@@ -80,6 +85,7 @@
 	<script type="text/javascript" src="/scripts/services/quill.js"></script>
 	<script type="text/javascript" src="/scripts/services/code.js"></script>
 	<script type="text/javascript" src="/scripts/services/ukAnimate.js"></script>
+	<script type="text/javascript" src="/scripts/services/subpage.js"></script>
 
 	<!-- + AUTH -->
 	<script type="text/javascript" src="/scripts/auth/loginController.js"></script>
@@ -130,15 +136,20 @@
 	<script type="text/javascript" src="/scripts/components/submission/edit.js"></script>
 	<script type="text/javascript" src="/scripts/components/submission/delete.js"></script> -->
 	<!-- ++  user -->
-<!-- 	<script type="text/javascript" src="/scripts/components/user/new.js"></script>
+	<script type="text/javascript" src="/scripts/components/user/new.js"></script>
+	<script type="text/javascript" src="/scripts/components/user/signup.js"></script>
 	<script type="text/javascript" src="/scripts/components/user/view.js"></script>
 	<script type="text/javascript" src="/scripts/components/user/list.js"></script>
 	<script type="text/javascript" src="/scripts/components/user/edit.js"></script>
-	<script type="text/javascript" src="/scripts/components/user/delete.js"></script> -->
+	<script type="text/javascript" src="/scripts/components/user/delete.js"></script>
 	
-
+	<!-- ++ invitation -->
+	<script type="text/javascript" src="/scripts/components/invitation/new.js"></script>
+	<script type="text/javascript" src="/scripts/components/invitation/view.js"></script>
+	
 	<!-- + PAGES -->
 
+	<script type="text/javascript" src="/scripts/pages/navigation/navbar.js"></script>
 	<!-- ++  article -->
 	<!-- <script type="text/javascript" src="/scripts/pages/article/new.js"></script>
 	<script type="text/javascript" src="/scripts/pages/article/view.js"></script>
@@ -177,6 +188,7 @@
 	 --><!-- ++  static -->
 	<script type="text/javascript" src="/scripts/pages/static/dashboardController.js"></script>
 	<script type="text/javascript" src="/scripts/pages/static/navbarController.js"></script>
+	<script type="text/javascript" src="/scripts/pages/static/invitationController.js"></script>
 	<!-- ++  user -->
 	<!-- <script type="text/javascript" src="/scripts/pages/user/new.js"></script>
 	<script type="text/javascript" src="/scripts/pages/user/view.js"></script>

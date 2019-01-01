@@ -111,9 +111,23 @@ exports.hide_fields = function(obj,PERMISSIONS)
 
 exports.logged	 = function(req,res,next)
 {
-	let user   = req.session.passport.user;
-	if(!user)	
-		return res.send({ message: 'Please login to continue'})
+	if(!(req.session && req.session.passport && req.session.passport.user))
+		return res.send({ err: 'Please login to continue', err: 403})
+	next();
+
+	// WHEN GMAIL API IS DONE
+	// User.find({_id: req.session.passport.user}).exec(function(err,user)
+	// {
+	// 	if(err) return res.send({err:"Database Error", code: 500});
+	// 	if(!user.confirmed)
+	// 		return res.send({err:"Please confirm your account.", err: 403});
+	// 	next();
+	// });
+}
+exports.loggedAlone	 = function(req,res,next)
+{
+	if(!(req.session && req.session.passport && req.session.passport.user))
+		return res.send({ err: 'Please login to continue', err: 403})
 	next();
 }
 
@@ -122,6 +136,26 @@ exports.admin_user = function(perm)
 	return function(req,res,next)
 	{
 		let id = req.session.passport.user;
+		User.findById(id, function(err,user)
+		{
+			if(user.admin_user_permissions & perm )
+				next();
+			else
+				return res.send({err: 'Permission Denied'});
+		});
+		
+	}
+}
+
+
+exports.admin_user_or_self = function(perm)
+{
+	return function(req,res,next)
+	{
+		let id = req.session.passport.user;
+		if(req.params.id == id)
+			next();
+		else
 		User.findById(id, function(err,user)
 		{
 			if(user.admin_user_permissions & perm )

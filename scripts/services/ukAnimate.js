@@ -8,7 +8,7 @@ app.service('ukAnimate', function($http,$timeout)
 		{
 			$timeout(function()
 			{
-				$component.removeClass('uk-animation-slide-bottom uk-animation-reverse');
+				$component.removeClass(animation);
 				cb();
 			},1);
 	    });

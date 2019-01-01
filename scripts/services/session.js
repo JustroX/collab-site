@@ -4,6 +4,7 @@ app.service('session', function($http,$timeout)
 	$http.get('/api/user/self').then((res)=>
 	{
 		res = res.data;
+		console.log(res);
 		if(res.err) return console.log(res.err);
 		user = res;
 	});

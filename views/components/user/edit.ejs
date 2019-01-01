@@ -1,3 +1,82 @@
+<div ng-controller='userEditController' >
+
+	<form ng-submit='api.submit()'>
+		<div  id='component-user-edit-1' ng-if="subpage.here('register-edit/1')" class="uk-padding uk-padding-remove-top uk-margin-remove-top uk-margin ">
+
+				<div class="uk-grid uk-child-width-1-4">
+					<div></div>
+					<div class="uk-padding uk-width-1-2">
+						<div style="height: 80vh; text-align: center;">
+							<div class="uk-padding">
+								<h3>Create your Account</h3>
+								
+								<img  width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-male.svg" >	
+								<br><br>	
+								<input required style="width: 200px; border-radius: 5px" type="email" class="uk-input" ng-model='model.private.local.email'  placeholder="Email" >
+								<br>
+								<input required style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='model.username'  placeholder="Username" >
+								<br><br>
+								<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='model.private.local.password'  placeholder="Password" >
+								<br>
+								<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='model.confirm_password'  placeholder="Confirm Password" >
+								<br><br>
+								<div ng-if='api.loading' uk-spinner></div>
+								<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+									{{ api.error }}
+								</div>
+								<button ng-click="validateForm1()" type="button" ng-if='!api.loading' class="uk-button uk-button-primary" style="color: white;background: linear-gradient(45deg,#0086b3,#00b3b3); border-radius: 5px">Next</button>
+							</div>
+						</div>
+					</div>
+					<div></div>
+				</div>
+
+
+		</div>
+
+		<div id='component-user-edit-2'  ng-if="subpage.here('register-edit/2')" class="uk-padding uk-padding-remove-top uk-margin-remove-top uk-margin ">
+			
+				<div class="uk-grid uk-child-width-1-4">
+					<div></div>
+					<div class="uk-padding uk-width-1-2">
+						<div style="height: 80vh; text-align: center;">
+
+							<a class="uk-link-muted" href="javascript:void(0)" ng-click='gotoPage1()' >Back to Page 1</a> <br>
+							<h3 style="margin-top: 0px;">Create your Account</h3>
+							<img ng-if=" model.sex != 'female' " width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-male.svg" >	
+							<img ng-if=" model.sex == 'female' " width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-female.svg" > 	
+							<br><br>
+							<b class="uk-text-meta">Name</b>
+							<br>		
+							<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-change='model.name = model.firstname + " " + model.lastname' ng-model='model.firstname'  placeholder="First name" >
+							<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-change='model.name = model.firstname + " " + model.lastname' ng-model='model.lastname'  placeholder="Last name" >
+							<br>
+							<b class="uk-text-meta">School</b> <br>	
+							<input required style="border-radius: 5px; width: 250px" type="text" class="uk-input" ng-model='model.school'  placeholder="School" ><br>
+							<b class="uk-text-meta">Birthday</b><br>	
+							<input required style="border-radius: 5px; width: 200px" type="date" class="uk-input" ng-model='model.birthday'  placeholder="Birthday" ><br>
+							<b class="uk-text-meta">Sex</b><br>	
+							<select required style="width: 150px; border-radius: 5px" class="uk-input uk-select" style="border-radius: 5px" ng-model="model.sex">
+								<option selected value="male">Male</option>
+								<option value="female">Female</option>
+							</select>
+							<br><br>
+							
+							<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+								{{ api.error }}
+							</div>
+							<div ng-if='api.loading' uk-spinner></div>
+							<button ng-if='!api.loading' type="submit" class="uk-button uk-button-default" style="color: white;background: linear-gradient(45deg,#0086b3,#00b3b3); border-radius: 5px">DONE</button> <br>
+						</div>
+					</div>
+					<div></div>
+				</div>
+
+		</div>
+		</form>
+	
+</div>
+<!-- 
 <div ng-controller='userEditController'>
 	
 	<input type="text" class="uk-input" ng-model='api.view.target'>
@@ -25,4 +104,4 @@
 	
 
 
-</div>
+</div> -->

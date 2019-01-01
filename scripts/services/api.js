@@ -1,4 +1,4 @@
-app.service('apiService', function(session,$http,$timeout) 
+app.service('apiService', function(session,$http,$timeout,$rootScope) 
 {
 	class deleteAPI
 	{
@@ -194,11 +194,14 @@ app.service('apiService', function(session,$http,$timeout)
 		load()
 		{
 			let api_ = this;
+			console.log("being loaded");
 			session.onready(function()
 			{
 				api_.loading = true;
+				console.log("ready");
 				$http.get('/api/'+api_.url+'/'+api_.target+'?'+api_.param).then((res)=>
 				{
+					api_.loaded(res);
 					api_.load_options();
 					res = res.data;
 					api_.loading = false;
@@ -216,6 +219,10 @@ app.service('apiService', function(session,$http,$timeout)
 				res = res.data;
 				api_.options = res;
 			});
+		}
+		loaded()
+		{
+			;
 		}
 		err(mes)
 		{
@@ -236,6 +243,7 @@ app.service('apiService', function(session,$http,$timeout)
 			this.loading = false;
 			this.error = "";
 			this.$scope  =$scope;
+
 		}
 		submit()
 		{
@@ -254,6 +262,9 @@ app.service('apiService', function(session,$http,$timeout)
 				api_.loading = false;
 				if(res.err)
 					return api_.err(res.err);
+
+				if(this.$scope.parent_api && this.$scope.parent_api.edit && this.$scope.parent_api.edit.success)
+					this.$scope.parent_api.edit.success(res);
 				api_.success(res)
 			});
 		}
@@ -272,8 +283,6 @@ app.service('apiService', function(session,$http,$timeout)
 		}
 		success(res)
 		{
-			if(this.$scope.parent_api)
-				this.$scope.parent_api.edit.success(res);
 		}
 	}
 

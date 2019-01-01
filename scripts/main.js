@@ -17,6 +17,9 @@ app.config(function($routeProvider) {
     .when("/dashboard", {
         templateUrl : "/pages/static/dashboard"
     })
+    .when("/invitation/:id", {
+        templateUrl : "/pages/static/invitation"
+    })
 
 
     //User
