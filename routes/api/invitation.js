@@ -7,7 +7,9 @@ var PERMISSIONS  =
 	_id: 1,
 	email : 3,
 	invited_by : 1,
-	createdAt: 1
+	createdAt: 1,
+	confirmed : 1,
+	user: 1,
 }
 
 router.post('/', lib.logged , function(req, res){
@@ -30,6 +32,22 @@ router.post('/', lib.logged , function(req, res){
 		return res.send(output);
 	});
 
+});
+
+router.post('/confirm', lib.logged , function(req, res){
+	let body = req.body;
+	let id = body._id;
+	Invitation.findById(id,function(err,inv)
+	{
+		if(err) return res.send({ err: "Database Error" , code : 500  });
+		inv.confirmed = true;
+		inv.user = body.user;
+		inv.save(function(err)
+		{
+			if(err) return res.send({ err: "Database Error" , code : 500  });
+			return res.send({ success: "Invitation has been confirmed" });
+		})
+	});
 });
 
 router.get('/', function(req, res){

@@ -6,7 +6,9 @@ var Schema = mongoose.Schema;
 var InvitationSchema = mongoose.Schema({
 	email : String,
 	invited_by : { type: Schema.Types.ObjectId , ref: "User"},
-	createdAt: { type: Date, expires: '3d', default: Date.now }
+	createdAt: { type: Date, expires: '3d', default: Date.now },
+	confirmed: Boolean,
+	user: {type: Schema.Types.ObjectId , ref: "User"}
 });
 
 

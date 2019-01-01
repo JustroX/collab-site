@@ -1,13 +1,15 @@
 app.service('session', function($http,$timeout) 
 {
 	let user ;
-	$http.get('/api/user/self').then((res)=>
+	let init = function()
 	{
-		res = res.data;
-		console.log(res);
-		if(res.err) return console.log(res.err);
-		user = res;
-	});
+		$http.get('/api/user/self').then((res)=>
+		{
+			res = res.data;
+			if(res.err) return console.log(res.err);
+			user = res;
+		});
+	}
 
 	let onready = function(_f)
 	{
@@ -17,6 +19,8 @@ app.service('session', function($http,$timeout)
 			$timeout(function(){onready(_f);},3);
 	};
 
+	init();
+	this.init = init;
 	this.getUser = function(){return user;}
 
 	this.onready = onready;

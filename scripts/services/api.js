@@ -195,21 +195,21 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 		{
 			let api_ = this;
 			console.log("being loaded");
-			session.onready(function()
+			// session.onready(function()
+			// {
+			api_.loading = true;
+			console.log("ready");
+			$http.get('/api/'+api_.url+'/'+api_.target+'?'+api_.param).then((res)=>
 			{
-				api_.loading = true;
-				console.log("ready");
-				$http.get('/api/'+api_.url+'/'+api_.target+'?'+api_.param).then((res)=>
-				{
-					api_.loaded(res);
-					api_.load_options();
-					res = res.data;
-					api_.loading = false;
-					if(res.err)
-						return api_.err(res.err);
-					api_.success(res);
-				});
+				api_.loaded(res);
+				api_.load_options();
+				res = res.data;
+				api_.loading = false;
+				if(res.err)
+					return api_.err(res.err);
+				api_.success(res);
 			});
+			// });
 		}
 		load_options()
 		{

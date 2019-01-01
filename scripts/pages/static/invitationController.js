@@ -1,4 +1,4 @@
-app.controller("staticInvitationController",function($scope,$http,$location,ukAnimate,subpageService,$timeout)
+app.controller("staticInvitationController",function($scope,$http,$location,ukAnimate,subpageService,$timeout,$routeParams)
 {
 	$scope.subpage = subpageService.Page();
 
@@ -11,11 +11,19 @@ app.controller("staticInvitationController",function($scope,$http,$location,ukAn
 			$scope.subpage.goto("register-edit/2");
 			ukAnimate.play("#static-invitation-register","uk-animation-slide-bottom-small uk-animation-reverse",function()
 			{
-				$http.get('/api/user/self').then(function(res)
+				$http.get('/api/user/self').then(function(sres)
 				{
 					// ukAnimate.play("#component-user-edit-2","uk-animation-slide-bottom-small",function(){});
-					res = res.data;
-					$scope.$broadcast("component-user-edit-load",{ _id : res._id });
+					sres = sres.data; 
+					if(sres.err)
+						return console.log(sres.err);
+					$http.post('/api/invitation/confirm',{ _id : $scope.invitation._id, user: sres._id }).then((res)=>
+					{
+						res = res.data;
+						if(res.err)
+							return console.log(res.err);
+						$scope.$broadcast("component-user-edit-load",{ _id : sres._id });							
+					})
 				});
 			});
 			
@@ -76,33 +84,56 @@ app.controller("staticInvitationController",function($scope,$http,$location,ukAn
 		});
 	}
 
-	$http.get('/auth/login').then((res)=>
+	$http.get('/api/invitation/'+$routeParams.id).then((res)=>
 	{
 		res = res.data;
-		if(res)
-			$http.get('/api/user/self').then(function(res)
+		if(res.err )
+			$scope.subpage.goto("error");
+		else
+		{
+			$scope.invitation = res;
+			$http.get('/auth/login').then((res)=>
 			{
-				res = res.data
-				if(res.name)
+				res = res.data;
+				if(res)
 				{
-					$location.path("/dashboard");
+					$http.get('/api/user/self').then(function(res)
+					{
+						res = res.data	
+						if(res.err)
+							console.log(res.err);
+						if(res.name)
+						{
+							$location.path("/dashboard");
+						}
+						else 
+						if( !(res.name) && (($scope.invitation.user+"") == (res._id+"")))
+						{
+							$scope.gotoRegister();
+							$scope.subpage.goto('register-edit/2');
+							ukAnimate.play("#component-user-edit-2","uk-animation-slide-bottom-small",function(){});
+							$http.get('/api/user/self').then(function(res)
+							{
+								res = res.data;
+								$scope.$broadcast("component-user-edit-load",{ _id : res._id });
+							});
+						}
+						else
+							$scope.subpage.goto("error");
+					});
 				}
 				else
 				{
-					$scope.gotoRegister();
-					$scope.subpage.goto('register-edit/2');
-					ukAnimate.play("#component-user-edit-2","uk-animation-slide-bottom-small",function(){});
-					$http.get('/api/user/self').then(function(res)
-					{
-						res = res.data;
-						$scope.$broadcast("component-user-edit-load",{ _id : res._id });
-					});
+					if($scope.invitation.confirmed)
+						$scope.subpage.goto("error");
+					else
+						$scope.subpage.goto("main");
 				}
+				
 			});
-		else
-			$scope.subpage.goto("main");
-		
-	})
+		}
+	});
+
 
 
 	
