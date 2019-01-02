@@ -5,6 +5,7 @@ app.service('subpageService', function(session,$http,$timeout,$rootScope)
 		constructor()
 		{
 			this.page = [];
+			this.onloadObj = {};
 		}
 
 		Ispage(str)
@@ -27,8 +28,16 @@ app.service('subpageService', function(session,$http,$timeout,$rootScope)
 			$timeout(function()
 			{
 				_page.page = location.split("/")
+				if(_page.onloadObj[location.split("/").join("/")])
+					_page.onloadObj[location.split("/").join("/")]();
 			},1);
 		}
+
+		onload(location,f_)
+		{
+			this.onloadObj[location.split("/").join("/")] = f_;
+		}
+
 	}
 
 	this.Page = function()

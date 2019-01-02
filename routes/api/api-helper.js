@@ -46,6 +46,11 @@ exports.filter = function(req,PERMISSIONS)
 		{
 			let val = req.query[i].split("..");
 			let item = { field: i };
+			if(val.length==1 && val[0].substring(0,3)=="rx_")
+			{
+				item.regex = val[0].substring(3);
+			}
+			else
 			if(val.length==1)
 				item.set = val[0];
 			else
@@ -62,6 +67,11 @@ exports.filter = function(req,PERMISSIONS)
 	let query = {};
 	for(var i of filters)
 	{
+		if(i.regex)
+		{
+			query[i.field] = { $regex: new RegExp(i.regex) , $options: 'i' };
+		}
+		else
 		if(i.set)
 			query[i.field] = i.set;
 		else

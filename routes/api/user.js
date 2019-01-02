@@ -113,12 +113,6 @@ router.get('/:id', function(req, res){
 
 
 
-
-
-
-
-
-
 router.post('/', lib.logged, lib.admin_user(1) , function(req, res){
 
 	//auntenticate admin settings

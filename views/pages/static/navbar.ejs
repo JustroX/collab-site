@@ -19,8 +19,25 @@
                 <li>
                     <div style="padding-top: 20px">
                         <form class="uk-search uk-search-default">
-                            <input class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
+                            <input ng-model='search.query' ng-change="searchtry()" class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
                         </form>
+                        <div  uk-sticky='offset: 100'>
+                            <div ng-if='search.query' >
+                                <div ng-controller='userListController'>
+                                    <div class="uk-card uk-card-default"  style="border-radius: 3px">
+                                        <div class="uk-padding-small">
+                                             <ul class="uk-nav uk-dropdown-nav">
+                                                <li class="uk-nav-header">Results</li>
+                                                <li style="text-align: center;" ng-show="!api.loading && !api.list.length"><i>No Results found :(</i></li>
+                                                <li style="text-align: center;"> <div ng-show='api.loading' uk-spinner></div></li>
+                                                <li style="padding: 0px" ng-repeat='i in api.list'><a href="#/user/{{i._id}}">{{i.name}}</a></li>
+                                                <li class="uk-nav-divider"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </li>
                 
