@@ -32,6 +32,7 @@ app.controller("invitationNewController",function($scope,$http,$location,$timeou
 
 	$scope.$on('pages/navigation/navbar/click-invite',function(ev,data)
 	{
+		$scope.invitation.link = "";
 		if($scope.modal.id)
 			UIkit.modal("#"+$scope.modal.id).show();
 	});

@@ -29,11 +29,11 @@ app.config(function($routeProvider) {
     // .when("/user", {
     //     templateUrl : "/pages/user/list"
     // })
-    .when("/user/:id", {
-        templateUrl : "/pages/user/view"
-    })
     .when("/user/edit/", {
         templateUrl : "/pages/user/edit"
+    })
+    .when("/user/:id", {
+        templateUrl : "/pages/user/view"
     })
 
 

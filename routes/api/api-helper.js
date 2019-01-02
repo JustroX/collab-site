@@ -80,8 +80,6 @@ exports.filter = function(req,PERMISSIONS)
 exports.sanitize = function(req,PERMISSIONS)
 {
 	let body = req.body;
-	
-	console.log(body);
 
 	let query = {};
 

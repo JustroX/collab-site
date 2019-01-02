@@ -3,13 +3,13 @@
         <div class="uk-navbar-left" style="margin-left: 5vw;">
             <ul class="uk-navbar-nav">
                 <li><a style="color: white" href="#/dashboard">  &nbsp;  Home</a></li>
-                <li><a style="color: white" href="#">    &nbsp;  Profile</a></li>
+                <li><a style="color: white" ng-click='profile()' href="javascript:void(0)"">    &nbsp;  Profile</a></li>
                 <li><a style="color: white" href="javascript:void(0)" ng-click="invite()">    &nbsp;  Invite Friends</a></li>
             </ul>
         </div>
 
         <div class="uk-navbar-center" >
-            <a class="uk-navbar-item uk-logo" href="#" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a>
+            <a class="uk-navbar-item uk-logo" href="javascript:void(0)" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a>
 
             
         </div>
@@ -25,11 +25,11 @@
                 </li>
                 
                 <li>
-                    <a href="#"><span uk-navbar-toggle-icon></span> </a>
+                    <a href="javascript:void(0)"><span uk-navbar-toggle-icon></span> </a>
                     <div class="uk-navbar-dropdown">
                         <ul class="uk-nav uk-navbar-dropdown-nav">
-                            <li class="uk-active"><a href="#">Settings</a></li>
-                            <li><a href="#">Profile</a></li>
+                            <li><a ng-click='settings()' href="javascript:void(0)">Settings</a></li>
+                            <li><a ng-click='profile()' href="javascript:void(0)">Profile</a></li>
                             <li><a href="#/guild">Guilds</a></li>
                             <li><a href="#">Administration</a></li>
                             <hr>
@@ -48,6 +48,10 @@
         </div>
     </nav>
 </div>
+
+
+    <!-- Modals -->
+    <div ng-include="'pages/components/invitation/new-modal'"></div>
 
 
 

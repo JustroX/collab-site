@@ -1,4 +1,4 @@
-app.controller("userEditController",function($scope,$http,$location,$timeout,session,apiService)
+app.controller("userEditController",function($scope,$http,$location,$timeout,session,apiService,$rootScope)
 {
 
 	let model = 
@@ -25,22 +25,26 @@ app.controller("userEditController",function($scope,$http,$location,$timeout,ses
 	
 	api.success = function(res)
 	{
-		model = 
-		{
-			name: "",
-		   bio: "",
-		   birthday: new Date(),
-		   school: "",
-		   username: "",
-		   private: 
-		   {
-		   	 local: 
-		   	 {
-		   	 	password: "",
-		   	 }
-		   }
-		};
-		$scope.model = model;
+		// model = 
+		// {
+		// 	name: "",
+		//    bio: "",
+		//    birthday: new Date(),
+		//    school: "",
+		//    username: "",
+		//    private: 
+		//    {
+		//    	 local: 
+		//    	 {
+		//    	 	password: "",
+		//    	 }
+		//    }
+		// };
+		// $scope.model = model;
+		$scope.model.private.local.password ="";
+		$scope.model.private.local.old_password ="";
+		$scope.model.confirm_password ="";
+		$rootScope.$broadcast("component/user/edit/save/success",{res:res});
 	};
 	api.validate = function()
 	{
@@ -60,9 +64,9 @@ app.controller("userEditController",function($scope,$http,$location,$timeout,ses
 	};
 	view.success = function(res)
 	{
-		console.log("catched");
 		$scope.model = res;
 		$scope.model.birthday = new Date(res.birthday || Date.now() );
+		$rootScope.$broadcast("component/user/edit/load/success",{res:res});
 	}
 	view.loaded = function(res)
 	{

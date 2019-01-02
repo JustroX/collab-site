@@ -1,4 +1,4 @@
-app.controller("staticNavbarController", function($scope,$location,$http)
+app.controller("staticNavbarController", function($rootScope,$scope,$location,$http)
 {
 	$scope.logout = function()
 	{

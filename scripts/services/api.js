@@ -194,18 +194,16 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 		load()
 		{
 			let api_ = this;
-			console.log("being loaded");
 			// session.onready(function()
 			// {
 			api_.loading = true;
-			console.log("ready");
 			$http.get('/api/'+api_.url+'/'+api_.target+'?'+api_.param).then((res)=>
 			{
 				api_.loaded(res);
 				api_.load_options();
 				res = res.data;
 				api_.loading = false;
-				if(res.err)
+				if( res.err || res == "" )
 					return api_.err(res.err);
 				api_.success(res);
 			});

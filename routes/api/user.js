@@ -172,7 +172,11 @@ router.put('/:id', lib.loggedAlone, lib.admin_user_or_self(2), function(req, res
 				user[i] = query[i];
 			}
 			if(req.body.private && req.body.private.local && req.body.private.local.password)
+			{
+				if( !user.validPassword(req.body.private.local.old_password) )
+					return res.send({err: "Password is incorrect" , code: 403});
 				user.private.local.password = user.generateHash(req.body.private.local.password);
+			}
 			if(req.body.private && req.body.private.local && req.body.private.local.email)
 				user.private.local.email = req.body.private.local.email;
 
