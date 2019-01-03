@@ -4,16 +4,18 @@
 	    <a class="uk-alert-close" uk-close></a>
 		{{ api.error }}
 	</div>
-
-	{{ model }}
-
 	<form ng-submit='api.submit()'>
-		<input type="text" class="uk-input" ng-model='model.name'  placeholder="Name" >
-		<textarea type="text" class="uk-input" ng-model='model.description'  placeholder="Description" ></textarea>
-		<button type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">New</button>
+		<b class="uk-text-meta">Guild Name</b> <br>
+		<input style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='model.name'  placeholder="Name" > <br>
+		<br>
+		<b class="uk-text-meta">Describe your guild</b> <br>
+		<textarea style="width: 200px; height: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='model.description'  placeholder="Description" ></textarea>
+		<br>
+		<div ng-if='api.loading' uk-spinner></div>
+		<br>
+		<button style="border-radius: 5px" type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">Continue</button>
 	</form>
 
 
-	<div ng-if='api.loading' uk-spinner></div>
 	
 </div>

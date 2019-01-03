@@ -62,7 +62,7 @@ exports.filter = function(req,PERMISSIONS)
 			}
 			filters.push(item);
 		}
-	}
+	};
 
 	let query = {};
 	for(var i of filters)

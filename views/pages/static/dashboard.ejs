@@ -8,22 +8,152 @@
 
 			<div class="uk-padding uk-padding-remove-top">
 				<ul class="uk-flex-center" uk-tab>
-					<li><a href="#">FEED</a></li>
-				    <li class="uk-active"><a href="#">DISCOVER</a></li>
-				    <li><a href="#">EVENTS</a></li>
+				    <li ng-class='{ "uk-active" : subpage.Ispage("discover") }'><a  ng-click='subpage.goto("discover")' href="javascript:void(0)">DISCOVER</a></li>
+					<li ng-class='{ "uk-active" : subpage.Ispage("feed") }'><a  ng-click='subpage.goto("feed")' href="javascript:void(0)">FEED</a></li>
+				    <li ng-class='{ "uk-active" : subpage.Ispage("events") }'><a  ng-click='subpage.goto("events")' href="javascript:void(0)">EVENTS</a></li>
 				</ul>
 			</div>
 			
+			<div ng-if='subpage.here("feed")'>
+				<div ng-include="'pages/post/new'"></div>
+				<div ng-include="'pages/post/list'"></div>
+			</div>
 
-			<div ng-include="'pages/post/new'"></div>
-			<div ng-include="'pages/post/list'"></div>
+			<div ng-if='subpage.Ispage("discover")'>
+				<div class="uk-padding uk-padding-remove-vertical uk-animation-slide-bottom-small">
+					<div class="uk-text-center">
+						<div class="uk-section uk-padding-remove-top">
+							<div>
+								<div  ng-if="subpage.here('discover/find')">
+									<img  class="uk-animation-slide-bottom-small" src="https://storage.googleapis.com/neris/public/images/types/scenes/diplomats_Advocate_INFJ_parenthood.svg"><br>
+									<div>
+										<h2>Discover</h2>
+										<p class="uk-text-meta">Join Guilds of your interests!</p>
+									</div>
+								</div>
+								<div  ng-if="subpage.here('discover/guilds')">
+									<img  class="uk-animation-slide-bottom-small" src="https://storage.googleapis.com/neris/public/images/types/scenes/diplomats_Protagonist_ENFJ_strengths.svg"><br>
+									<div>
+										<h2>Your Guilds</h2>
+										<p class="uk-text-meta">Check out what's happening on your guild.</p>
+									</div>
+								</div>
+								<div  ng-if="subpage.here('discover/create')">
+									<img  class="uk-animation-slide-bottom-small" src="https://storage.googleapis.com/neris/public/images/types/scenes/diplomats_Protagonist_ENFJ_friendships.svg"><br>
+									<div>
+										<h2>Start a community!</h2>
+										<p class="uk-text-meta">Create your own guild.</p>
+									</div>
+								</div>
+							</div>
+							<div class="uk-text-right uk-padding uk-padding-remove-vertical">
+								<ul class="uk-flex-center" uk-tab>
+								    <li ng-class='{ "uk-active": subpage.here("discover/find"  ) }' ><a ng-click="subpage.goto('discover/find')" href="#">Find</a></li>
+								    <li ng-class='{ "uk-active": subpage.here("discover/guilds") }' ><a ng-click="subpage.goto('discover/guilds')" href="#">Guilds</a></li>
+								    <li ng-class='{ "uk-active": subpage.here("discover/create") }' ><a ng-click="subpage.goto('discover/create')" href="#">Create</a></li>
+								</ul>
+							</div>
+							<div ng-if='subpage.here("discover/create")'>
+								<div class="uk-padding uk-animation-slide-bottom-small">
+									<div ng-include='"pages/components/guild/new"'></div>
+								</div>
+							</div>
+							<div ng-if='subpage.here("discover/find")'>
+								<div ng-controller='guildListController'>
+									<div class="uk-text-center">
+										<div ng-if="api.loading" uk-spinner></div>
+									</div>
+									<div uk-scrollspy="target: > div.guild_holder; cls:uk-animation-slide-bottom-small; delay: 500" class="uk-grid uk-child-width-1-3 uk-grid-match">
+										<div ng-hide="api.loading" class="guild_holder" ng-repeat='i in api.list'>
+											<div style="cursor: pointer;" ng-click='show_guild_modal()' class="uk-card uk-card-hover uk-card-body uk-padding-small">
+												<img src="/assets/guild-blank.png"> <br>
+												{{ i.name }}
+											</div>
+											<div  class="uk-width-small" uk-drop style="text-align: center;">
+										        <div  class="uk-card uk-card-body uk-card-secondary uk-padding-small uk-text-center" style="border-radius: 4px; color: white">
+										        	<small>
+											        	<b>{{i.name}}</b><br>
+											        	<i style="margin-top: 0px">
+											        		{{ i.description }}
+											        	</i><br>
+											        	<small>Click for more</small>
+										        	</small>
+										        </div>
+										    </div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div ng-if='subpage.here("discover/guilds")'>
+								<div ng-controller='guildListController'>
+									<div class="uk-text-center">
+										<div ng-if="api.loading" uk-spinner></div>
+									</div>
+									<div ng-hide='api.loading' uk-scrollspy="target: > div.guild_holder; cls:uk-animation-slide-bottom-small; delay: 500" class="uk-grid uk-child-width-1-3 uk-grid-match">
+										<div class="guild_holder" ng-repeat='i in api.list'>
+											<div style="cursor: pointer;" ng-click='goto_guild()' class="uk-card uk-card-hover uk-card-body uk-padding-small">
+												<img src="/assets/guild-blank.png"> <br>
+												{{ i.name }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="uk-width-1-4">
-			<div ng-include="'pages/components/navigation/right'"></div>
-			<div ng-include="'pages/components/navigation/about'"></div>
+			<!-- <div ng-include="'pages/components/navigation/right'"></div> -->
+			<!-- <div ng-include="'pages/components/navigation/about'"></div> -->
 		</div>
 	</div>
+	<br><br><br><br><br><br>
+	<!-- modals -->
+	<div id="modal-guild-view" class="uk-modal-full" uk-modal>
+	    <div class="uk-modal-dialog">
+	        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+	        <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+	            <div class="uk-background-cover" style="background-image: url('assets/guild-cover-default.jpg');" uk-height-viewport></div>
+	            <div class="uk-padding-large">
+	                <h1>Hello World Guild</h1>
+	                <ul uk-accordion>
+	                    <li class="uk-open">
+	                        <a class="uk-accordion-title" href="#">Guild Description</a>
+	                        <div class="uk-accordion-content">
+	                            <p>Guild for introductory programming course.
+	                            Here masters will teach you how to think like a programmer and Lorem ipsum dolor sit amet,
+	                            consectetur adipisicing elit, sed do eiusmod
+	                            tempor.</p>
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <a class="uk-accordion-title" href="#">Join by Badge</a>
+	                        <div class="uk-accordion-content">
+	                            <p>
+	                                Badge requirements
+	                                <ol>
+	                                    <li><a href=""> Hello World Badge </a></li>
+	                                    <li><a href=""> Competitive Programming Badge </a></li>
+	                                    <li><a href=""> Ultimate Badge </a></li>
+	                                </ol>
+	                                &nbsp;&nbsp;&nbsp;<button class="uk-button uk-button-primary">JOIN</button> 
 
-
+	                            </p>
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <a class="uk-accordion-title" href="#">Join by Request</a>
+	                        <div class="uk-accordion-content">
+	                            Guild administrators will  review your request first before admiting you. <br><br>
+	                            &nbsp;&nbsp;&nbsp;<button class="uk-button uk-button-primary ">REQUEST MEMBERSHIP</button>
+	                        </div>
+	                    </li>
+	                </ul>
+	            </div>
+	        </div>
+	    </div>
+	</div> 
 
 </div>

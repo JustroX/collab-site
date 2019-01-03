@@ -27,6 +27,9 @@ var PERMISSIONS =
    ranks: 5,
 
    users: 1,
+   "users.ranks" : 1,
+   "users.user" : 1,
+
    modules: 1,
    posts: 1,
    badges_required: 1,
@@ -71,6 +74,7 @@ router.get('/', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let query = lib.filter(req,PERMISSIONS);
 	let options = req.query.option;
+
 
 	let limit =  (req.query.limit || 10)-1+1;
 	let offset = (req.query.offset || 0)-1+1;
