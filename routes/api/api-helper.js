@@ -51,6 +51,11 @@ exports.filter = function(req,PERMISSIONS)
 				item.regex = val[0].substring(3);
 			}
 			else
+			if(val.length==1 && val[0].substring(0,3)=="ne_")
+			{
+				item.ne = val[0].substring(3);
+			}
+			else
 			if(val.length==1)
 				item.set = val[0];
 			else
@@ -70,6 +75,11 @@ exports.filter = function(req,PERMISSIONS)
 		if(i.regex)
 		{
 			query[i.field] = { $regex: new RegExp(i.regex) , $options: 'i' };
+		}
+		else
+		if(i.ne)
+		{
+			query[i.field] = { $ne: i.ne };
 		}
 		else
 		if(i.set)

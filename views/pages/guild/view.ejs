@@ -4,19 +4,22 @@
 	<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
 
 		<div class="uk-padding uk-padding-large uk-padding-remove-top uk-width-1-4">
-			<ul class="uk-thumbnav">
-			    <li class="uk-active" style="text-align: center;"><a href=""><img src="assets/guild-blank.png" width="150px" height="150px" alt=""></a></li>
-			</ul>
-			<br>
-			<div uk-sticky="offset: 100">
-				<b>Hello World Guild</b>
-		        <ul class="uk-tab-left" uk-tab>
-		            <li ng-class="{ 'uk-active' : subpage.here('feed') }" style="padding: 0px"><a href="#">Guild Feed</a></li>
-		            <li ng-class="{ 'uk-active' : subpage.here('members') }" style="padding: 0px"><a href="#">Members</a></li>
-		            <li ng-class="{ 'uk-active' : subpage.here('modules') }" style="padding: 0px"><a href="#">Modules</a></li>
-		            <li ng-class="{ 'uk-active' : subpage.here('about') }" style="padding: 0px"><a href="#">About</a></li>
-		            <li ng-class="{ 'uk-active' : subpage.here('settings') }" style="padding: 0px"><a href="#">Settings</a></li>
-		        </ul>
+			<div ng-controller='guildViewController'>
+				<ul class="uk-thumbnav">
+				    <li class="uk-active" style="text-align: center;"><a href=""><img src="assets/guild-blank.png" width="150px" height="150px" alt=""></a></li>
+				</ul>
+				<br>
+				<div uk-sticky="offset: 100">
+					<b>{{api.value.name}}</b>
+					<div ng-show='api.loading' class="uk-spinner"></div>
+			        <ul class="uk-tab-left" uk-tab>
+			            <li ng-class="{ 'uk-active' : subpage.here('feed') }" style="padding: 0px"><a  ng-click='subpage.goto("feed")' href="#">Guild Feed</a></li>
+			            <li ng-class="{ 'uk-active' : subpage.here('members') }" style="padding: 0px"><a  ng-click='subpage.goto("members")' href="#">Members</a></li>
+			            <li ng-class="{ 'uk-active' : subpage.here('modules') }" style="padding: 0px"><a  ng-click='subpage.goto("modules")' href="#">Modules</a></li>
+			            <li ng-class="{ 'uk-active' : subpage.here('about') }" style="padding: 0px"><a  ng-click='subpage.goto("about")' href="#">About</a></li>
+			            <li ng-class="{ 'uk-active' : subpage.here('settings') }" style="padding: 0px"><a  ng-click='subpage.goto("settings")' href="#">Settings</a></li>
+			        </ul>
+				</div>
 			</div>
 		</div>
 
@@ -118,47 +121,10 @@
 				<br><br><br><br>
 			</div>
  -->
-			<!-- <div>
+			<div ng-if='subpage.here("settings")'>
 				<h3>GROUP SETTINGS</h3>
 				<hr class="uk-divider-icon">
-				<section>
-					<h3>Main Settings</h3>
-						<b>Guild Name </b> <br>
-						<input type="text" class="uk-input">
-						<b>Guild Description </b> <br>
-						<textarea class="uk-textarea"></textarea>						
-						<br>
-						<br>
-						<div class="uk-child-width-1-2" uk-grid>
-							<div style="padding-left: 100px"> 
-								<img src="assets/guild-blank.png" width="200px" height="200px">
-							</div>
-							<div>
-								<b>Guild Coat of Arms </b> <br>
-								<small><em>500 x 500 px</em></small><br>
-								<div uk-form-custom>
-						            <input type="file">
-						            <button class="uk-button uk-button-default" type="button" tabindex="-1">Select Image</button>
-						        </div>
-								<p>
-									Guild Coat of Arms symbolizes your Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-									tempor incididunt ut labore et dolore magna aliqua. 
-								</p>
-							</div>
-						</div>
-						<br>
-				        <b>Guild Cover </b><br>
-						<br>
-						<div class="uk-section uk-light uk-background-cover" style="background-image: url(assets/guild-cover-default.jpg)">
-					        <div class="uk-container">
-					        </div>
-					    </div>
-					    <br>
-					    Replace Cover : <div uk-form-custom>
-				            <input type="file">
-				            <button class="uk-button uk-button-default" type="button" tabindex="-1">Select Image</button>
-				        </div>
-				</section>
+				<div ng-include='"/pages/components/guild/edit"'></div>
 				<hr class="uk-divider-icon">
 				<section>
 					<div class="uk-grid uk-child-width-1-3">
@@ -267,7 +233,7 @@
 						<br><br><br><br>
 						<br><br><br><br>
 			</div>
- -->
+
 			<!-- <div>
 				
 				<section>

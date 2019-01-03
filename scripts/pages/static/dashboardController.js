@@ -26,7 +26,7 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	{
 		$timeout(function()
 		{
-			$scope.$broadcast("component/guild/list",{param: ""});
+			$scope.$broadcast("component/guild/list",{param: "users.user=ne_"+session.getUser()._id});
 		},5);
 	});
 	$scope.subpage.onload("discover/guilds",function()
