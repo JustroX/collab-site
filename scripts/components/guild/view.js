@@ -1,4 +1,4 @@
-app.controller("guildViewController",function($scope,$http,$location,$timeout,session,apiService)
+app.controller("guildViewController",function($scope,$http,$location,$timeout,session,apiService,subpageService)
 {
 	let api = apiService.view("guild",$scope);
 	$scope.api    = api;

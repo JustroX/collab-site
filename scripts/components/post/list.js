@@ -5,7 +5,14 @@ app.controller("postListController",function($scope,$http,$location,$timeout,ses
 	{
 		for(let i in res)
 		{
-			res[i].content = editorService.toHTML(JSON.parse(res[i].content));
+			try
+			{
+				res[i].content = editorService.toHTML(JSON.parse(res[i].content));
+			}
+			catch(err)
+			{
+				console.log("Parsing error");
+			}
 		}
 		api.list = res;
 		$timeout(function()
@@ -14,4 +21,10 @@ app.controller("postListController",function($scope,$http,$location,$timeout,ses
 		},1);
 	}
 	$scope.api    = api;
+
+	$scope.$on('components/post/list',function(ev,data)
+	{
+		$scope.api.param = data.param;
+		$scope.api.load();
+	});
 });

@@ -37,6 +37,11 @@ app.controller("postNewController",function($scope,$http,$location,$timeout,apiS
 		return $scope.model.content !='' && $scope.model.group!='';
 	};
 
+	$scope.$on('components/post/new/group',function(ev,data)
+	{
+		$scope.model.group = data.group;
+	});
+
 	$scope.editor = editor;
 	$scope.api    = api;
 
