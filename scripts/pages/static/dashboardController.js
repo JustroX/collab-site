@@ -40,6 +40,12 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	$scope.show_guild_modal = function(guild)
 	{
 		UIkit.modal("#modal-guild-view").show();
+		$scope.$broadcast("component/guild/view",{_id:guild._id});
+	}
+
+	$scope.goto_guild = function(guild)
+	{
+		window.location.href = "#/guild/"+guild._id;
 	}
 
 	$scope.$on("component/guild/list/success",function()
