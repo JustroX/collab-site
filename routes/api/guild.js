@@ -116,13 +116,149 @@ router.get('/:id', function(req, res){
 });
 
 
+//PENDINGs
+router.get('/:id/users_pending', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.find({_id: guild_id}).populate('users_pending.users').exec(function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		guild = guild[0];
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+
+		if(!guild.is_permitted(user,"permission_members",1)) return res.send({ code: 403, err: "Permission Denied"});
+
+		res.send(guild.users_pending);
+	});
+});
+
+router.post('/:id/users_pending/request', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		if(guild.is_member(user)) return res.send({code:403, err: 'User is already a member'});
+
+		guild.users_pending.push({ user: user ,  mes: req.body.message});
+
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+	});
+});
+
+
+
+
+//MEMBER
+router.post('/:id/members/', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		if(guild.is_member(user)) return res.send({code:403, err: 'User is already a member'});
+		
+		let badge_completed = guild.is_badge_complete(user);
+		let permitted = guild.is_permitted(user,"permission_members",1);
+
+		if(!badge_completed && !permitted)
+		{
+			return res.send({ code: 403, err: "Your badges are incomplete"});
+		}
+		let target = permitted? req.body.user : user;
+		guild.members.push({ user: target ,  ranks: [] });
+
+		//remove from pending users
+		for(let i in guild.users_pending)
+		{
+			if( guild.users_pending[i].user == target  )
+			{
+				guild.users_pending.splice(i,1);
+				break;
+			}
+		}
+
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+	});
+});
+
+router.put('/:id/members/:mem_id', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		
+		if(!guild.is_permitted(user,"permission_members",2))
+			return res.send({code: 403, err: "Permission Denied"});
+		if(!guild.is_member(user)) return res.send({code:403, err: 'User is not a member'});
+
+		for(let i in guild.members)
+		{
+			if(guild.members[i]._id == req.params.mem_id)
+			{
+				guild.members[i].ranks = [req.body.rank];
+			}
+		}
+
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+	});
+});
+
+router.delete('/:id/members/:mem_id', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		
+		if(!guild.is_permitted(user,"permission_members",2))
+			return res.send({code: 403, err: "Permission Denied"});
+		if(!guild.is_member(user)) return res.send({code:403, err: 'User is not a member'});
+
+		for(let i in guild.members)
+		{
+			if(guild.members[i]._id == req.params.mem_id)
+			{
+				guild.members[i].splice(i,1);
+				break;
+			}
+		}
+
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+	});
+});
+
+
+
+
+//RANKS
+
+
 router.put('/:id', lib.logged , function(req, res){
 
 	let user   = req.session.passport.user;
-
-
-
-
 	let guild_id = req.params.id;
 	let query = lib.sanitize(req,PERMISSIONS);
 

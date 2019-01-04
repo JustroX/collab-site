@@ -121,7 +121,7 @@
 				<br><br><br><br>
 			</div>
  -->
-			<div ng-if='subpage.here("settings")'>
+			<div ng-show='subpage.here("settings")'>
 				<h3>GROUP SETTINGS</h3>
 				<hr class="uk-divider-icon">
 				<div ng-include='"/pages/components/guild/edit"'></div>
@@ -140,7 +140,7 @@
 							</ul>
 							<hr>
 						</div>
-						<div class="uk-width-expand" ng-if='true'>
+						<div class="uk-width-expand" ng-show='true'>
 							<h4>Edit rank</h4>
 							Rank name
 					    	<input type="text" class="uk-input">
@@ -234,36 +234,38 @@
 						<br><br><br><br>
 			</div>
 
-			<div ng-if='subpage.here("members")'>
+			<div ng-show='subpage.here("members")'>
 				
 				<section>
 					<h3>Members</h3>
 					<div style="height: 50vh; overflow-y: scroll;">
-						<table class="uk-table uk-table-striped">
-						    <thead>
-						        <tr>
-						            <th>#</th>
-						            <th></th>
-						            <th>Name</th>
-						            <th>Rank</th>
-						            <th>Status</th>
-						        </tr>
-						    </thead>
-						    <tbody>
-						        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
-						            <td>{{ $index+1 }}</td>
-						            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
-						            <td>Justine Che T. Romero</td>
-						            <td> 
-						            	<select class="uk-select">
-							                <option selected>Craftsmen</option>
-							                <option>Master</option>
-							            </select>
-        							</td>
-						            <td></td>
-						        </tr>
-						    </tbody>
-						</table>
+						<div ng-controller='guildEditController'>
+							<table class="uk-table uk-table-striped">
+							    <thead>
+							        <tr>
+							            <th>#</th>
+							            <th></th>
+							            <th>Name</th>
+							            <th>Rank</th>
+							            <th>Status</th>
+							        </tr>
+							    </thead>
+							    <tbody>
+							        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
+							            <td>{{ $index+1 }}</td>
+							            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
+							            <td>Justine Che T. Romero</td>
+							            <td> 
+							            	<select class="uk-select">
+								                <option selected>Craftsmen</option>
+								                <option>Master</option>
+								            </select>
+	        							</td>
+							            <td></td>
+							        </tr>
+							    </tbody>
+							</table>
+						</div>
 					</div>
 					<h3>Add new Member</h3>
 						<div class="uk-margin uk-child-width-1-4" uk-grid>

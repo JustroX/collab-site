@@ -1,5 +1,6 @@
 var mongoose  = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+var User = require('./user.js');
 var Schema = mongoose.Schema;
 
 /*
@@ -59,6 +60,7 @@ var GuildSchema = mongoose.Schema({
    			} ],
 
    users: [ { user:{ type: Schema.Types.ObjectId, ref : "User"} , ranks: [] } ],
+   users_pending : [ { user: { type: Schema.Types.ObjectId, ref: "User"} , message: String } ],
    modules: [Schema.Types.ObjectId],
    posts: [Schema.Types.ObjectId],
    badges_required: [Schema.Types.ObjectId],
@@ -66,6 +68,65 @@ var GuildSchema = mongoose.Schema({
    created_by : { type: Schema.Types.ObjectId, ref: "User"}
   
 });
+
+GuildSchema.methods.is_permitted = function(user,permission,num)
+{
+   let find = false;
+   for(let i in this.users)
+   {
+      let cur = this.users[i];
+      if( cur.user==user )
+      {
+         for(let x in this.ranks)
+         {
+            for(let y in cur.ranks)
+            {
+               if(this.ranks[x].name == cur.ranks[y])
+               {
+                  // console.log(cur.user+" "+user);
+                  if( this.ranks[x][permission] & num )
+                     find = true
+               }
+            }
+         }
+      }
+   }
+   return find;
+}
+
+GuildSchema.methods.is_badge_complete = function(user_id)
+{
+   User.findById(user_id,function(err,user)
+   {
+      for(let j in this.badges_required)
+      {
+         let found = false;
+         for(let i in user.badges)
+         {
+            if(this.badges_required[j]==user.badges[i])
+            {
+               found = true;
+               break;
+            }
+         }
+         if(!found)
+            return false;
+      }
+      return true;
+   });
+}
+
+GuildSchema.methods.is_member = function(user)
+{
+
+   for(let i in this.users)
+   {
+      let cur = this.users[i];
+      if( cur.user==user )
+         return true;
+   }
+   return false;
+}
 
 GuildSchema.methods.is_permitted_module = function(user,num)
 {
