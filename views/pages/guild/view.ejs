@@ -237,35 +237,64 @@
 			<div ng-show='subpage.here("members")'>
 				
 				<section>
-					<h3>Members</h3>
-					<div style="height: 50vh; overflow-y: scroll;">
-						<div ng-controller='guildEditController'>
+					<h3>Pending Requests</h3>
+					<div ng-controller='guildMainPendingController'>
+						<div style="height: 50vh; overflow-y: scroll;">
 							<table class="uk-table uk-table-striped">
 							    <thead>
 							        <tr>
 							            <th>#</th>
 							            <th></th>
 							            <th>Name</th>
-							            <th>Rank</th>
-							            <th>Status</th>
+							            <th>Message</th>
 							        </tr>
 							    </thead>
 							    <tbody>
 							        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
 							            <td>{{ $index+1 }}</td>
-							            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
+							            <td><a href="javascript:void(0)" class="uk-icon-button" uk-icon=""><i class="fas fa-check"></i></a>
+							            	&nbsp;&nbsp;<a href="javascript:void(0)" class="uk-icon-button" uk-icon=""><i class="fas fa-times"></i></a></td>
 							            <td>Justine Che T. Romero</td>
 							            <td> 
-							            	<select class="uk-select">
-								                <option selected>Craftsmen</option>
-								                <option>Master</option>
-								            </select>
+							            	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							            	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							            	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+							            	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+							            	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+							            	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 	        							</td>
-							            <td></td>
 							        </tr>
 							    </tbody>
 							</table>
 						</div>
+					</div>
+					<h3>Members</h3>
+					<div style="height: 50vh; overflow-y: scroll;">
+						<table class="uk-table uk-table-striped">
+						    <thead>
+						        <tr>
+						            <th>#</th>
+						            <th></th>
+						            <th>Name</th>
+						            <th>Rank</th>
+						            <th>Status</th>
+						        </tr>
+						    </thead>
+						    <tbody>
+						        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
+						            <td>{{ $index+1 }}</td>
+						            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
+						            <td>Justine Che T. Romero</td>
+						            <td> 
+						            	<select class="uk-select">
+							                <option selected>Craftsmen</option>
+							                <option>Master</option>
+							            </select>
+        							</td>
+						            <td></td>
+						        </tr>
+						    </tbody>
+						</table>
 					</div>
 					<h3>Add new Member</h3>
 						<div class="uk-margin uk-child-width-1-4" uk-grid>

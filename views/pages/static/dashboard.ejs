@@ -114,41 +114,68 @@
 	<div id="modal-guild-view" class="uk-modal-full" uk-modal>
 	    <div class="uk-modal-dialog">
 	        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-	        <div ng-controller='guildViewController'>
+	        <div>
 		        <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
 		            <div class="uk-background-cover" style="background-image: url('assets/guild-cover-default.jpg');" uk-height-viewport></div>
 		            <div class="uk-padding-large">
-		                <h1 ng-if='!api.loading' >{{ api.value.name }}</h1>
-		                <div class="uk-text-center">
-			                <div ng-if='api.loading' uk-spinner></div>
+		            	<div  ng-controller='guildViewController'>
+			                <h1 ng-if='!api.loading' >{{ api.value.name }}</h1>
+			                <div class="uk-text-center">
+				                <div ng-if='api.loading' uk-spinner></div>
+			            	</div>
 		                </div>
-		                <ul ng-if='!api.loading' uk-accordion>
+		                <ul uk-accordion>
 		                    <li class="uk-open">
 		                        <a class="uk-accordion-title" href="#">Guild Description</a>
 		                        <div class="uk-accordion-content">
-		                            <p>{{ api.value.description }}</p>
+			                    	<div  ng-controller='guildViewController'>
+						                <div class="uk-text-center">
+							                <div ng-if='api.loading' uk-spinner></div>
+						            	</div>
+				                        <p>{{ api.value.description }}</p>
+			                    	</div>
 		                        </div>
 		                    </li>
 		                    <li>
 		                        <a class="uk-accordion-title" href="#">Join by Badge</a>
 		                        <div class="uk-accordion-content">
-		                            <p>
-		                                Badge requirements
-		                                <p ng-hide='api.value.badges_required.length' class="uk-text-meta">No requirements</p>
-		                                <ol>
-		                                    <li ng-repeat='i in api.value.badges_required'><a href=""> Hello World Badge </a></li>
-		                                </ol>
-		                                &nbsp;&nbsp;&nbsp;<button class="uk-button uk-button-primary">JOIN</button> 
-
-		                            </p>
-		                        </div>
+			                    	<div   ng-controller='guildViewController'>
+			                            <p>
+			                                Badge requirements
+			                                <p ng-hide='api.value.badges_required.length' class="uk-text-meta">No requirements</p>
+			                                <ol>
+			                                    <li ng-repeat='i in api.value.badges_required'><a href=""> Hello World Badge </a></li>
+			                                </ol>
+			                            </p>
+			                        </div>
+			                        <div ng-controller='guildNewJoinBadgeController'>
+			                            <div>
+				                            <div ng-if='api.loading' uk-spinner></div>
+			                            </div>
+			                            <div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+											{{ api.error }}
+										</div>
+			                            &nbsp;&nbsp;&nbsp;<button  ng-if='!api.loading' ng-click='api.submit()' class="uk-button uk-button-primary">JOIN</button> 
+			                        </div>
+		                    	</div>
 		                    </li>
 		                    <li>
 		                        <a class="uk-accordion-title" href="#">Join by Request</a>
 		                        <div class="uk-accordion-content">
-		                            Guild administrators will  review your request first before admiting you. <br><br>
-		                            &nbsp;&nbsp;&nbsp;<button class="uk-button uk-button-primary ">REQUEST MEMBERSHIP</button>
-		                        </div>
+			                    	<div ng-controller='guildNewPendingController'>
+			                            Guild administrators will  review your request first before admiting you. <br><br>
+			                            <textarea ng-model='model.message' class="uk-textarea" placeholder="Leave a message to the admins"></textarea>
+			                            &nbsp;&nbsp;&nbsp;
+			                        	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+											{{ api.error }}
+										</div>
+										
+			                            <div>
+				                            <div ng-if='api.loading' uk-spinner></div>
+			                            </div>
+			                            <button ng-if='!api.loading' ng-click='api.submit()' class="uk-button uk-button-primary ">REQUEST MEMBERSHIP</button>
+			                        </div>
+		                    	</div>
 		                    </li>
 		                </ul>
 		            </div>

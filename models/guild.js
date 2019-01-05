@@ -94,7 +94,7 @@ GuildSchema.methods.is_permitted = function(user,permission,num)
    return find;
 }
 
-GuildSchema.methods.is_badge_complete = function(user_id)
+GuildSchema.methods.is_badge_complete = function(user_id,cb)
 {
    User.findById(user_id,function(err,user)
    {
@@ -110,9 +110,9 @@ GuildSchema.methods.is_badge_complete = function(user_id)
             }
          }
          if(!found)
-            return false;
+            return cb(false);
       }
-      return true;
+      return cb(true);
    });
 }
 

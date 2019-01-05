@@ -41,6 +41,9 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	{
 		UIkit.modal("#modal-guild-view").show();
 		$scope.$broadcast("component/guild/view",{_id:guild._id});
+		$scope.$broadcast('components/guild/pending/init',{guild_id:guild._id});
+		$scope.$broadcast('components/guild/join/init',{guild_id:guild._id});
+
 	}
 
 	$scope.goto_guild = function(guild)
@@ -51,6 +54,10 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	$scope.$on("component/guild/list/success",function()
 	{
 
+	});
+	$scope.$on('components/guild/join/success',function(ev,data)
+	{
+		window.location.href = "#/guild/"+data.id;
 	});
 
 });

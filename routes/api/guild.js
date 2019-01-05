@@ -143,8 +143,38 @@ router.post('/:id/users_pending/request', lib.logged, function(req, res){
 		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
 		if(guild.is_member(user)) return res.send({code:403, err: 'User is already a member'});
 
+		for(let i in guild.users_pending)
+		{
+			if(guild.users_pending[i].user == user )
+				return res.send({ code: 403, err: "You already have a pending request."});
+		}
+
 		guild.users_pending.push({ user: user ,  mes: req.body.message});
 
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+	});
+});
+
+
+router.delete('/:id/users_pending/request/:pending_id', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+
+		for(let i in guild.users_pending)
+		{
+			if(guild.users_pending[i]._id == req.params.pending_id )
+			{
+				guild.users_pending.splice(i,1);
+			}		
+		}
 		guild.save(function(err, updatedUser)
 		{
 			res.send({ message: "Done" , code: 200});
@@ -166,29 +196,31 @@ router.post('/:id/members/', lib.logged, function(req, res){
 		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
 		if(guild.is_member(user)) return res.send({code:403, err: 'User is already a member'});
 		
-		let badge_completed = guild.is_badge_complete(user);
-		let permitted = guild.is_permitted(user,"permission_members",1);
-
-		if(!badge_completed && !permitted)
+		guild.is_badge_complete(user,function(badge_completed)
 		{
-			return res.send({ code: 403, err: "Your badges are incomplete"});
-		}
-		let target = permitted? req.body.user : user;
-		guild.members.push({ user: target ,  ranks: [] });
+			let permitted = guild.is_permitted(user,"permission_members",1);
 
-		//remove from pending users
-		for(let i in guild.users_pending)
-		{
-			if( guild.users_pending[i].user == target  )
+			if(!badge_completed && !permitted)
 			{
-				guild.users_pending.splice(i,1);
-				break;
+				return res.send({ code: 403, err: "Your are not allowed to perform this action."});
 			}
-		}
+			let target = permitted? req.body.user : user;
+			guild.users.push({ user: target ,  ranks: [] });
 
-		guild.save(function(err, updatedUser)
-		{
-			res.send({ message: "Done" , code: 200});
+			//remove from pending users
+			for(let i in guild.users_pending)
+			{
+				if( guild.users_pending[i].user == target  )
+				{
+					guild.users_pending.splice(i,1);
+					break;
+				}
+			}
+
+			guild.save(function(err, updatedUser)
+			{
+				res.send({ message: "Done" , code: 200});
+			});
 		});
 	});
 });
@@ -206,11 +238,11 @@ router.put('/:id/members/:mem_id', lib.logged, function(req, res){
 			return res.send({code: 403, err: "Permission Denied"});
 		if(!guild.is_member(user)) return res.send({code:403, err: 'User is not a member'});
 
-		for(let i in guild.members)
+		for(let i in guild.users)
 		{
-			if(guild.members[i]._id == req.params.mem_id)
+			if(guild.users[i]._id == req.params.mem_id)
 			{
-				guild.members[i].ranks = [req.body.rank];
+				guild.users[i].ranks = [req.body.rank];
 			}
 		}
 
@@ -234,11 +266,11 @@ router.delete('/:id/members/:mem_id', lib.logged, function(req, res){
 			return res.send({code: 403, err: "Permission Denied"});
 		if(!guild.is_member(user)) return res.send({code:403, err: 'User is not a member'});
 
-		for(let i in guild.members)
+		for(let i in guild.users)
 		{
-			if(guild.members[i]._id == req.params.mem_id)
+			if(guild.users[i]._id == req.params.mem_id)
 			{
-				guild.members[i].splice(i,1);
+				guild.users[i].splice(i,1);
 				break;
 			}
 		}
