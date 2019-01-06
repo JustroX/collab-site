@@ -121,7 +121,7 @@ router.get('/:id/users_pending', lib.logged, function(req, res){
 	let user   = req.session.passport.user;
 	let guild_id = req.params.id;
 
-	Guild.find({_id: guild_id}).populate('users_pending.users').exec(function(err, guild)
+	Guild.find({_id: guild_id}).populate('users_pending.user','name').exec(function(err, guild)
 	{
 		if(err) return res.send({code:500, err: "Database Error"})	
 		guild = guild[0];
@@ -149,8 +149,7 @@ router.post('/:id/users_pending/request', lib.logged, function(req, res){
 				return res.send({ code: 403, err: "You already have a pending request."});
 		}
 
-		guild.users_pending.push({ user: user ,  mes: req.body.message});
-
+		guild.users_pending.push({ user: user ,  message: req.body.message});
 		guild.save(function(err, updatedUser)
 		{
 			res.send({ message: "Done" , code: 200});
@@ -170,9 +169,10 @@ router.delete('/:id/users_pending/request/:pending_id', lib.logged, function(req
 
 		for(let i in guild.users_pending)
 		{
-			if(guild.users_pending[i]._id == req.params.pending_id )
+			if(guild.users_pending[i]._id && guild.users_pending[i]._id.equals(req.params.pending_id) )
 			{
 				guild.users_pending.splice(i,1);
+				break;
 			}		
 		}
 		guild.save(function(err, updatedUser)
@@ -194,11 +194,12 @@ router.post('/:id/members/', lib.logged, function(req, res){
 	{
 		if(err) return res.send({code:500, err: "Database Error"})	
 		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
-		if(guild.is_member(user)) return res.send({code:403, err: 'User is already a member'});
+		let permitted = guild.is_permitted(user,"permission_members",1);
+		
+		if(!permitted && guild.is_member(user)) return res.send({code:403, err: 'User is already a member'});
 		
 		guild.is_badge_complete(user,function(badge_completed)
 		{
-			let permitted = guild.is_permitted(user,"permission_members",1);
 
 			if(!badge_completed && !permitted)
 			{
@@ -210,7 +211,7 @@ router.post('/:id/members/', lib.logged, function(req, res){
 			//remove from pending users
 			for(let i in guild.users_pending)
 			{
-				if( guild.users_pending[i].user == target  )
+				if( guild.users_pending[i].user && guild.users_pending[i].user._id && guild.users_pending[i].user._id.equals(target)  )
 				{
 					guild.users_pending.splice(i,1);
 					break;

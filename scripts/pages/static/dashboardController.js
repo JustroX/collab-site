@@ -40,9 +40,12 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	$scope.show_guild_modal = function(guild)
 	{
 		UIkit.modal("#modal-guild-view").show();
-		$scope.$broadcast("component/guild/view",{_id:guild._id});
-		$scope.$broadcast('components/guild/pending/init',{guild_id:guild._id});
-		$scope.$broadcast('components/guild/join/init',{guild_id:guild._id});
+		$timeout(function()
+		{
+			$scope.$broadcast("component/guild/view",{_id:guild._id});
+			$scope.$broadcast('components/guild/pending/init',{guild_id:guild._id});
+			$scope.$broadcast('components/guild/join/init',{guild_id:guild._id});
+		},100);
 
 	}
 

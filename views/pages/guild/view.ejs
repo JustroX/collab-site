@@ -239,7 +239,9 @@
 				<section>
 					<h3>Pending Requests</h3>
 					<div ng-controller='guildMainPendingController'>
-						<div style="height: 50vh; overflow-y: scroll;">
+						<div ng-show='list.loading' uk-spinner></div>
+						<p ng-show='!list.list.length'>No pending request.</p>
+						<div ng-show='!list.loading && list.list.length' style="height: 50vh; overflow-y: scroll;">
 							<table class="uk-table uk-table-striped">
 							    <thead>
 							        <tr>
@@ -250,18 +252,16 @@
 							        </tr>
 							    </thead>
 							    <tbody>
-							        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
+							        <tr ng-repeat='i in list.list track by $index'>
 							            <td>{{ $index+1 }}</td>
-							            <td><a href="javascript:void(0)" class="uk-icon-button" uk-icon=""><i class="fas fa-check"></i></a>
-							            	&nbsp;&nbsp;<a href="javascript:void(0)" class="uk-icon-button" uk-icon=""><i class="fas fa-times"></i></a></td>
-							            <td>Justine Che T. Romero</td>
+							            <td>
+							            	<div ng-if='approve.loading || reject.loading' uk-spinner></div>
+							            	<a ng-if='!approve.loading && !reject.loading' ng-click='approve_user(i.user)' href="javascript:void(0)" class="uk-icon-button" uk-icon=""><i class="fas fa-check"></i></a>
+							            	&nbsp;&nbsp;
+							            	<a ng-if='!approve.loading && !reject.loading' ng-click='reject_user(i)' href="javascript:void(0)" class="uk-icon-button" uk-icon=""><i class="fas fa-times"></i></a></td>
+							            <td>{{ i.user.name }}</td>
 							            <td> 
-							            	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-							            	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-							            	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-							            	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-							            	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-							            	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							            	{{ i.message }}
 	        							</td>
 							        </tr>
 							    </tbody>

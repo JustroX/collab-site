@@ -130,7 +130,7 @@ exports.hide_fields = function(obj,PERMISSIONS)
 exports.logged	 = function(req,res,next)
 {
 	if(!(req.session && req.session.passport && req.session.passport.user))
-		return res.send({ err: 'Please login to continue', err: 403})
+		return res.send({ err: 'Please login to continue', code: 403})
 	next();
 
 	// WHEN GMAIL API IS DONE
@@ -145,7 +145,7 @@ exports.logged	 = function(req,res,next)
 exports.loggedAlone	 = function(req,res,next)
 {
 	if(!(req.session && req.session.passport && req.session.passport.user))
-		return res.send({ err: 'Please login to continue', err: 403})
+		return res.send({ err: 'Please login to continue', code: 403})
 	next();
 }
 

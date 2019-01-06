@@ -18,6 +18,7 @@ app.controller("guildNewPendingController",function($scope,$http,$location,$time
 		    pos: 'top-right',
 		    timeout: 5000
 		});
+		UIkit.modal("#modal-guild-view").hide();
 	};
 	$scope.api.validate = function()
 	{

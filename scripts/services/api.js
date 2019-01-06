@@ -123,6 +123,7 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 			session.onready(function()
 			{
 				api_.loading = true;
+				console.log('/api/'+api_.url+'?limit='+api_.limit+'&offset='+api_.page+'&'+api_.param);
 				$http.get('/api/'+api_.url+'?limit='+api_.limit+'&offset='+api_.page+'&'+api_.param).then((res)=>
 				{
 					api_.load_options();
