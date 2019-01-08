@@ -106,7 +106,7 @@ router.get('/:id', function(req, res){
 	let options = req.query.option;
 
 	Guild.find({ _id: guild_id},fields.join(' '))
-	.populate("users","name username private.local.email")
+	.populate("users.user","name username private.local.email")
 	.populate("created_by","name username private.local.email")
 	.exec(function(err,guild)
 	{
@@ -186,6 +186,19 @@ router.delete('/:id/users_pending/request/:pending_id', lib.logged, function(req
 
 
 //MEMBER
+
+router.get('/:id/members/', lib.logged, function(req, res){
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.find({ _id: guild_id}).populate('users.user','name').exec(function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild[0]) return res.send({ code: 500 , err: 'Guild not found.' });
+		res.send( guild[0].users );
+	});
+});
+
 router.post('/:id/members/', lib.logged, function(req, res){
 	let user   = req.session.passport.user;
 	let guild_id = req.params.id;
@@ -206,6 +219,7 @@ router.post('/:id/members/', lib.logged, function(req, res){
 				return res.send({ code: 403, err: "Your are not allowed to perform this action."});
 			}
 			let target = permitted? req.body.user : user;
+			if(guild.is_member(target)) return res.send({code:403, err: 'User is already a member'});
 			guild.users.push({ user: target ,  ranks: [] });
 
 			//remove from pending users
@@ -243,6 +257,16 @@ router.put('/:id/members/:mem_id', lib.logged, function(req, res){
 		{
 			if(guild.users[i]._id == req.params.mem_id)
 			{
+				if(guild.is_permitted(guild.users[i].user,"permission_members",2))
+				{
+					let count = 0;
+					for(let u in guild.users)
+					{
+						count += guild.is_permitted(guild.users[u].user,"permission_members",2);		
+					}
+					if(count == 1 && !guild.rank_permission(req.body.rank,"permission_members",2))
+						return res.send({code: 403, err: "Can't modify the only user with update privileges."});
+				}
 				guild.users[i].ranks = [req.body.rank];
 			}
 		}
@@ -263,15 +287,26 @@ router.delete('/:id/members/:mem_id', lib.logged, function(req, res){
 		if(err) return res.send({code:500, err: "Database Error"})	
 		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
 		
-		if(!guild.is_permitted(user,"permission_members",2))
+		if(!guild.is_permitted(user,"permission_members",4))
 			return res.send({code: 403, err: "Permission Denied"});
 		if(!guild.is_member(user)) return res.send({code:403, err: 'User is not a member'});
+
 
 		for(let i in guild.users)
 		{
 			if(guild.users[i]._id == req.params.mem_id)
 			{
-				guild.users[i].splice(i,1);
+				if(guild.is_permitted(guild.users[i].user,"permission_members",2))
+				{
+					let count = 0;
+					for(let u in guild.users)
+					{
+						count += guild.is_permitted(guild.users[u].user,"permission_members",2);		
+					}
+					if(count == 1)
+						return res.send({code: 403, err: "Can't delete the only user with update privileges."});
+				}
+				guild.users.splice(i,1);
 				break;
 			}
 		}

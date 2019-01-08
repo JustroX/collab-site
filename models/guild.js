@@ -93,6 +93,17 @@ GuildSchema.methods.is_permitted = function(user,permission,num)
    }
    return find;
 }
+GuildSchema.methods.rank_permission = function(rank,permission,num)
+{
+   for(let x in this.ranks)
+   {
+      if(this.ranks[x].name == rank )
+      {
+            return (this.ranks[x][permission] & num)
+      }
+   }
+   return 0;
+}
 
 GuildSchema.methods.is_badge_complete = function(user_id,cb)
 {

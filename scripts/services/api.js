@@ -41,24 +41,25 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 
 	class newAPI
 	{
-		constructor($scope)
+		constructor($scope,model_name='model')
 		{
 			this.loading = false;
 			this.$scope = $scope;
 			this.error = "";
 			this.succ = "";
+			this.model_name = model_name;
 		}
 		submit()
 		{
 			let api_ = this;
 			if(!api_.validate())
 			{
-				api_.error = "Can't post an empty content.";
+				api_.error = "Please fill up all necessary information.";
 				return;
 			}	
 			api_.error = '';
 			api_.loading = true;
-			$http.post('/api/'+api_.url+'',this.$scope.model).then((res)=>
+			$http.post('/api/'+api_.url+'',this.$scope[this.model_name]).then((res)=>
 			{
 				res = res.data;
 
@@ -237,11 +238,12 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 
 	class editAPI
 	{
-		constructor($scope,model)
+		constructor($scope,model_name="model")
 		{
 			this.loading = false;
 			this.error = "";
 			this.$scope  =$scope;
+			this.model_name = model_name;
 
 		}
 		submit()
@@ -254,7 +256,7 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 			}	
 			api_.error = '';
 			api_.loading = true;
-			$http.put('/api/'+api_.url+'/'+api_.view.target,this.$scope.model).then((res)=>
+			$http.put('/api/'+api_.url+'/'+api_.view.target,this.$scope[this.model_name]).then((res)=>
 			{
 				res = res.data;
 				api_.loaded(res);

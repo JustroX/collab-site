@@ -241,7 +241,7 @@
 					<div ng-controller='guildMainPendingController'>
 						<div ng-show='list.loading' uk-spinner></div>
 						<p ng-show='!list.list.length'>No pending request.</p>
-						<div ng-show='!list.loading && list.list.length' style="height: 50vh; overflow-y: scroll;">
+						<div ng-show='!list.loading && list.list.length' style="max-height: 50vh; overflow-y: scroll;">
 							<table class="uk-table uk-table-striped">
 							    <thead>
 							        <tr>
@@ -269,52 +269,94 @@
 						</div>
 					</div>
 					<h3>Members</h3>
-					<div style="height: 50vh; overflow-y: scroll;">
-						<table class="uk-table uk-table-striped">
-						    <thead>
-						        <tr>
-						            <th>#</th>
-						            <th></th>
-						            <th>Name</th>
-						            <th>Rank</th>
-						            <th>Status</th>
-						        </tr>
-						    </thead>
-						    <tbody>
-						        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
-						            <td>{{ $index+1 }}</td>
-						            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
-						            <td>Justine Che T. Romero</td>
-						            <td> 
-						            	<select class="uk-select">
-							                <option selected>Craftsmen</option>
-							                <option>Master</option>
-							            </select>
-        							</td>
-						            <td></td>
-						        </tr>
-						    </tbody>
-						</table>
-					</div>
-					<h3>Add new Member</h3>
-						<div class="uk-margin uk-child-width-1-4" uk-grid>
-						    <form class="uk-search uk-search-default">
-						        <input class="uk-search-input" type="search" placeholder="Search...">
-						    </form>
-						    <div>
-						    	Justine Che T. Romero
-						    </div>
-						    <div>
-				            	<select class="uk-select">
-					                <option selected>Craftsmen</option>
-					                <option>Master</option>
-					            </select>
-						    </div>
-						    <div>
-						    	<button class="uk-button uk-button-primary">Add </button>
-						    </div>
+					<div ng-controller='guildMembershipController'>
+						<div ng-if='delete.error' class="uk-alert uk-alert-danger" uk-alert>
+							{{ delete.error }}
 						</div>
-					<br>
+						<div style="max-height: 50vh; overflow-y: scroll;">
+							<div ng-hide='model.users.length'>
+								<div uk-spinner></div>
+							</div>
+							<div ng-show='model.users.length'>
+								<table class="uk-table uk-table-striped">
+								    <thead>
+								        <tr>
+								            <th>#</th>
+								            <th></th>
+								            <th>Name</th>
+								            <th>Rank</th>
+								            <th>Status</th>
+								        </tr>
+								    </thead>
+								    <tbody>
+								        <tr ng-repeat='i in model.users track by $index'>
+								            <td>{{ $index+1 }}</td>
+								            <td>
+								            	<a ng-show='!(delete.loading || ( !delete_confirm || delete.target != i._id) ) ' ng-click='delete_user(i)' href="javascript:void(0)" class="uk-text-meta" style="color: red">Confirm?</a>
+								            	<div ng-show='delete.loading && delete.target == i._id '>
+								            		<div uk-spinner></div>
+								            	</div>
+								            	<a ng-show='!((delete_confirm && delete.target == i._id ))' href="javascript:void(0)" ng-click='delete_user(i)' class="uk-icon-button" uk-icon="trash"></a>
+								            </td>
+								            <td>{{ i.user.name }}</td>
+								            <td> 
+								            	<select ng-change='update_privileges(i)' ng-options="rank.name as rank.name for rank in model.ranks" ng-model="i.ranks[0]" class="uk-select">
+									            </select>
+		        							</td>
+								            <td>
+												<div ng-if='edit.error && edit.view.target == i._id ' class="uk-alert uk-alert-danger" uk-alert>
+													{{ edit.error }}
+												</div>
+								            	<div ng-show='edit.loading && edit.view.target == i._id '>
+								            		<div uk-spinner></div>
+								            	</div>
+								            </td>
+								        </tr>
+								    </tbody>
+								</table>
+							</div>
+						</div>
+						<h3>Add new Member</h3>
+							<div ng-if='new.error' class="uk-alert uk-alert-danger" uk-alert>
+								{{ new.error }}
+							</div>
+							<div class="uk-margin uk-child-width-1-3" uk-grid>
+							   	
+			                    <div>
+			                        <form class="uk-search uk-search-default">
+			                            <input ng-model='search.query' ng-change="searchtry()" class="uk-search-input uk-input" type="search" placeholder="Search...">
+			                        </form>
+			                        <div  uk-sticky='offset: 100; z-index: 2'>
+			                            <div ng-if='search.query' >
+			                                <div ng-controller='userListController'>
+			                                    <div class="uk-card uk-card-default"  style="border-radius: 3px">
+			                                        <div class="uk-padding-small">
+			                                             <ul class="uk-nav uk-dropdown-nav">
+			                                                <li class="uk-nav-header">Results</li>
+			                                                <li style="text-align: center;" ng-show="!api.loading && !api.list.length"><i>No Results found :(</i></li>
+			                                                <li style="text-align: center;"> <div ng-show='api.loading' uk-spinner></div></li>
+			                                                <li style="padding: 0px" ng-repeat='i in api.list'><a href="javascript:void(0)" ng-click='select_user(i)'  >{{i.name}}</a></li>
+			                                                <li class="uk-nav-divider"></li>
+			                                            </ul>
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+
+			                    <div>
+			                    	{{ selected_user.name }}
+			                    </div>
+							    <div>									
+							    	<div ng-show='new.loading'>
+							    		<div uk-spinner></div>
+							    	</div>
+							    	<button ng-hide='new.loading' ng-click='new.submit()' class="uk-button uk-button-primary">Add </button>
+							    </div>
+							</div>
+						<br>
+					</div>
 				</section>
 				<hr class="uk-divider-icon">
 			</div>

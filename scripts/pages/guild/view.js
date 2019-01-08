@@ -27,6 +27,7 @@ app.controller("pageGuildViewController",function($scope,$http,$location,$timeou
 		{
 			$scope.$broadcast("components/guild/edit",$routeParams.id);
 			$scope.$broadcast('components/guild/pending/main/init',{ guild_id: $routeParams.id});
+			$scope.$broadcast('components/guild/membership/init',{ guild_id: $routeParams.id});
 		},1);
 	});
 
