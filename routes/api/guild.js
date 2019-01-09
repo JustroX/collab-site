@@ -397,7 +397,7 @@ router.delete('/:id/ranks/:rank_id', lib.logged, function(req,res)
 		{
 			if(guild.ranks[i]._id == req.params.rank_id)
 			{
-				guild.rank.splice(i,1);
+				guild.ranks.splice(i,1);
 				break;
 			}
 		}

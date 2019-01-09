@@ -191,11 +191,11 @@
 								    </tbody>
 								</table>
 				    	
-						    	<div ng-show='edit.loading' >
+						    	<div ng-show='edit.loading || delete.loading' >
 							    	<div uk-spinner></div>
 						    	</div>
-						    	<button ng-hide='edit.loading' ng-click='edit.submit()' class="uk-button uk-button-primary  uk-margin-remove"> Save Rank</button>
-						    	<button ng-hide='edit.loading' class="uk-button uk-button-danger  uk-margin-remove">Delete Rank</button>
+						    	<button ng-hide='edit.loading || delete.loading' ng-click='edit.submit()' class="uk-button uk-button-primary  uk-margin-remove"> Save Rank</button>
+						    	<button ng-hide='edit.loading || delete.loading' ng-click='delete_this()' class="uk-button uk-button-danger  uk-margin-remove"> <span ng-show='!delete_confirm'> Delete Rank </span><span  ng-show='delete_confirm'> Confirm? </span> </button>
 							</div>
 						</div>
 					</div>

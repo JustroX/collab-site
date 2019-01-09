@@ -5,6 +5,7 @@ app.controller("guildRankController",function($scope,$http,$location,$timeout,se
 	$scope.view = apiService.view("",$scope);
 	$scope.new = apiService.new("",$scope);
 	$scope.edit = apiService.edit("",$scope,"edit_model");
+	$scope.delete = apiService.delete("",$scope);
 	$scope.edit.view = {};
 	$scope.edit_model = {};
 	$scope.temp_model = 
@@ -13,7 +14,8 @@ app.controller("guildRankController",function($scope,$http,$location,$timeout,se
 		permission_members : [0,0,0],
 		permission_posts : [0,0,0],
 		permission_settings : [0,0,0],
-	}
+	};
+	$scope.delete_confirm = false;
 
 	$scope.new.success = function()
 	{
@@ -37,10 +39,35 @@ app.controller("guildRankController",function($scope,$http,$location,$timeout,se
 		$scope.view.load();
 	}
 
+	$scope.delete.success = function()
+	{
+		UIkit.notification({
+		    message: 'Rank deleted.',
+		    status: 'success',
+		    pos: 'top-right',
+		    timeout: 5000
+		});
+		$scope.edit_model = {};
+		$scope.view.load();
+	}
+
+	$scope.delete_this = function()
+	{
+		if(!$scope.delete_confirm)
+			$scope.delete_confirm = true;
+		else
+		{
+			if( !$scope.edit_model) return;
+			$scope.delete.target = $scope.edit_model._id;
+			$scope.delete.delete();
+		}
+	}
+
 	$scope.view_rank = function(i)
 	{
 		$scope.edit_model = i;
 		$scope.edit.view.target = i._id;
+		$scope.delete_confirm = false;
 		for(let perm in $scope.edit_model)
 		{
 			if(perm.substring(0,10)=="permission")
@@ -75,6 +102,7 @@ app.controller("guildRankController",function($scope,$http,$location,$timeout,se
 		$scope.view.url = 'guild/'+data.guild_id;
 		$scope.new.url = 'guild/'+data.guild_id + '/ranks';
 		$scope.edit.url = 'guild/'+data.guild_id + '/ranks';
+		$scope.delete.url = 'guild/'+data.guild_id + '/ranks';
 		$timeout(function()
 		{
 			$scope.view.load();
