@@ -323,6 +323,93 @@ router.delete('/:id/members/:mem_id', lib.logged, function(req, res){
 
 //RANKS
 
+router.post('/:id/ranks', lib.logged, function(req,res)
+{	
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		let permitted = guild.is_permitted(user,"permission_settings",2);
+		if(!permitted) return res.send({code:403, err: 'Permission denied.'});
+		guild.ranks.push( { name: "New rank"  , 
+   				permission_settings : 0,
+   				permission_members  : 0,
+   				permission_posts    : 0,
+   				permission_modules    : 0 } );
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+		
+	});
+});
+
+
+router.put('/:id/ranks/:rank_id', lib.logged, function(req,res)
+{	
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		let permitted = guild.is_permitted(user,"permission_settings",2);
+		if(!permitted) return res.send({code:403, err: 'Permission denied.'});
+		
+		for(let i in guild.ranks)
+		{
+			if(guild.ranks[i]._id == req.params.rank_id)
+			{
+				let o = req.body;
+				for(let x in o)
+				{
+					guild.ranks[i][x] = o[x];
+				}
+				break;
+			}
+		}
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+		
+	});
+});
+
+
+router.delete('/:id/ranks/:rank_id', lib.logged, function(req,res)
+{	
+	let user   = req.session.passport.user;
+	let guild_id = req.params.id;
+
+	Guild.findById(guild_id,function(err, guild)
+	{
+		if(err) return res.send({code:500, err: "Database Error"})	
+		if(!guild) return res.send({ code: 500 , err: 'Guild not found.' });
+		let permitted = guild.is_permitted(user,"permission_settings",2);
+		if(!permitted) return res.send({code:403, err: 'Permission denied.'});
+		
+		for(let i in guild.ranks)
+		{
+			if(guild.ranks[i]._id == req.params.rank_id)
+			{
+				guild.rank.splice(i,1);
+				break;
+			}
+		}
+		guild.save(function(err, updatedUser)
+		{
+			res.send({ message: "Done" , code: 200});
+		});
+		
+	});
+});
+
+
 
 router.put('/:id', lib.logged , function(req, res){
 

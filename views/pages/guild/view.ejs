@@ -127,69 +127,76 @@
 				<div ng-include='"/pages/components/guild/edit"'></div>
 				<hr class="uk-divider-icon">
 				<section>
-					<div class="uk-grid uk-child-width-1-3">
-						
-						<div>
-							<h3>Ranks</h3>
-							<h4>All ranks</h4>
-							<ul class="uk-list uk-list-striped">
-							    <li><a href="#/">List item 1</a></li>
-							    <li><a href="#/">List item 2</a></li>
-							    <li><a href="#/">List item 3</a></li>
-							    <li> <button class="uk-button uk-button-secondary">Add new Rank</button> </li>
-							</ul>
-							<hr>
-						</div>
-						<div class="uk-width-expand" ng-show='true'>
-							<h4>Edit rank</h4>
-							Rank name
-					    	<input type="text" class="uk-input">
-					    	<hr>
-					    	Permissions <br>
-					    	<table class="uk-table uk-table-striped">
-							    <tbody>
-							        <tr>
-							            <th>Modules</th>
-							            <td>
-											<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-									            <label><input class="uk-checkbox" type="checkbox" checked> Add</label>
-									            <label><input class="uk-checkbox" type="checkbox" checked> Update</label>
-									            <label><input class="uk-checkbox" type="checkbox" checked> Remove</label>
-									        </div>
-							            </td>
-							        </tr>
-							        <tr>
-							            <th>Membership</th>
-							            <td>
-											<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-									            <label><input class="uk-checkbox" type="checkbox" checked> Add</label>
-									            <label><input class="uk-checkbox" type="checkbox" checked> Update</label>
-									            <label><input class="uk-checkbox" type="checkbox" checked> Remove</label>
-									        </div>
-							            </td>
-							        </tr>
-							        <tr>
-							            <th>Group Settings</th>
-							            <td>
-											<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-									            <label><input class="uk-checkbox" type="checkbox" checked> Update</label>
-									            <label><input class="uk-checkbox" type="checkbox"> Delete Group</label>
-									        </div>
-							            </td>
-							        </tr>
-							        <tr>
-							        	<th>Posts</th>
-							        	<td>
-											<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-									            <label><input class="uk-checkbox" type="checkbox"> Remove</label>
-									        </div>
-							        	</td>
-							        </tr>
-							    </tbody>
-							</table>
-			    	
-					    	<button class="uk-button uk-button-danger  uk-margin-remove">Delete Rank</button>
-					    	<button class="uk-button uk-button-primary  uk-margin-remove">Save Rank</button>
+					<div ng-controller='guildRankController'>
+						<div class="uk-grid uk-child-width-1-3">
+							
+							<div>
+								<h3>Ranks</h3>
+								<h4>All ranks</h4>
+								<ul class="uk-list uk-list-striped">
+									<li ng-show='view.loading'><div uk-spinner></div></li>
+								    <li ng-hide='view.loading' ng-repeat='i in model.ranks' ><a href="javascript:void(0)" ng-click='view_rank(i)'>{{i.name}}</a></li>
+								    <li>
+								    	<div ng-show='new.loading' uk-spinner></div> 
+								    	<button ng-click='new.submit()' ng-hide='new.loading' class="uk-button uk-button-secondary">Add new Rank</button>
+								    </li>
+								</ul>
+								<hr>
+							</div>
+							<div class="uk-width-expand" ng-show='edit_model._id'>
+								<h4>Edit rank</h4>
+								Rank name
+						    	<input ng-model='edit_model.name' type="text" class="uk-input">
+						    	<hr>
+						    	Permissions <br>
+						    	<table class="uk-table uk-table-striped">
+								    <tbody>
+								        <tr>
+								            <th>Modules</th>
+								            <td>
+												<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+										            <label><input ng-checked=' is_permitted("permission_modules",1)' ng-change='check_change("permission_modules")' ng-model='temp_model.permission_modules[0]' class="uk-checkbox" type="checkbox" > Add</label>
+										            <label><input ng-checked=' is_permitted("permission_modules",2)' ng-change='check_change("permission_modules")' ng-model='temp_model.permission_modules[1]' class="uk-checkbox" type="checkbox" > Update</label>
+										            <label><input ng-checked=' is_permitted("permission_modules",4)' ng-change='check_change("permission_modules")' ng-model='temp_model.permission_modules[2]' class="uk-checkbox" type="checkbox" > Remove</label>
+										        </div>
+								            </td>
+								        </tr>
+								        <tr>
+								            <th>Membership</th>
+								            <td>
+												<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+										            <label><input ng-checked=' is_permitted("permission_members",1)'  ng-change='check_change("permission_members")'  ng-model='temp_model.permission_members[0]'  class="uk-checkbox" type="checkbox" > Add</label>
+										            <label><input ng-checked=' is_permitted("permission_members",2)'  ng-change='check_change("permission_members")'  ng-model='temp_model.permission_members[1]'  class="uk-checkbox" type="checkbox" > Update</label>
+										            <label><input ng-checked=' is_permitted("permission_members",4)'  ng-change='check_change("permission_members")'  ng-model='temp_model.permission_members[2]'  class="uk-checkbox" type="checkbox" > Remove</label>
+										        </div>
+								            </td>
+								        </tr>
+								        <tr>
+								            <th>Group Settings</th>
+								            <td>
+												<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+										            <label><input ng-checked=' is_permitted("permission_settings",1)'  ng-change='check_change("permission_settings")'  ng-model='temp_model.permission_settings[0]' class="uk-checkbox" type="checkbox" > Update</label>
+										            <label><input ng-checked=' is_permitted("permission_settings",2)'  ng-change='check_change("permission_settings")'  ng-model='temp_model.permission_settings[1]' class="uk-checkbox" type="checkbox"> Delete Group</label>
+										        </div>
+								            </td>
+								        </tr>
+								        <tr>
+								        	<th>Posts</th>
+								        	<td>
+												<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+										            <label><input ng-checked=' is_permitted("permission_posts",1)'  ng-change='check_change("permission_posts")'  ng-model='temp_model.permission_posts[0]'  class="uk-checkbox" type="checkbox"> Remove</label>
+										        </div>
+								        	</td>
+								        </tr>
+								    </tbody>
+								</table>
+				    	
+						    	<div ng-show='edit.loading' >
+							    	<div uk-spinner></div>
+						    	</div>
+						    	<button ng-hide='edit.loading' ng-click='edit.submit()' class="uk-button uk-button-primary  uk-margin-remove"> Save Rank</button>
+						    	<button ng-hide='edit.loading' class="uk-button uk-button-danger  uk-margin-remove">Delete Rank</button>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -360,80 +367,6 @@
 				</section>
 				<hr class="uk-divider-icon">
 			</div>
-
-		<!-- 	<div>
-				
-				<section>
-					<h3>Pending Requests</h3>
-					<table class="uk-table uk-table-striped">
-					    <thead>
-					        <tr>
-					            <th>#</th>
-					            <th>Name</th>
-					            <th></th>
-					        </tr>
-					    </thead>
-					    <tbody>
-					        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
-					            <td>{{ $index+1 }}</td>
-					            <td>Justine Che T. Romero</td>
-					            <td> 
-					            	<a href="" class="uk-icon-button uk-button-primary" uk-icon="plus"></a>
-					            	<a href="" class="uk-icon-button uk-button-danger" uk-icon="close"></a>
-    							</td>
-					        </tr>
-					    </tbody>
-					</table>
-					<h3>Members</h3>
-					<div style="height: 50vh; overflow-y: scroll;">
-						<table class="uk-table uk-table-striped">
-						    <thead>
-						        <tr>
-						            <th>#</th>
-						            <th></th>
-						            <th>Name</th>
-						            <th>Rank</th>
-						            <th>Status</th>
-						        </tr>
-						    </thead>
-						    <tbody>
-						        <tr ng-repeat='i in [1,2,3,4,5] track by $index'>
-						            <td>{{ $index+1 }}</td>
-						            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
-						            <td>Justine Che T. Romero</td>
-						            <td> 
-						            	<select class="uk-select">
-							                <option selected>Craftsmen</option>
-							                <option>Master</option>
-							            </select>
-        							</td>
-						            <td></td>
-						        </tr>
-						    </tbody>
-						</table>
-					</div>
-					<h3>Add new Member</h3>
-						<div class="uk-margin uk-child-width-1-4" uk-grid>
-						    <form class="uk-search uk-search-default">
-						        <input class="uk-search-input" type="search" placeholder="Search...">
-						    </form>
-						    <div>
-						    	Justine Che T. Romero
-						    </div>
-						    <div>
-				            	<select class="uk-select">
-					                <option selected>Craftsmen</option>
-					                <option>Master</option>
-					            </select>
-						    </div>
-						    <div>
-						    	<button class="uk-button uk-button-primary">Add </button>
-						    </div>
-						</div>
-					<br>
-				</section>
-				<hr class="uk-divider-icon">
-			</div> -->
 
 		</div>
 		<div class="uk-width-1-4">
