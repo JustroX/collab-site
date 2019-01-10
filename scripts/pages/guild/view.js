@@ -39,6 +39,7 @@ app.controller("pageGuildViewController",function($scope,$http,$location,$timeou
 		{
 			$scope.$broadcast("components/guild/edit",$routeParams.id);
 			$scope.$broadcast('components/guild/rank/init',{ guild_id: $routeParams.id});
+			$scope.$broadcast("components/guild/delete/init",{ _id: $routeParams.id});
 		},1);
 	});
 

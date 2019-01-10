@@ -224,18 +224,46 @@
 						</table>
 					</div>
 					<h3>Add new Badge</h3>
-						<div class="uk-margin uk-child-width-1-3" uk-grid>
-						    <form class="uk-search uk-search-default">
-						        <input class="uk-search-input" type="search" placeholder="Search...">
-						    </form>
-						    <div>
-						    	Competitive Programming Guild
-						    </div>
-						    <div>
-						    	<button class="uk-button uk-button-primary">Add </button>
-						    </div>
-						</div>
+					<div class="uk-margin uk-child-width-1-3" uk-grid>
+					    <form class="uk-search uk-search-default">
+					        <input class="uk-search-input" type="search" placeholder="Search...">
+					    </form>
+					    <div>
+					    	Competitive Programming Guild
+					    </div>
+					    <div>
+					    	<button class="uk-button uk-button-primary">Add </button>
+					    </div>
+					</div>
 					<br>
+				</section>
+				<hr class="uk-divider-icon">
+				<section>
+					<div ng-controller='guildDeleteController'>
+						<h4>Danger Zone</h4>
+						<blockquote cite="#">
+						    <p class="uk-margin-small-bottom">Please take note that this action can not be undone.</p>
+						</blockquote>
+						<button class="uk-button uk-button-danger uk-margin-small-right" type="button" uk-toggle="target: #modal-delete">Delete Guild</button>
+						
+
+						<div id="modal-delete" uk-modal>
+						    <div class="uk-modal-dialog uk-modal-body">
+						        <h2 class="uk-modal-title">Delete</h2>
+						        <p style="color: red">Are you sure you want to delete this guild together with all of it's modules?</p>
+						        <div ng-show='api.error' class="uk-alert-danger" uk-alert>
+						        	{{api.error}}
+						        </div>
+							        <p class="uk-text-right">
+							        	<div ng-if='api.loading'>
+							        		<div uk-spinner></div>
+							        	</div>
+							            <button ng-hide='api.loading' class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+							            <button ng-hide='api.loading' ng-click='api.delete()' class="uk-button uk-button-danger" type="button">Delete</button>
+							        </p>
+							</div>
+						</div>
+				    </div>
 				</section>
 						<br><br><br><br>
 						<br><br><br><br>

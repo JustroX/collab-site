@@ -475,7 +475,7 @@ router.delete('/:id', function(req, res){
 		for(let i in guild.users)
 		{
 			let cur = guild.users[i];
-			if( cur.user==user )
+			if( cur.user && cur.user.equals && cur.user.equals(user) )
 			{
 				for(let x in guild.ranks)
 				{
