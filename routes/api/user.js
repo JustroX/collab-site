@@ -110,7 +110,51 @@ router.get('/:id', function(req, res){
 	});
 });
 
+router.post('/:id/follow', lib.logged, function(req,res)
+{
+	let user_id = req.params.id;
+	User.findById(req.session.passport.user, function(err, owner )
+	{
+		if(err) return res.send({ code :500 , err: "Database Error"});
+		if(!owner) return res.send({ code:500, err: "User doesn't exist" });
+		
+		User.findById(user_id, function(err, user)
+		{
+			if(err) return res.send({ code :500 , err: "Database Error"});
+			if(!user) return res.send({ code:500, err: "User doesn't exist" });
 
+			//hahanapin kung finoolow nya na
+			let find = false;
+			for(let i in user.followed_by)
+			{
+				let u = user.followed_by[i];
+				if(u._id && u._id.equals && u._id.equals(owner._id))
+				{
+					user.followed_by.splice(i,1);
+					owner.follows.splice(owner.follows.indexOf(user._id),1);
+					find = true;
+					break;
+				}
+				//kung finollow na, unfollow
+			}
+			if(!find)
+			{
+				user.followed_by.push(owner._id);
+				owner.follows.push(user._id);
+			}
+			owner.save(function(err,upowner)
+			{
+				if(err) return res.send({ err: "Database Error", code : 500})
+				user.save(function(err,upuser)
+				{
+					if(err) return res.send({ err: "Database Error", code : 500})
+					res.send({ message: "Done", code: 200});
+				});
+			})
+		});
+
+	});
+});
 
 
 router.post('/', lib.logged, lib.admin_user(1) , function(req, res){

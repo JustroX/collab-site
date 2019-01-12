@@ -16,7 +16,41 @@
 			
 			<div ng-if='subpage.here("feed")'>
 				<div ng-include="'pages/post/new'"></div>
-				<div ng-include="'pages/post/list'"></div>
+				<div>
+					<div ng-controller='postFeedController'>
+						<div class="uk-padding">
+							<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+							    <a class="uk-alert-close" uk-close></a>
+								{{ api.error }}
+							</div>
+							
+							<div ng-repeat='  i in api.list '>
+								<div uk-scrollspy="cls:uk-animation-slide-top-small" class="uk-card-hover uk-padding-small" id="ex-card" style="margin-bottom: 10px">
+								    <div class="uk-padding-small">
+								        <div class="uk-grid-small uk-flex-middle" uk-grid>
+								            <img class="uk-border-circle" width="50px" height="50px" src="https://storage.googleapis.com/neris/public/images/types/faces/INFJ-female.svg">
+							                <p class="uk-margin-remove-top"> <b>{{ i.author.name }}</b> &middot; <small> <time datetime="{{ i.date }}">{{ i.date | date: "MMMM d, y" }}</time> </small> </p>
+								        </div>
+								    </div>
+								    <div class="uk-padding-small">
+								    	<div ng-bind-html='i.content'></div>
+								    </div>
+								    <div style="text-align: center;">
+								    	<a href="" class="uk-icon-button uk-margin-small-right" uk-icon="heart"></a>
+										<a href="" class="uk-icon-button" uk-icon="refresh"></a>
+										<a href="" class="uk-icon-button  uk-margin-small-right" uk-icon="comment"></a>
+								    </div>
+								</div>
+							</div>
+
+							<div class="uk-text-center">
+								<div ng-if='api.loading' uk-spinner></div>
+								<div ng-hide='api.loading' class="uk-text-meta"><a href="javascript:void(0)" class="uk-link-muted" ng-click='api.next()'>More</a></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div ng-if='subpage.Ispage("discover")'>

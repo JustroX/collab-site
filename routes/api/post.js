@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var lib = require('./api-helper.js')
 var Post = require('../../models/post.js');
+var User = require('../../models/user.js');
 var max = function(a,b){ return (a>b)? a : b; };
 
 var PERMISSIONS  = 
@@ -21,6 +22,7 @@ router.post('/', lib.logged , function(req, res){
 
 	if(! lib.validate_fields(req,res,PERMISSIONS)) return;
 
+	console.log(req.body);
 
 	let post = new Post();
 	for(let i in PERMISSIONS)
@@ -40,7 +42,7 @@ router.post('/', lib.logged , function(req, res){
 	});
 });
 
-router.get('/', function(req, res){
+router.get('/', lib.logged, function(req, res){
 
 	let fields = lib.fields(req,PERMISSIONS);
 	let sort = lib.sort(req,PERMISSIONS);
@@ -73,6 +75,52 @@ router.get('/', function(req, res){
 		if(err) throw err;
 		res.send(docs);
 	});
+
+});
+
+router.get('/feed', lib.logged,  function(req, res){
+
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
+	let query = lib.filter(req,PERMISSIONS);
+	let options = req.query.option;
+
+	let limit =  (req.query.limit || 10)-1+1;
+	let offset = (req.query.offset || 0)-1+1;
+
+
+
+	User.findById(req.session.passport.user , function(err,u)
+	{
+		query["author"] = u.follows;
+		query["author"].push(u._id);
+		
+		if(options)
+		{
+			let opt = {};
+			Post.count(query,function(err,count)
+			{
+				opt.collectionCount = count;
+				res.send(opt);
+			});
+		}
+		else
+		Post.find(query,fields.join(' '))
+			.sort(sort)
+			.limit(limit).skip(max(0,limit*offset))
+			.populate("group")
+			.populate("liked_by","name username")
+			.populate("shared_by","name username")
+			.populate("replies")
+			.populate("author","name username")	
+		.exec(function(err,docs)
+		{
+			if(err) throw err;
+			res.send(docs);
+		});
+	});
+
+
 
 });
 

@@ -33,10 +33,13 @@
 				            	<img class="uk-border-circle" src="https://abs.twimg.com/sticky/default_profile_images/default_profile.png" style="width: 150px; height: 150px;">
 			            	</div>
 					        <h3 style="margin-bottom: 0px">{{ api.value.name }}</h3>
-					       	<i class="uk-text-meta" style="color: white; font-size: 15pt">Founder</i>
+					       	<i class="uk-text-meta" style="color: white; font-size: 15pt">Shitty Person</i>
 					       	<br><br>
-					       	<div>
-						       	<button class="uk-button" style="border-radius: 5px; color: white; background: linear-gradient(45deg,#0086b3,#00b3b3); width: 150px;">Follow</button>
+					       	<div ng-show='user._id != profile_user '>
+					       		<div ng-show='follow.loading'>
+					       			<div uk-spinner></div>
+					       		</div>
+						       	<button ng-hide='follow.loading' 	ng-click='follow_click()' class="uk-button" style="border-radius: 5px; color: white; background: linear-gradient(45deg,#0086b3,#00b3b3); width: 150px;">{{ user.follows.includes(profile_user) ? "Unfollow" : "Follow" }}</button>
 					       	</div>
 			            </div>
 			            <div>

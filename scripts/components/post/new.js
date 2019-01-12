@@ -1,4 +1,4 @@
-app.controller("postNewController",function($scope,$http,$location,$timeout,apiService,editorService)
+app.controller("postNewController",function($scope,$http,$location,$timeout,apiService,editorService,$rootScope)
 {
 	let model = 
 	{
@@ -30,6 +30,8 @@ app.controller("postNewController",function($scope,$http,$location,$timeout,apiS
 		    pos: 'top',
 		    timeout: 3000
 		});
+
+		$rootScope.$broadcast('components/post/new/success');
 
 	}
 	api.validate = function()

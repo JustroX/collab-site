@@ -55,8 +55,8 @@ var UserSchema = mongoose.Schema({
    	submissions: [Schema.Types.ObjectId],  
 
 	badges: [{ type: Schema.Types.ObjectId, ref: "Badge"}], 
-   	follows: [Schema.Types.ObjectId],
-   	followed_by : [Schema.Types.ObjectId],
+   	follows: [{ type: Schema.Types.ObjectId, ref: "User"}],
+   	followed_by : [{ type:Schema.Types.ObjectId, ref: "User"}],
 
    private:
    {

@@ -36,7 +36,8 @@ app.use(passport.session());
 app.use(flash());
 
 app.set('view engine','ejs');
-
+// app.set('views', 'views/'); 
+app.set('views', __dirname + '/views');
 app.get('/',function(req,res)
 {
 	res.render('pages/index')

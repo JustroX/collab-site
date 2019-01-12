@@ -140,10 +140,14 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 		load_options()
 		{
 			let api_ = this;
-			$http.get('/api/'+api_.url+'?options=true').then((res)=>
+			$http.get('/api/'+api_.url+'?option=true').then((res)=>
 			{
 				res = res.data;
 				api_.options = res;
+
+
+				if( api_.page*api_.limit > api_.options.collectionCount )
+					api_.page = Math.floor(api_.options.collectionCount/api_.limit ) -1;
 			});
 		}
 
@@ -214,7 +218,7 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 		load_options()
 		{
 			let api_ = this;
-			$http.get('/api/'+api_.url+'?options=true').then((res)=>
+			$http.get('/api/'+api_.url+'?option=true').then((res)=>
 			{
 				res = res.data;
 				api_.options = res;

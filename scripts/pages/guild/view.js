@@ -12,12 +12,14 @@ app.controller("pageGuildViewController",function($scope,$http,$location,$timeou
 	{
 		$timeout(function()
 		{
+			console.log("Wew");
 			$scope.$broadcast('components/post/new/group',{ group: $routeParams.id });
-		});
-		$timeout(function()
-		{
-			$scope.$broadcast("components/post/list",{ param: "group="+$routeParams.id+"&sort=-date"});
-		},100);
+			$scope.$broadcast("components/post/feed/init",{ param: "group="+$routeParams.id+"&sort=-date"});
+			$scope.$on('components/post/new/success',function(ev,data)
+			{
+				$scope.$broadcast("components/post/feed/init",{ param: "group="+$routeParams.id+"&sort=-date"});
+			});
+		},700);
 	});
 
 

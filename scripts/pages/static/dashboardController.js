@@ -15,8 +15,12 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 
 	$scope.subpage.onload("feed",function()
 	{
-		
+		$timeout(function()
+		{
+			$scope.$broadcast("components/post/feed/init",{param: "sort=-date"});
+		},5);
 	});
+
 	$scope.subpage.onload("discover",function()
 	{
 		$scope.subpage.goto("discover/find");
@@ -61,6 +65,11 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	$scope.$on('components/guild/join/success',function(ev,data)
 	{
 		window.location.href = "#/guild/"+data.id;
+	});
+	   
+	$scope.$on('components/post/new/success',function(ev,data)
+	{
+		$scope.$broadcast("components/post/feed/init",{param: ""});
 	});
 
 });
