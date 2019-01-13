@@ -14,7 +14,9 @@ var PERMISSIONS  =
    liked_by  : 1,
    shared_by : 1,
    replies   : 1,
-   author    : 1
+   author    : 1,
+
+   parent : 1,
   
 }
 
@@ -34,10 +36,28 @@ router.post('/', lib.logged , function(req, res){
 	}
 	post.author = req.session.passport.user;
 	post.date = new Date();
-	post.save(function(err)
+
+	if(req.body.parent)
+		post.parent  = req.body.parent;
+	
+	post.save(function(err,post)
 	{
-		if(err) throw err;
+		if(err) return res.send({ code: 500, err: 'Database Error' });
 		let output = lib.hide_fields(post,PERMISSIONS);
+
+		if(req.body.parent)
+			Post.findById(req.body.parent,function(err, parent_post){
+				if(err) return res.send({ err: "Databasse error" , code: 500 });
+				if(!parent_post) return res.send({ err: "Parent post not found", code: 500});
+
+				parent_post.replies.push(post._id);
+				parent_post.save(function(err)
+				{
+					if(err) return res.send({ err: "Databasse error" , code: 500 });
+					return res.send(output)
+				});
+			});
+		else
 		return res.send(output);
 	});
 });
@@ -70,9 +90,13 @@ router.get('/', lib.logged, function(req, res){
 		.populate("shared_by","name username")
 		.populate("replies")
 		.populate("author","name username")	
+		.populate("replies.author","name username")
+		.populate("replies.liked_by","name username")
+		.populate("replies.shared_by","name username")
 	.exec(function(err,docs)
 	{
-		if(err) throw err;
+		console.log(docs)
+		if(err) return res.send({ code: 500, err: 'Database Error' });
 		res.send(docs);
 	});
 
@@ -115,7 +139,7 @@ router.get('/feed', lib.logged,  function(req, res){
 			.populate("author","name username")	
 		.exec(function(err,docs)
 		{
-			if(err) throw err;
+			if(err) return res.send({ code: 500, err: 'Database Error' });
 			res.send(docs);
 		});
 	});
@@ -137,7 +161,7 @@ router.get('/:id', function(req, res){
 		.populate("replies")
 		.populate("author","name username").exec(function(err,post)
 	{
-		if(!post) return res.send({ code: 500 , message: 'Post not found.' });
+		if(!post) return res.send({ code: 500 , err: 'Post not found.' });
 		res.send(post[0] || post);
 	});
 
@@ -153,8 +177,8 @@ router.put('/:id', lib.logged, function(req, res){
 
 	Post.findById(post_id, function(err, post)
 	{
-		if(err) throw err;	
-		if(!post) return res.send({ code: 500 , message: 'Post not found.' });
+		if(err) return res.send({ code: 500, err: 'Database Error' });	
+		if(!post) return res.send({ code: 500 , err: 'Post not found.' });
 
 		for(let i in query)
 		{
@@ -162,7 +186,7 @@ router.put('/:id', lib.logged, function(req, res){
 		}
 		post.save(function(err, updatedUser)
 		{
-			if(err) throw err;
+			if(err) return res.send({ code: 500, err: 'Database Error' });
 			let output = lib.hide_fields(updatedUser,PERMISSIONS);
 			res.send(output);
 		});
@@ -172,17 +196,17 @@ router.put('/:id', lib.logged, function(req, res){
 router.delete('/:id', lib.logged , function(req, res){
 	let post_id = req.params.id;
 	let user   = req.session.passport.user;
-	if(!user) return res.send({ code: 403, message: 'Please login to continue'});
+	if(!user) return res.send({ code: 403, err: 'Please login to continue'});
 	
 
 	Post.findById(post_id, function(err, post)
 	{
 		if(err) return res.send({ err : "Databasse Error" });
-		if(!post) return res.send({ code: 500 , message: 'Post not found.' });
+		if(!post) return res.send({ code: 500 , err: 'Post not found.' });
 				
 		Post.deleteOne({ _id: post_id },function(err)
 		{
-			if(err) return res.send({ err : "Databasse Error" });
+			if(err) return res.send({ code: 500, err : "Databasse Error" });
 			return res.send({ message: "Delete successful" })
 
 		});

@@ -44,6 +44,21 @@ app.controller("postNewController",function($scope,$http,$location,$timeout,apiS
 		$scope.model.group = data.group;
 	});
 
+	$scope.$on('components/post/new/post',function(ev,data)
+	{
+		$scope.model.group = data.group || $scope.model.group;
+		$scope.model.parent  = data.parent; 
+	});
+
+	$scope.init = function()
+	{
+		$timeout(function()
+		{
+			$scope.editor.init('text-editor'+$scope.unique_id);
+			$scope.editor.active= false;
+		},2);
+	}
+
 	$scope.editor = editor;
 	$scope.api    = api;
 

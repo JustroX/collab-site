@@ -1,10 +1,10 @@
-<div ng-init="editor.init();editor.active= false" ng-controller='postNewController'>
+<div ng-init="init()" ng-controller='postNewController'>
 	<div ng-show='components.new.ready' class="uk-card uk-card-default uk-animation-slide-bottom " >
 	    <div class="uk-card-header uk-background-muted uk-padding-small">
 	    	<b>POST</b>
 	    </div>
 	    <div class="uk-card-body " ng-class="{'uk-padding-remove': editor.active}" style="cursor: text;background: #efefef">
-	        <div ng-click='editor.toggle()'  id='components-post-add-overlay' class="uk-grid-small uk-flex-middle "  ng-show="!editor.active"  uk-grid>
+	        <div ng-click='editor.toggle()'  id='components-post-add-overlay{{::unique_id}}' class="uk-grid-small uk-flex-middle "  ng-show="!editor.active"  uk-grid>
 	            <div class="uk-width-auto ">
 	                <img class="uk-border-circle " ng-show="!editor.active" width="40" height="40" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
 	            </div>
@@ -12,18 +12,18 @@
 	            	<p>{{user.name}}, share something...</p>
 	            </div>
 	        </div>
-            <div id='components-post-add-main' class="uk-width-expand" ng-show='editor.active' >
+            <div id='components-post-add-main{{::unique_id}}' class="uk-width-expand" ng-show='editor.active' >
 				<div ng-if='api.error' class="uk-alert uk-alert-danger uk-margin-remove-bottom" uk-alert>
 				    <!-- <a class="uk-alert-close" uk-close></a> -->
 					{{ api.error }}
 				</div>	
 				<div style="padding: 0px;">
-					<div id='text-editor' style="height: 20vh; padding: 0px; margin: 0px"></div>
+					<div id='text-editor{{::unique_id}}' style="height: 20vh; padding: 0px; margin: 0px"></div>
 				</div>
 			</div>
 	    </div>
 	    <div class="uk-card-footer">
-	    	<div id='components-post-add-footer' ng-if='editor.active' class="uk-grid-small uk-flex-middle" uk-grid>
+	    	<div id='components-post-add-footer{{::unique_id}}' ng-if='editor.active' class="uk-grid-small uk-flex-middle" uk-grid>
 	            <div class="uk-width-auto">
 	                <img ng-show="editor.active" class="uk-border-circle uk-animation-scale-up" width="40" height="40" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
 	            </div>

@@ -197,7 +197,7 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 			this.param = "";
 			this.$scope  = $scope;
 		}
-		load()
+		load(cb=function(){})
 		{
 			let api_ = this;
 			// session.onready(function()
@@ -211,7 +211,7 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 				api_.loading = false;
 				if( res.err || res == "" )
 					return api_.err(res.err);
-				api_.success(res);
+				api_.success(res,cb);
 			});
 			// });
 		}
@@ -233,10 +233,11 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 			this.error = mes;
 			console.log("API ERROR: "+mes);
 		}
-		success(res)
+		success(res,cb)
 		{
 			this.value = res;
 			this.$scope.model = res;
+			cb();
 		}
 	}
 

@@ -20,6 +20,7 @@ app.controller("postFeedController",function($scope,$http,$location,$timeout,ses
 			$timeout(function()
 			{
 			   $('pre.ql-syntax').each(function(i, e) {hljs.highlightBlock(e)});
+
 			},1);
 		},1);
 	}
@@ -32,4 +33,11 @@ app.controller("postFeedController",function($scope,$http,$location,$timeout,ses
 		$scope.api.page = 0;
 		$scope.api.load();
 	});
+
+	$scope.view_details = function(post)
+	{
+		$scope.$broadcast('components/post/view/init',{ _id : post._id , cb:function(){}});
+		$scope.$broadcast('components/post/new/post',{ parent : post._id , group : post.group });
+		UIkit.modal('#modal-post-details').show();
+	}
 });

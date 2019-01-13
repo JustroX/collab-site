@@ -11,7 +11,9 @@ var PostSchema = mongoose.Schema({
    liked_by  : [  { type: Schema.Types.ObjectId, ref: 'User'} ],
    shared_by : [{ user:   { type: Schema.Types.ObjectId, ref: 'User'} , group:  { type: Schema.Types.ObjectId, ref: 'User'}  }],
    replies   : [  { type: Schema.Types.ObjectId, ref: 'Post'} ],
-   author    : { type: Schema.Types.ObjectId, ref: 'User'}
+   author    : { type: Schema.Types.ObjectId, ref: 'User'},
+
+   parent    : {type: Schema.Types.ObjectId, ref: 'Post'}
   
 });
 
