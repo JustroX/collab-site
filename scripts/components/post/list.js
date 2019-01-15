@@ -24,6 +24,7 @@ app.controller("postListController",function($scope,$http,$location,$timeout,ses
 
 	$scope.$on('components/post/list',function(ev,data)
 	{
+		console.log("wew")
 		$scope.api.param = data.param;
 		$scope.api.load();
 	});

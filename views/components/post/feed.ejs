@@ -88,30 +88,31 @@
 			            	<hr>
 			            	<div style="height: 80vh; overflow-y: scroll;">
 
-								<div class="uk-text-center">
-									<div ng-if='api.loading' uk-spinner></div>
-								</div>
-				            	<small>
-				            		<div ng-repeat='i in api.value.replies'>
-										<div uk-scrollspy="cls:uk-animation-slide-top-small" class="uk-card-hover uk-padding-small" id="ex-card" style="margin-bottom: 10px">
-										    {{i}}
-										    <div class="uk-padding-small">
-										        <div class="uk-grid-small uk-flex-middle" uk-grid>
-										            <img class="uk-border-circle" width="50px" height="50px" src="https://storage.googleapis.com/neris/public/images/types/faces/INFJ-female.svg">
-									                <p class="uk-margin-remove-top"> <b>{{ i.author.name }}</b> &middot; <small> <time datetime="{{ i.date }}">{{ i.date | date: "MMMM d, y" }}</time> </small> </p>
-										        </div>
-										    </div>
-										    <div class="uk-padding-small">
-										    	<div ng-bind-html='i.content'></div>
-										    </div>
-										    <div style="text-align: center;">
-										    	<a href="" class="uk-icon-button uk-margin-small-right" uk-icon="heart"></a>
-												<a href="" class="uk-icon-button" uk-icon="refresh"></a>
-												<a href="javascript:void(0)" ng-click='view_details(i)'  class="uk-icon-button  uk-margin-small-right" uk-icon="comment"></a>
-										    </div>
-										</div>
-				            		</div>
-				            	</small>
+			            		<div ng-controller='postListController'>
+									<div class="uk-text-center">
+										<div ng-if='api.loading' uk-spinner></div>
+									</div>
+					            	<small>
+					            		<div ng-repeat='i in api.list'>
+											<div uk-scrollspy="cls:uk-animation-slide-top-small" class="uk-card-hover uk-padding-small" id="ex-card" style="margin-bottom: 10px">
+											    <div class="uk-padding-small">
+											        <div class="uk-grid-small uk-flex-middle" uk-grid>
+											            <img class="uk-border-circle" width="50px" height="50px" src="https://storage.googleapis.com/neris/public/images/types/faces/INFJ-female.svg">
+										                <p class="uk-margin-remove-top"> <b>{{ i.author.name }}</b> &middot; <small> <time datetime="{{ i.date }}">{{ i.date | date: "MMMM d, y" }}</time> </small> </p>
+											        </div>
+											    </div>
+											    <div class="uk-padding-small">
+											    	<div ng-bind-html='i.content'></div>
+											    </div>
+											    <div style="text-align: center;">
+											    	<a href="" class="uk-icon-button uk-margin-small-right" uk-icon="heart"></a>
+													<a href="" class="uk-icon-button" uk-icon="refresh"></a>
+													<a href="javascript:void(0)" ng-click='view_details(i)'  class="uk-icon-button  uk-margin-small-right" uk-icon="comment"></a>
+											    </div>
+											</div>
+					            		</div>
+					            	</small>
+			            		</div>
 
 			            	</div>
 

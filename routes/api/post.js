@@ -87,15 +87,10 @@ router.get('/', lib.logged, function(req, res){
 		.limit(limit).skip(max(0,limit*offset))
 		.populate("group")
 		.populate("liked_by","name username")
-		.populate("shared_by","name username")
-		.populate("replies")
+		.populate("shared_by","name username")	
 		.populate("author","name username")	
-		.populate("replies.author","name username")
-		.populate("replies.liked_by","name username")
-		.populate("replies.shared_by","name username")
 	.exec(function(err,docs)
 	{
-		console.log(docs)
 		if(err) return res.send({ code: 500, err: 'Database Error' });
 		res.send(docs);
 	});
