@@ -58,6 +58,19 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 		window.location.href = "#/guild/"+guild._id;
 	}
 
+	$scope.$on('components/post/delete/success',function(ev,data)
+	{
+		UIkit.modal("#modal-delete-confirm").hide();
+		UIkit.modal("#modal-post-details").hide();		
+		UIkit.notification({
+		    message: 'Your post has been deleted',
+		    status: 'success',
+		    pos: 'top',
+		    timeout: 3000
+		});
+		$scope.$broadcast("components/post/feed/init",{param: "sort=-date"});
+	});
+
 	$scope.$on("component/guild/list/success",function()
 	{
 
@@ -69,7 +82,7 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	   
 	$scope.$on('components/post/new/success',function(ev,data)
 	{
-		$scope.$broadcast("components/post/feed/init",{param: ""});
+		$scope.$broadcast("components/post/feed/init",{param: "sort=-date"});
 	});
 
 });

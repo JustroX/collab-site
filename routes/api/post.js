@@ -44,21 +44,7 @@ router.post('/', lib.logged , function(req, res){
 	{
 		if(err) return res.send({ code: 500, err: 'Database Error' });
 		let output = lib.hide_fields(post,PERMISSIONS);
-
-		if(req.body.parent)
-			Post.findById(req.body.parent,function(err, parent_post){
-				if(err) return res.send({ err: "Databasse error" , code: 500 });
-				if(!parent_post) return res.send({ err: "Parent post not found", code: 500});
-
-				parent_post.replies.push(post._id);
-				parent_post.save(function(err)
-				{
-					if(err) return res.send({ err: "Databasse error" , code: 500 });
-					return res.send(output)
-				});
-			});
-		else
-		return res.send(output);
+		res.send(output);
 	});
 });
 
