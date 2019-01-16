@@ -1,8 +1,8 @@
-app.controller("badgeNewController",function($scope,$http,$location,$timeout,session,apiService)
+app.controller("badgeNewController",function($scope,$http,$location,$timeout,session,apiService,$rootScope)
 {
 	let model = 
 	{
-		name: "",
+		name: "New Badge",
 	};
 
 	$scope.model   = model;
@@ -12,7 +12,7 @@ app.controller("badgeNewController",function($scope,$http,$location,$timeout,ses
 	{
 		model = 
 		{
-			name: "", 
+			name: "New Badge", 
 		};
 		$scope.model = model;
 	};
@@ -21,6 +21,11 @@ app.controller("badgeNewController",function($scope,$http,$location,$timeout,ses
 		return $scope.model.name!="" ;
 	};
 
-
 	$scope.api    = api;
+
+	$scope.api.success = function(res)
+	{
+		$rootScope.$broadcast('components/badge/new/success');
+	};
+
 });

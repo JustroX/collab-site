@@ -9,7 +9,8 @@ var BadgeSchema = mongoose.Schema({
 	title: String,
 	asset: Buffer,
 	created_by: { type:Schema.Types.ObjectId ,ref:"User"},
-	created_by_guild:  Schema.Types.ObjectId
+	created_by_guild:  Schema.Types.ObjectId,
+	date: { type: Date ,  default: Date.now }
 
 });
 

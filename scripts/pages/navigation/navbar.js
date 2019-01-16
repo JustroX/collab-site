@@ -1,5 +1,4 @@
-app.controller("pageNavigationNavbarController",function($scope,$rootScope,$location,session,$timeout
-	)
+app.controller("pageNavigationNavbarController",function($scope,$rootScope,$location,session,$timeout)
 {
 	$scope.invite = function()
 	{
@@ -15,6 +14,14 @@ app.controller("pageNavigationNavbarController",function($scope,$rootScope,$loca
 	$scope.settings = function()
 	{
 		$location.path("/user/edit" );
+	}
+
+	$scope.badge = function()
+	{
+		UIkit.modal("#badge-forger").show();
+		$timeout(function(){
+			$rootScope.$broadcast('page/badge/view/init');
+		},5);
 	}
 
 	$scope.search  = 
