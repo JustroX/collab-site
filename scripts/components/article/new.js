@@ -1,4 +1,4 @@
-app.controller("articleNewController",function($scope,$http,$location,$timeout,apiService,editorService)
+app.controller("articleNewController",function($scope,$http,$location,$timeout,apiService,editorService,$rootScope)
 {
 	let model = 
 	{
@@ -16,19 +16,26 @@ app.controller("articleNewController",function($scope,$http,$location,$timeout,a
 	}
 
 	let api = apiService.new("article",$scope);
-	api.loaded = function(res)
-	{
-		editor.quill.setText('');
-		model.content = '';
-		model.title = '';
-	}
+
 	api.validate = function()
 	{
-		return $scope.model.content !='' && $scope.model.title!='';
+		return $scope.model.title!='' && $scope.model.module;
 	};
 
 	$scope.editor = editor;
 	$scope.api    = api;
+
+	$scope.$on('components/article/new/init',function(ev,data)
+	{
+		$scope.model.title = "New Article";
+		$scope.model.module = data._id; 
+	});
+
+	$scope.api.success = function(res)
+	{
+		$rootScope.$broadcast('components/article/new/success');
+	}
+
 
 	// $timeout(editor.init , 1);
 });

@@ -22,14 +22,14 @@ app.service('subpageService', function(session,$http,$timeout,$rootScope)
 			return str.split("/").join("/") == this.page.join("/");
 		}
 
-		goto(location)
+		goto(location,param)
 		{
 			let _page = this;
 			$timeout(function()
 			{
 				_page.page = location.split("/")
 				if(_page.onloadObj[location.split("/").join("/")])
-					_page.onloadObj[location.split("/").join("/")]();
+					_page.onloadObj[location.split("/").join("/")](param);
 			},1);
 		}
 

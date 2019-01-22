@@ -7,6 +7,7 @@ var PERMISSIONS  =
 {
 	_id: 1,
 	name: 7, 
+	description: 5,
 	guild: 3,
 	badges: 5,
 	articles: 5,
@@ -87,10 +88,94 @@ router.get('/:id', function(req, res){
 	.populate("users","name username private.local.email")
 	.exec(function(err,mod)
 	{
+		if(err) return res.send({code : 500 , err: 'Database Error.'})
 		if(!mod[0]) return res.send({ code: 500 , err: 'Module not found.' });
 		res.send(mod[0]);
 	});
 
+});
+router.get('/:id/page', function(req, res){
+	let mod_id = req.params.id;
+	let fields = lib.fields(req,PERMISSIONS);
+	let sort = lib.sort(req,PERMISSIONS);
+	let options = req.query.option;
+
+	Module.find({ _id: mod_id},fields.join(' '))
+	.populate("articles.article","title")
+	.populate("challenges.challenges","title")
+	.exec(function(err,mod)
+	{
+		if(err) return res.send({code : 500 , err: 'Database Error.'})
+		if(!mod[0]) return res.send({ code: 500 , err: 'Module not found.' });
+
+		let pages = [];
+		for(let i in mod[0].challenges)
+		{
+			if(!mod[0].challenges[i]._id || i=="_parent") continue;
+			mod[0].challenges[i].mode = 'challenge';
+			pages.push(mod[0].challenges[i]);
+		}
+		for(let i in mod[0].articles)
+		{
+			if(!mod[0].articles[i]._id || i=="_parent") continue;
+			mod[0].articles[i].mode = 'article';
+			pages.push(mod[0].articles[i]);
+		}
+		pages.sort((a,b) => (a.page > b.page) ? 1 : ((b.page > a.page) ? -1 : 0)); 
+		res.send(pages);
+	});
+
+});
+
+router.post('/:id/page',function(req,res)
+{
+	let mod_id = req.params.id;
+	let page_id = req.body.page;
+	let inc = req.body.inc;
+	// 1 if down -1 if up
+
+	console.log("here")
+
+	Module.find({ _id: mod_id})
+	.populate("articles.article","title")
+	.exec(function(err,mod)
+	{
+		if(err) return res.send({code : 500 , err: 'Database Error.'})
+		if(!mod[0]) return res.send({ code: 500 , err: 'Module not found.' });
+
+		for(let i in mod[0].challenges)
+		{
+			if(!mod[0].challenges[i]._id || i=="_parent") continue;
+			if(mod[0].challenges[i].page == page_id)
+			{
+				mod[0].challenges[i].page = page_id + inc;
+			}
+			else
+			if(mod[0].challenges[i].page == page_id + inc)
+			{
+				mod[0].challenges[i].page = page_id - inc;
+			}
+		}
+		for(let i in mod[0].articles)
+		{
+			if(!mod[0].articles[i]._id || i=="_parent") continue;
+			if(mod[0].articles[i].page == page_id)
+			{
+				mod[0].articles[i].page = page_id + inc;
+			}
+			else
+			if(mod[0].articles[i].page == page_id + inc)
+			{
+				mod[0].articles[i].page = page_id - inc;
+			}
+		}
+
+		mod[0].save(function(err)
+		{
+			if(err) return res.send({ err: "Database Error", code: 500});
+			return res.send({success: "Page updated"});
+		})
+	});
 });
 
 router.put('/:id', lib.logged, function(req, res){

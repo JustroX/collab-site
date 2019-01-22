@@ -69,16 +69,16 @@ app.config(function($routeProvider) {
 
     
     //Module
-    .when("/module/new", {
+    .when("/guild/:guild/module/new", {
         templateUrl : "/pages/module/new"
     })
-    .when("/module", {
+    .when("/guild/:guild/module", {
         templateUrl : "/pages/module/list"
     })
-    .when("/module/:id", {
+    .when("/guild/:guild/module/:id", {
         templateUrl : "/pages/module/view"
     })
-    .when("/module/edit/:id", {
+    .when("/guild/:guild/module/:id/edit", {
         templateUrl : "/pages/module/edit"
     })
     

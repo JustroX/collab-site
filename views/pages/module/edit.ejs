@@ -1,0 +1,309 @@
+<div ng-controller="pageModuleEditController" class="uk-padding-large uk-padding-remove-top">
+
+	<div class="uk-child-width-1-4" uk-grid>
+		<div uk-sticky="offset: 0" class="uk-padding-remove">
+			<br><br>
+			<h3 style="margin-top: 10px">Module Editor</h3>
+			<h5>CONFIGURATION</h5>
+		    <ul class="uk-nav uk-nav-default">
+		        <li><a href="javascript:void(0)" ng-click='edit_title()' ><span uk-icon="icon: bookmark"></span> Module Title</a></li>
+		        <li><a href="javascript:void(0)" ng-click='edit_badges()'><span uk-icon="icon: bookmark"></span> Badge Rewards</a></li>
+		        <li>
+		        	<a href="javascript:void(0)" ng-click='delete_module()' class="uk-link-muted"><span uk-icon="icon: bookmark"></span> Delete Module</a>
+					<div ng-controller='moduleDeleteController'>
+						<!-- <button type="button"  class="uk-button uk-button-danger">Delete</button> -->
+						<div id="modal-module-delete" uk-modal>
+						    <div class="uk-modal-dialog uk-modal-body">
+						        <h2 class="uk-modal-title">Are you sure you want to delete this module?</h2>
+						        <p style="color: red;">This includes all submissions, articles, and challenges in this module. Note: action can not be undone.</p>
+						        
+						        <div ng-show='api.loading'><div uk-spinner></div></div>
+						        <p ng-hide='api.loading' class="uk-text-right">
+						            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+						            <button ng-click='api.delete()' class="uk-button uk-button-danger" type="button">Delete</button>
+						        </p>
+						    </div>
+						</div>
+					</div>
+
+		        </li>
+		    </ul>
+			<h5>PAGES</h5>
+			<div ng-controller='modulePageListController'>
+				<div style="max-height: 30vh; overflow-y: scroll; width: 80%">
+						<small>
+							<div ng-show='api.loading'><div uk-spinner></div></div>
+							<div ng-hide='api.list.length'>Nothing here.</div>
+							<ul ng-show='!api.loading' uk-accordion="collapsible: true" style="padding: 0px">
+							    <li ng-repeat='i in api.list track by $index' style="padding: 0px; margin:0px">
+							        
+							        <a class="uk-accordion-title" href="#"><small>{{i.article.title}}</small></a>
+							        <div class="uk-accordion-content">
+						            	<p ng-controller='moduleOrderController' ng-init='model.inc=-1; model.page= $index'>
+						            		{{api.error}}
+							            	<a  ng-click='api.submit()'  href="javascript:void(0)" class="uk-icon-button uk-margin-small-right" uk-icon="triangle-up"></a>
+						            	</p>
+							            <p>
+							            	<a ng-controller='moduleOrderController' ng-init='model.inc=1; model.page= $index'  ng-click='api.submit()' href="" class="uk-icon-button uk-margin-small-right" uk-icon="triangle-down"></a>
+							            	<a href="javascript:void(0)" ng-click='edit_article(i.article)'  class="uk-icon-button uk-margin-small-right" uk-icon="file-edit"></a>
+							            	<a href="javascript:void(0)" ng-click='delete_article(i.article)' class="uk-icon-button uk-margin-small-right" uk-icon="trash"></a>
+							            	<div ng-controller='articleDeleteController'>
+												<div id="modal-article-delete" uk-modal>
+												    <div class="uk-modal-dialog uk-modal-body">
+												        <h2 class="uk-modal-title">Are you sure you want to delete Aritlce?</h2>
+												        <p style="color: red;">Note: action can not be undone.</p>
+												        
+												        <div ng-show='api.loading'><div uk-spinner></div></div>
+												        <p ng-hide='api.loading' class="uk-text-right">
+												            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+												            <button ng-click='api.delete()' class="uk-button uk-button-danger" type="button">Delete</button>
+												        </p>
+												    </div>
+												</div>
+											</div>
+							            </p>
+							        </div>
+
+							    </li>
+							</ul>
+						</small>
+				</div>
+			</div>
+			<h5>NEW PAGE</h5>
+			<ul class="uk-nav uk-nav-default">
+		        <li>
+		        	<div ng-controller='articleNewController'>
+		        		<div ng-show='api.loading'><div uk-spinner></div></div>
+		        		<div ng-show='api.error'>{{api.error}}</div>
+			        	<a ng-hide='api.loading' class="uk-link-muted" href="javascript:void(0)" ng-click='api.submit()' ><span uk-icon="icon: plus"></span> Add Article</a>
+		        	</div>
+				</li>
+		        <li>
+		        	<div >
+			        	<a class="uk-link-muted" href="javascript:void(0)" ng-click='edit_title()' ><span uk-icon="icon: plus"></span> Add Challenge</a>
+		        	</div>
+		        </li>
+		  	</ul>
+		</div>
+		<div class="uk-width-expand" style="background: white">
+			<div class="uk-padding-large uk-padding-remove-top">
+				<br>
+				<div>
+		           	<small><a class="uk-link-muted" href="#/guild/{{guild_id}}"> <span uk-icon="chevron-left"></span> EXIT EDITOR </a></small>
+				</div>
+				<div ng-controller='articleEditController'>
+
+					<div ng-show='subpage.here("article") || subpage.here("settings")'>
+						<ul class="uk-tab-bottom" uk-tab>
+						    <li class="uk-active"><a ng-click='subpage.goto("article")' href="#">Article </a></li>
+						    <li><a ng-click='subpage.goto("settings")' href="#">Response Settings</a></li>
+						    <li style="text-align: center;"><div class="uk-text-muted" ng-hide='api.loading' ng-click='api.submit()' style="padding: 5px; cursor: pointer;">SAVE CHANGES  </div><div class="uk-text-center" ng-show='api.loading'><div uk-spinner="ratio: 0.7"></div></div> </li>
+						</ul>
+					</div>
+					
+					<div ng-show='subpage.here("article")' >
+						<div ng-show='api.view.loading' class="uk-text-center">
+							<br><br><br><br><br>
+							<div uk-spinner></div>
+						</div>
+						<article ng-show='!api.view.loading' class="uk-article"> 
+							<div ng-hide='edit_heading'>
+							    <h1 class="uk-article-title"><a class="uk-link-reset" href="javascript:void(0)">{{model.title}}</a> <a ng-click='edit_heading=true' href="javascript:void(0)"><span uk-icon="icon: pencil; ratio: 1.5"></span></a></h1>
+							</div>
+						    <div ng-show='edit_heading'>
+						    	<input ng-blur='edit_heading = false' class="uk-input uk-form-width-medium" style="font-size: 24pt" type="text" ng-model='model.title'>
+						    </div>
+							<div class="uk-alert uk-alert-danger" ng-show='api.error'>{{api.error}}</div>
+						    <p class="uk-article-meta">Written by <a ng-repeat='u in model.authors track by $index' href="#/user/{{u._id}}" target="_blank" >{{ u.name + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{ model.module.name }}</a></p>
+						    <div id="text-editor" style="min-height: 100vh">
+						    	<h1>Hello World</h1>
+						    	<i>Lorem ipsum dolor sit amet</i> <br>
+							    <p>
+							    	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							    </p>
+							    <br><br>
+							    <b>Lorem</b>
+							    <p>
+							    	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							    	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							    	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+							    	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+							    	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+							    	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							    </p>
+							</div>
+						</article>
+					</div>
+				</div>
+
+				<form  ng-show='subpage.here("settings")'>
+					<h1>Response Settings</h1>
+					<p>Edit Challenge Information</p>
+
+					<hr>
+					<p>RESPONSE TYPE</p>
+					<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+			            <label><input class="uk-radio" type="radio" name="response" checked> Code</label>
+			            <label><input class="uk-radio" type="radio" name="response"> Single Value</label>
+			        </div>
+
+			        <hr>
+			        <small>For code</small>
+			        <p>TESTCASE EXPLANATION</p>
+		    		<textarea class="uk-textarea" style="height: 30vh"></textarea>
+			        <p>LANGUAGE</p>
+			        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+			            <label><input class="uk-checkbox" type="checkbox" checked> Python 2</label>
+			            <label><input class="uk-checkbox" type="checkbox"> Python 3</label>
+			            <label><input class="uk-checkbox" type="checkbox"> C++</label>
+			            <label><input class="uk-checkbox" type="checkbox"> C</label>
+			        </div>
+			        <p>CHALLENGE ANSWER</p>
+			        <button ng-click='show_testcases()' class="uk-button uk-button-default">Configure Testcases</button>
+
+			        <hr>
+			        <small>For single Value</small>
+			        <p>DATA TYPE</p>
+					<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+			            <label><input class="uk-radio" type="radio" name="data-type" checked> Integer</label>
+			            <label><input class="uk-radio" type="radio" name="data-type"> Float</label>
+			            <label><input class="uk-radio" type="radio" name="data-type"> String</label>
+			        </div>
+			        <p>FLOAT PRECISION</p>
+					<div class="uk-child-width-1-4" uk-grid>
+						<div class="uk-margin">
+				            <input class="uk-input" type="number" placeholder="0.00">
+						</div>
+			        </div>
+			        <p>STRIP INPUT</p>
+			        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+			            <label><input class="uk-checkbox" type="checkbox" checked> Strip input</label>
+			        </div>
+			        <p>CHALLENGE ANSWER</p>
+					<div class="uk-child-width-1-4" uk-grid>
+						<div class="uk-margin">
+				            <input class="uk-input" type="text" placeholder="Answer">
+						</div>
+			        </div>
+			        <hr>
+
+
+				</form>
+
+
+				<div ng-hide='subpage.here("article") || subpage.here("settings")' class="uk-padding-large uk-text-center">
+					<br><br><br><br>
+					<h2 class="uk-text-muted">Nothing is selected</h2>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="modal-module-title" uk-modal>
+	    <div class="uk-modal-dialog uk-modal-body">
+	    	<div ng-controller='moduleEditController'>
+		        <h2 class="uk-modal-title">Edit Module Description</h2>
+		        <p></p>
+		        <div ng-show='api.error || api.view.error' class="uk-alert uk-alert-danger">
+		        	{{api.error}}{{ api.view.error}}
+		        </div>
+		        <div ng-hide='api.loading || api.view.loading '>
+			        <small>Module Name</small>
+			        <div class="uk-margin">
+			            <input class="uk-input" ng-model='model.name' type="text" placeholder="Module Name">
+			        </div>
+			        <small>Module Description</small>
+				    <textarea class="uk-textarea" ng-model='model.description'></textarea>
+		        </div>
+		        <div ng-show='api.loading || api.view.loading '>
+		        	<div uk-spinner></div>
+		        </div>
+		        <p ng-hide='api.loading' class="uk-text-right">
+		            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+		            <button ng-click='api.submit()' class="uk-button uk-button-primary" type="button">Save</button>
+		        </p>
+	    	</div>
+	    </div>
+	</div>
+
+	<div id="modal-module-badge" uk-modal>
+	    <div class="uk-modal-dialog uk-modal-body">
+	        <h2 class="uk-modal-title">Choose Badge Rewards</h2>
+	        <div class="uk-child-width-1-3" uk-grid>
+	        	<div>
+	        		<input type="text" class="uk-input" placeholder="Search Badge...">
+	        		<div style="height: 40vh; overflow-y: scroll;">
+						<ul class="uk-list uk-list-striped">
+						    <li  ng-repeat='i in [1,2,3,4,5,6,7,8,9]'><a class="uk-link-muted" href="">List item {{i}}</a></li>
+						</ul>
+	        		</div>
+	        		<button class="uk-button uk-button-small uk-button-default" ng-click='badge_forge()'><small>FORGE NEW BADGE</small></button>
+	        	</div>
+		    	<div class="uk-width-expand">
+		    		<img class="uk-align-center" src="/assets/badge-sample.png" width="140px"  height="140px">
+	    			<div style="text-align: center;">
+		    			<h4 style="margin: 0px">SQUIRE BADGE</h4>
+		    			<i>of Hello World guild</i>
+		    			<br><br>
+		    			<button class="uk-button uk-button-small uk-button-primary">SELECT</button>
+	    			</div>
+		    	</div>
+	        </div>
+
+	        <p class="uk-text-right">
+	            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+	            <button class="uk-button uk-button-primary" type="button">Save</button>
+	        </p>
+	    </div>
+	</div>
+
+	<div id="modal-challenge-testcases" uk-modal>
+	    <div class="uk-modal-dialog uk-modal-body">
+	        <h2 class="uk-modal-title">Configure Testcases</h2>
+	        <div class="uk-child-width-1-3" uk-grid>
+	        	<div>
+	        		TESTCASES
+	        		<br>
+	        		<div style="height: 70vh; overflow-y: scroll;">
+						<ul class="uk-list uk-list-striped">
+						    <li  ng-repeat='i in [1,2,3,4,5,6,7,8,9]'><a class="uk-link-muted" href="">Test Case {{i}}</a></li>
+						</ul>
+	        		</div>
+	        		<button class="uk-button uk-button-small uk-button-default" >ADD NEW</button>
+	        	</div>
+		    	<div class="uk-width-expand">
+		    		Input 
+		    		<textarea class="uk-textarea" style="height: 30vh"></textarea>
+		    		Output 
+		    		<textarea class="uk-textarea" style="height: 30vh"></textarea>
+		    		Points 
+					<div class="uk-margin uk-margin-remove-top">
+			            <input class="uk-input" type="number" placeholder="10">
+					</div>
+			        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+			            <label><input class="uk-checkbox" type="checkbox" checked> Use as sample testcase</label>
+			        </div>
+		    	</div>
+	        </div>
+
+	        <p class="uk-text-right">
+	            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+	            <button class="uk-button uk-button-primary" type="button">Save</button>
+	        </p>
+	    </div>
+	</div>
+
+<!-- 	<div class="uk-modal-full" id="modal-badge-forge" uk-modal>
+	    <div class="uk-modal-dialog">
+	        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+	        <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
+	            <div class="uk-background-cover" style="background-image: url('images/photo.jpg');" uk-height-viewport></div>
+	            <div class="uk-padding-large">
+	                <h1>Headline</h1>
+	                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	            </div>
+	        </div>
+	    </div>
+	</div> -->
+</div>

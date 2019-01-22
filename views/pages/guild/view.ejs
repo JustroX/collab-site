@@ -34,23 +34,38 @@
 				</div>
 			</div>
 
-			<!-- <div>
-				GUILD MODULES
-				<br><br>
+			<div ng-show='subpage.here("modules")'>
+				<div ng-controller='moduleListController'>
 
-				<div ng-repeat='i in [1,2,3,4,5]'>
-					<div class="uk-background-default uk-padding">
-			            <h3 class="uk-card-title"><a href="">Introduction to Programming</a></h3>
-			            <p>
-			            	Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-			            </p>
-			            <a class="uk-button uk-button-primary" href='#/module/123'>Get Started</a>
-			            <a class="uk-button uk-button-secondary" href="#/module/123/edit" >Open in Editor</a>
-			            <a class="uk-button uk-button-secondary" href="#/module/123/edit" >Module Overview</a>
-			        </div>
-			        <br>
+					<% include ../../components/module/new.ejs %>
+
+					<div class="uk-text-center">
+						GUILD MODULES
+						<div ng-show='!api.loading && !api.list ' class="uk-card uk-background-muted uk-padding">
+							<p class="uk-text-muted">This guild has no modules.</p>
+							<a ng-click='module_new_modal()' ng-if='is_admin()' href="javascript:void(0)">Create One</a>
+						</div>
+						<div ng-show='!api.loading && api.list ' class="uk-card uk-background-muted uk-padding">
+							<a ng-click='module_new_modal()' ng-if='is_admin()' href="javascript:void(0)">Add new Module</a>
+						</div>
+						<div ng-show='api.loading'><div uk-spinner></div></div>
+					</div>
+					
+						<br><br>
+					<div ng-hide='api.loading' ng-repeat='i in api.list'>
+						<div class="uk-background-default uk-padding">
+				            <h3 class="uk-card-title"><a href="">{{i.name}}</a></h3>
+				            <p>
+				            	{{ i.description }}
+				            </p>
+				            <a class="uk-button uk-button-primary" href='#/guild/{{ guild_id }}/module/{{i._id}}'>Get Started</a>
+				            <a class="uk-button uk-button-secondary" href="#/guild/{{ guild_id }}/module/{{i._id}}/edit" >Open in Editor</a>
+				            <a class="uk-button uk-button-secondary" href="#/guild/{{ guild_id }}/module/{{i._id}}/edit" >Module Overview</a>
+				        </div>
+				        <br>	
+					</div>
 				</div>
-			</div> -->
+			</div>
 
 <!-- 			<div>
 				<div class="uk-section-default">

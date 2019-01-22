@@ -8,7 +8,7 @@ var PERMISSIONS  =
 {	
 	_id: 1,
 	title: 7,
-	content: 7,
+	content: 5,
 	authors: 1,
 	module: 3
 }
@@ -49,12 +49,16 @@ router.post('/', lib.logged ,function(req, res){
 
 			article.save(function(err)
 			{
-				if(err)
+				if(err) return res.send({ err: "Database Error"});
+
+				mod.articles.push({ article: article._id, page: mod.articles.length});
+				mod.save(function(err)
 				{
-					return res.send({ err: "Database Error"})
-				}
-				let output = lib.hide_fields(article,PERMISSIONS);
-				return res.send(output);
+					if(err) return res.send({ err: "Database Error"});
+					let output = lib.hide_fields(article,PERMISSIONS);
+					return res.send(output);
+				});
+
 			});
 		});
 	});
@@ -91,7 +95,7 @@ router.get('/', function(req, res){
 		}
 		res.send(docs);
 	});
-
+	
 });
 
 router.get('/:id', function(req, res){
@@ -100,7 +104,8 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Article.find({_id: article_id},fields.join(' ') ).populate("authors","name username").exec(function(err,mod)
+	Article.find({_id: article_id},fields.join(' ') ).populate("authors","name username")
+	.populate("module","name").exec(function(err,mod)
 	{
 		if(!mod[0]) return res.send({ code: 500 , err: 'Article not found.' });
 		res.send(mod[0]);
@@ -192,6 +197,8 @@ router.delete('/:id', lib.logged, function(req, res){
 				return res.send({ err: "Database Error"})
 			}
 			if(!mod) return res.send({ code: 501, err:"Module not found." });
+
+		
 	
 			Guild.findById(mod.guild, function(err, guild){
 
@@ -207,7 +214,22 @@ router.delete('/:id', lib.logged, function(req, res){
 				Article.deleteOne({ _id: article_id },function(err)
 				{
 					if(err) return res.send({ err : "Databasse Error" });
-					return res.send({ message: "Delete successful" })
+
+					for(let i in mod.articles)
+					{
+						let a = mod.articles[i];
+						if( a.article.equals && a.article.equals(article_id)  )
+						{
+							mod.articles.splice(i,1);
+							break;
+						}	
+					}
+
+					mod.save(function(err)
+					{
+						if(err) return res.send({ err : "Databasse Error" });
+						return res.send({ message: "Delete successful" })
+					});
 
 				});
 			});

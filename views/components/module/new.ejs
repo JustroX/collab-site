@@ -1,17 +1,23 @@
 <div ng-controller='moduleNewController'>
-
-	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
-	    <a class="uk-alert-close" uk-close></a>
-		{{ api.error }}
-	</div>
-
-	<form ng-submit='api.submit()'>
-		<input type="text" class="uk-input" ng-model='model.name'  placeholder="Name" >
-		<input type="text" class="uk-input" ng-model='model.guild'  placeholder="Guild" >
-		<button type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">New</button>
-	</form>
+	<div id="modal-module-new" uk-modal>
+	    <div class="uk-modal-dialog uk-modal-body">
+	        <h2 class="uk-modal-title">Create new module</h2>
+	        <p>
+	        	Name something that appropriately describes your module.
+	        </p>
+			<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
+				{{ api.error }}
+			</div>
 
 
-	<div ng-if='api.loading' uk-spinner></div>
-	
+			<form ng-submit='api.submit()'>
+				<input type="text" class="uk-input" ng-model='model.name'  placeholder="Name" >
+				<br><br>
+				<div ng-show='api.loading' uk-spinner></div>
+	            <button ng-hide='api.loading' class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+				<button ng-hide='api.loading' type="submit" ng-if='!api.loading' class="uk-button uk-button-primary">Create</button>
+			</form>
+	        
+	    </div>
+	</div>	
 </div>

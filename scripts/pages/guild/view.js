@@ -1,12 +1,20 @@
 app.controller("pageGuildViewController",function($scope,$http,$location,$timeout,session,$rootScope,subpageService,$routeParams)
 {
 	$scope.subpage = subpageService.Page();
+
+	$scope.guild_id = $routeParams.id;
+
 	session.onready(function(){
 		$timeout(function() {
 			$scope.subpage.goto("feed");
 			$scope.$broadcast("component/guild/view",{ _id: $routeParams.id});
 		}, 1);
 	});
+
+	$scope.is_admin = function()
+	{
+		return true; 
+	}
 
 	$scope.subpage.onload("feed",function()
 	{
@@ -31,6 +39,32 @@ app.controller("pageGuildViewController",function($scope,$http,$location,$timeou
 			$scope.$broadcast('components/guild/pending/main/init',{ guild_id: $routeParams.id});
 			$scope.$broadcast('components/guild/membership/init',{ guild_id: $routeParams.id});
 		},1);
+	});
+
+
+	$scope.subpage.onload("modules",function()
+	{
+		$timeout(function()
+		{
+			$scope.$broadcast("components/module/list",{ param: "guild=" + $routeParams.id + "&sort=-date" });
+			$scope.$broadcast("components/module/add/init",{ _id: $routeParams.id });
+			$scope.$on('components/module/add/success',function(ev,data)
+			{
+				UIkit.modal("#modal-module-new").hide();
+				UIkit.notification({
+				    message: 'Your module has been created',
+				    status: 'success',
+				    pos: 'top',
+				    timeout: 3000
+				});
+				$scope.$broadcast("components/module/list",{ param: "guild=" + $routeParams.id + "&sort=-date" });
+			});
+		},1);
+
+		$scope.module_new_modal = function()
+		{
+			UIkit.modal("#modal-module-new").show();
+		}
 	});
 
 

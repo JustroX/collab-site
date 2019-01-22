@@ -5,10 +5,11 @@ var Schema = mongoose.Schema;
 
 var ModuleSchema = mongoose.Schema({
    name: String, 
+   description: String, 
    guild: Schema.Types.ObjectId,
    badges: [Schema.Types.ObjectId ],
-   articles: [{ page: Number, article: Schema.Types.ObjectId }],
-   challenges: [{ page: Number, challenge: Schema.Types.ObjectId  }],
+   articles: [{ page: Number, article:{ type: Schema.Types.ObjectId , ref : "Article" }}],
+   challenges: [{ page: Number, challenge:{ type: Schema.Types.ObjectId, ref: "Challenge"}  }],
    users: [{ type: Schema.Types.ObjectId , ref : "User" } ]
   
 });
