@@ -105,9 +105,20 @@ router.get('/:id', function(req, res){
 	Challenge.find({_id: challenge_id},fields.join(' ') ).populate("authors","username name").populate("module","name").exec(function(err,mod)
 	{
 		if(!mod[0]) return res.send({ code: 500 , err: 'Challenge not found.' });
-		if(!mod[0].authors.includes(req.session.passport.user))
-			delete mod[0].testcases;
-		res.send(mod[0]);
+		
+		let challenge  = JSON.parse(JSON.stringify(mod[0]));
+
+		if(!challenge.authors.includes(req.session.passport.user))
+		{
+			let t = [];
+			for(let i in challenge.testcases)
+			{
+				if(challenge.testcases[i].sample)
+					t.push(challenge.testcases[i]);
+			}
+			challenge.testcases  = t;
+		}
+		res.send(challenge);
 	});
 });
 
