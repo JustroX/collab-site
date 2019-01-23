@@ -10,6 +10,7 @@ app.controller("pageModuleEditController",function($scope,$http,$location,$timeo
 	{
 		$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
 		$scope.$broadcast('components/article/new/init',{_id:$routeParams.id});
+		$scope.$broadcast('components/challenge/new/init',{_id:$routeParams.id});
 	},4);
 
 	$scope.delete_module = function()
@@ -21,23 +22,41 @@ app.controller("pageModuleEditController",function($scope,$http,$location,$timeo
 		},3);
 	}
 
-	$scope.delete_article = function(article)
+	$scope.delete = {};
+	$scope.delete["article"] = function(article,idx)
 	{
 		$timeout(function()
 		{
-			UIkit.modal('#modal-article-delete').show();
-			$scope.$broadcast('component/article/delete/init',{ target: article._id });
+			UIkit.modal('#modal-article-delete-'+idx).show();
+			$scope.$broadcast('component/article/delete/init',{ idx: idx, target: article._id });
+		},3);
+	}
+	$scope.delete["challenge"] = function(challenge,idx)
+	{
+		$timeout(function()
+		{
+			UIkit.modal('#modal-challenge-delete-'+idx).show();
+			$scope.$broadcast('component/challenge/delete/init',{ idx: idx, target: challenge._id });
 		},3);
 	}
 
-	$scope.edit_article = function(article)
+	$scope.edit = {};
+	$scope.edit["article"] = function(article)
 	{
 		$scope.subpage.goto("article",{_id:article._id});
+	}
+	$scope.edit["challenge"] = function(challenge)
+	{
+		$scope.subpage.goto("challenge",{_id:challenge._id});
 	}
 
 	$scope.subpage.onload("article",function(param)
 	{
 		$scope.$broadcast('components/article/edit/init',{target : param._id });
+	});
+	$scope.subpage.onload("challenge",function(param)
+	{
+		$scope.$broadcast('components/challenge/edit/init',{target : param._id });
 	});
 
 	$scope.save_changes = function()
@@ -84,9 +103,20 @@ app.controller("pageModuleEditController",function($scope,$http,$location,$timeo
 
 	$scope.$on('component/article/delete/success',function(ev,data)
 	{
-		UIkit.modal('#modal-article-delete').hide();
+		UIkit.modal('#modal-article-delete-'+data.idx).hide();
 		UIkit.notification({
 		    message: 'Article has been deleted',
+		    status: 'success',
+		    pos: 'top',
+		    timeout: 3000
+		});
+		$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
+	});
+	$scope.$on('component/challenge/delete/success',function(ev,data)
+	{
+		UIkit.modal('#modal-challenge-delete-'+data.idx).hide();
+		UIkit.notification({
+		    message: 'Challenge has been deleted',
 		    status: 'success',
 		    pos: 'top',
 		    timeout: 3000
@@ -109,9 +139,22 @@ app.controller("pageModuleEditController",function($scope,$http,$location,$timeo
 	{
 		$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
 	});
+	$scope.$on('components/challenge/new/success',function(ev,data)
+	{
+		$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
+	});
 	$scope.$on('components/article/edit/success',function(ev,data){
 		UIkit.notification({
 		    message: 'Article has been updated',
+		    status: 'success',
+		    pos: 'top',
+		    timeout: 3000
+		});
+		$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
+	});
+	$scope.$on('components/challenge/edit/success',function(ev,data){
+		UIkit.notification({
+		    message: 'Challenge has been updated',
 		    status: 'success',
 		    pos: 'top',
 		    timeout: 3000

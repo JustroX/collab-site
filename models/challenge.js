@@ -6,18 +6,25 @@ var Schema = mongoose.Schema;
 var ChallengeSchema = mongoose.Schema({
 	title: String,
 	content: String,
-	module: Schema.Types.ObjectId,
-	authors: [Schema.Types.ObjectId],
-	submissions: [ Schema.Types.ObjectId ],
+	module: { type: Schema.Types.ObjectId , ref: "Module"},
+	authors: [{ type: Schema.Types.ObjectId , ref: "User"}],
+	submissions: [ {type: Schema.Types.ObjectId , ref: "Submission"} ],
 	
 	output_type: Number,
-	settings: { language: String },
 	/*
 		0 - code
 		1 - value
 	*/	
-	answer   : Number,
-	testcases: [ { input: String , output: String, sample: Boolean } ],
+	settings: 
+	{ 
+		languages: [String],
+		testcase_description: String,
+		data_type: String,
+		precision: Number,
+		strip: Boolean
+	},
+	answer   : String,
+	testcases: [ { input: String , output: String, sample: Boolean, points: Number } ],
 	
 });
 

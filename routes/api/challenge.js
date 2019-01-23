@@ -10,11 +10,13 @@ var PERMISSIONS  =
 	_id: 1,
 	title: 7,
 	content: 7,
-	testcases: 0,
+	testcases: 5,
 	module: 3,
 	authors: 1,
 	output_type: 5,
- 	submissions: 1 
+ 	submissions: 1,
+ 	settings: 5,
+ 	answer: 5,
 }
 
 router.post('/', lib.logged, function(req, res){
@@ -48,8 +50,15 @@ router.post('/', lib.logged, function(req, res){
 			challenge.save(function(err)
 			{
 				if(err) return res.send({ err: "Database Error", code: 500 });
-				let output = lib.hide_fields(challenge,PERMISSIONS);
-				return res.send(output);
+				
+				mod.challenges.push({ challenge: challenge._id, page: mod.challenges.length + mod.articles.length});
+
+				mod.save(function(err)
+				{
+					if(err) return res.send({ err: "Database Error"});
+					let output = lib.hide_fields(challenge,PERMISSIONS);
+					return res.send(output);
+				});
 			});
 		});
 	});
@@ -66,6 +75,8 @@ router.get('/', function(req, res){
 	let limit =  (req.query.limit || 10)-1+1;
 	let offset = (req.query.offset || 0)-1+1;
 
+	fields.push("-testcases");
+
 	if(options)
 	{
 		let opt = {};
@@ -76,7 +87,7 @@ router.get('/', function(req, res){
 		});
 	}
 	else
-	Challenge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).populate("authors").exec(function(err,docs)
+	Challenge.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset).populate("authors","username name").exec(function(err,docs)
 	{
 		if(err) return res.send({ err: "Database Error", code: 500 });
 		res.send(docs);
@@ -90,9 +101,12 @@ router.get('/:id', function(req, res){
 	let sort = lib.sort(req,PERMISSIONS);
 	let options = req.query.option;
 
-	Challenge.find({_id: challenge_id},fields.join(' ') ).populate("authors").exec(function(err,mod)
+
+	Challenge.find({_id: challenge_id},fields.join(' ') ).populate("authors","username name").populate("module","name").exec(function(err,mod)
 	{
 		if(!mod[0]) return res.send({ code: 500 , err: 'Challenge not found.' });
+		if(!mod[0].authors.includes(req.session.passport.user))
+			delete mod[0].testcases;
 		res.send(mod[0]);
 	});
 });
@@ -181,7 +195,20 @@ router.delete('/:id', lib.logged, function(req, res){
 				Challenge.deleteOne({ _id: challenge_id },function(err)
 				{
 					if(err) return res.send({ err : "Databasse Error" });
-					return res.send({ message: "Delete successful" })
+					for(let i in mod.challenges)
+					{
+						let a = mod.challenges[i];
+						if( a.challenge.equals && a.challenge.equals(challenge_id)  )
+						{
+							mod.challenges.splice(i,1);
+							break;
+						}	
+					}
+					mod.save(function(err)
+					{
+						if(err) return res.send({ err : "Databasse Error" });
+						return res.send({ message: "Delete successful" })
+					});
 
 				});
 			});

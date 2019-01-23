@@ -102,7 +102,7 @@ router.get('/:id/page', function(req, res){
 
 	Module.find({ _id: mod_id},fields.join(' '))
 	.populate("articles.article","title")
-	.populate("challenges.challenges","title")
+	.populate("challenges.challenge","title")
 	.exec(function(err,mod)
 	{
 		if(err) return res.send({code : 500 , err: 'Database Error.'})
@@ -112,14 +112,15 @@ router.get('/:id/page', function(req, res){
 		for(let i in mod[0].challenges)
 		{
 			if(!mod[0].challenges[i]._id || i=="_parent") continue;
-			mod[0].challenges[i].mode = 'challenge';
-			pages.push(mod[0].challenges[i]);
+			
+			pages.push(JSON.parse(JSON.stringify(mod[0].challenges[i])));
+			pages[pages.length-1].mode = 'challenge';
 		}
 		for(let i in mod[0].articles)
 		{
 			if(!mod[0].articles[i]._id || i=="_parent") continue;
-			mod[0].articles[i].mode = 'article';
-			pages.push(mod[0].articles[i]);
+			pages.push(JSON.parse(JSON.stringify(mod[0].articles[i])));
+			pages[pages.length-1].mode = 'article';
 		}
 		pages.sort((a,b) => (a.page > b.page) ? 1 : ((b.page > a.page) ? -1 : 0)); 
 		res.send(pages);
@@ -137,11 +138,35 @@ router.post('/:id/page',function(req,res)
 	console.log("here")
 
 	Module.find({ _id: mod_id})
-	.populate("articles.article","title")
 	.exec(function(err,mod)
 	{
 		if(err) return res.send({code : 500 , err: 'Database Error.'})
 		if(!mod[0]) return res.send({ code: 500 , err: 'Module not found.' });
+
+		let pages = [];
+		for(let i in mod[0].challenges)
+		{
+			if(!mod[0].challenges[i]._id || i=="_parent") continue;
+			
+			pages.push(JSON.parse(JSON.stringify(mod[0].challenges[i])));
+			pages[pages.length-1].mode = 'challenge';
+			pages[pages.length-1].index = i;
+		}
+		for(let i in mod[0].articles)
+		{
+			if(!mod[0].articles[i]._id || i=="_parent") continue;
+			pages.push(JSON.parse(JSON.stringify(mod[0].articles[i])));
+			pages[pages.length-1].mode = 'article';
+			pages[pages.length-1].index = i;
+		}
+		pages.sort((a,b) => (a.page > b.page) ? 1 : ((b.page > a.page) ? -1 : 0)); 
+
+		for(let i in pages)
+		{
+			mod[0][pages[i].mode+"s"][pages[i].index].page = i;
+		}
+
+
 
 		for(let i in mod[0].challenges)
 		{

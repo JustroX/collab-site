@@ -1,10 +1,10 @@
-app.controller("challengeNewController",function($scope,$http,$location,$timeout,apiService,editorService)
+app.controller("challengeNewController",function($scope,$http,$location,$timeout,apiService,editorService,$rootScope)
 {
 	let model = 
 	{
-		title: "",
+		title: "New Challenge",
 		content:"",
-		module: "",
+		module: null,
 	}
 	$scope.model   = model;
 	
@@ -15,17 +15,25 @@ app.controller("challengeNewController",function($scope,$http,$location,$timeout
 	}
 
 	let api = apiService.new("challenge",$scope);
-	api.loaded = function(res)
-	{
-		editor.quill.setText('');
-		model.content = '';
-		model.title = '';
-	}
+	
 	api.validate = function()
 	{
-		return $scope.model.title!="" && $scope.model.content!="" && $scope.model.module!="";
+		return $scope.model.title!="" && $scope.model.module!="";
 	};
 
 	$scope.editor = editor;
 	$scope.api    = api;
+
+	$scope.$on('components/challenge/new/init',function(ev,data)
+	{
+		$scope.model.title = "New Challenge";
+		$scope.model.module = data._id; 
+	});
+
+	$scope.api.success = function(res)
+	{
+		$rootScope.$broadcast('components/challenge/new/success');
+	}
+
+
 });

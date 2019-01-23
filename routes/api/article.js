@@ -20,18 +20,12 @@ router.post('/', lib.logged ,function(req, res){
 
 	Module.findById(body.module,function(err, mod)
 	{
-		if(err)
-		{
-			return res.send({ err: "Database Error"})
-		}
+		if(err) return res.send({ err: "Database Error"});
 		if(!mod) return res.send({ code: 501, err:"Module not found." });
 
 		Guild.findById(mod.guild, function(err, guild){
 
-			if(err)
-			{
-				return res.send({ err: "Database Error"})
-			}
+			if(err)	return res.send({ err: "Database Error"})
 			if(!guild) return res.send({ code: 501, err: "Guild not found." });
 
 			let permited = guild.is_permitted_module(req.session.passport.user,2);
@@ -51,7 +45,7 @@ router.post('/', lib.logged ,function(req, res){
 			{
 				if(err) return res.send({ err: "Database Error"});
 
-				mod.articles.push({ article: article._id, page: mod.articles.length});
+				mod.articles.push({ article: article._id, page: mod.articles.length +  mod.challenges.length});
 				mod.save(function(err)
 				{
 					if(err) return res.send({ err: "Database Error"});
