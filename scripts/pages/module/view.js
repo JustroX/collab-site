@@ -32,6 +32,7 @@ app.controller("pageModuleViewController",function($scope,$http,$location,$timeo
 		$scope.$broadcast('components/challenge/view',{_id: challenge._id});
 		$scope.page = idx;
 		$scope.subpage.goto('challenge');
+
 	}
 
 	let first_time  = true;
@@ -45,15 +46,13 @@ app.controller("pageModuleViewController",function($scope,$http,$location,$timeo
 		}
 	});
 
+	$scope.$on('components/submission/new/success',function(ev,data)
+	{
+		UIkit.modal('#modal-submission-confirm').hide();
+	});
+
 	$scope.init_codebox = function()
 	{
-		 var editor = CodeMirror.fromTextArea(document.getElementById("editor-challenge"), {
-		    lineNumbers: true,
-		    keyMap: "sublime",
-		    theme: "monokai",
-		    mode: "python",
-		    autoRefresh: true,
-		  });
 	}
 
 	$scope.page_prev = function()

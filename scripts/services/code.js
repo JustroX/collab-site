@@ -16,10 +16,14 @@ app.service('codeService', function(session,$http,$timeout)
 			this.id = _id;
 			let textarea = document.getElementById(this.id);
 			let editor_ = this;
-			this.codemirror = CodeMirror.fromTextArea(textarea, {
-				lineNumbers : true
-			});
-			this.codemirror.on('change', v =>
+			this.codemirror =CodeMirror.fromTextArea(textarea, {
+			    lineNumbers: true,
+			    keyMap: "sublime",
+			    theme: "monokai",
+			    mode: "python",
+			    autoRefresh: true
+			  });
+			this.codemirror.on('change', editor =>
 			{
 				$timeout(()=>
 				{

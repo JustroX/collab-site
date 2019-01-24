@@ -10,6 +10,7 @@ var PERMISSIONS  =
 	_id: 1,
 	content : 3,
    	challenge: 3,
+   	language: 3,
    	author : 1,
    	verdict: 1,  
 }
@@ -29,8 +30,8 @@ router.post('/', lib.logged,  function(req, res){
 			if(err) return res.send({ err: "Module not found", code: 500});
 			if(!mod) return res.send({ code: 500 , err: 'Module not found.' });
 
-			if(!mod.is_registered(req.session.passport.user))
-				return res.send({code: 403, err: 'You are not registered in this module.'})
+			// if(!mod.is_registered(req.session.passport.user))
+			// 	return res.send({code: 403, err: 'You are not registered in this module.'})
 			
 			let submission = new Submission();
 			for(let i in PERMISSIONS)
@@ -41,12 +42,17 @@ router.post('/', lib.logged,  function(req, res){
 				}
 			}
 			submission.author = req.session.passport.user
-			submission.save(function(err)
+			submission.get_verdict(res,challenge,function(results)
 			{
-				if(err) return res.send({ err: "Module not found", code: 500});
-				let output = lib.hide_fields(submission,PERMISSIONS);
-				return res.send(output);
+				submission.verdict.testcases = results;
+				submission.save(function(err)
+				{
+					if(err) return res.send({ err: "Database error", code: 500});
+					let output = lib.hide_fields(submission,PERMISSIONS);
+					return res.send(output);
+				});
 			});
+
 		});
 	});
 
