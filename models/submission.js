@@ -35,10 +35,10 @@ SubmissionSchema.methods.get_verdict = function(res,challenge,cb)
 			data._ids.push(challenge.testcases[i]._id);
 			data.scores.push(challenge.testcases[i].points);
 		}
-
+		let _sub = this;
 		Judge.judge(res,data,function(result)
 		{
-			this.verdict.testcases = result;
+			_sub.verdict.testcases = result;
 			cb();
 		});
 	}
