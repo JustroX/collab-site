@@ -1,4 +1,4 @@
-app.controller("pageModuleViewController",function($scope,$http,$location,$timeout,apiService,$routeParams,subpageService)
+app.controller("pageModuleViewController",function($scope,$http,$location,$timeout,apiService,$routeParams,subpageService,session)
 {
 	let page =  0;
 	$scope.page  = page;
@@ -48,8 +48,28 @@ app.controller("pageModuleViewController",function($scope,$http,$location,$timeo
 
 	$scope.$on('components/submission/new/success',function(ev,data)
 	{
-		UIkit.modal('#modal-submission-confirm').hide();
+		$timeout(function()
+		{
+			UIkit.modal('#modal-submission-confirm').hide();
+			UIkit.tab("#tab-submission").show(1);
+			UIkit.switcher("#switcher-submission").show(1);
+			$scope.$broadcast('component/submission/list',{param: "author="+session.getUser()._id + "&sort=-date"});
+			$scope.$on('component/submission/list/success',function(ev,data)
+			{
+				$scope.view_submission({ _id:  data._id});
+			});
+		},3);
 	});
+
+	$scope.view_submission =function(i)
+	{
+		$scope.$broadcast('components/submission/view',{_id:i._id});
+		$scope.$on('components/submission/view/success',function(ev,data)
+		{
+			scrollTo('scroll-submission-results');	
+		});
+
+	}
 
 	$scope.init_codebox = function()
 	{
@@ -68,9 +88,13 @@ app.controller("pageModuleViewController",function($scope,$http,$location,$timeo
 
 	setTimeout(function()
 	{
-		$scope.master.load();
-		$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
-		$scope.init_codebox();
+		session.onready(function()
+		{
+			$scope.master.load();
+			$scope.$broadcast('components/module/page/list',{_id:$routeParams.id});
+			$scope.$broadcast('component/submission/list',{param: "author="+session.getUser()._id + "&sort=-date"})
+			$scope.init_codebox();
+		});
 	},1);
 
 });

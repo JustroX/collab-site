@@ -115,7 +115,9 @@ module.exports.judge = function(res,data,cb)
 		post_to_judge(body,function(err,res,body_output)
 		{
 			if(err) return res.send({ code: 500, err: "Database Error."});
+			body_output = JSON.parse(body_output);
 			body_output._id = data._ids[i];
+			body_output.points = data.scores[i];
 			results.push(body_output);
 			i +=1;
 			if( i < data.outputs.length)

@@ -1,4 +1,11 @@
-app.controller("submissionNewController",function($scope,$http,$location,$timeout,apiService,codeService,judgeService)
+function scrollTo(tag_id)
+{
+   $('html, body').animate({
+         scrollTop: $('#'+tag_id).offset().top
+    }, 'slow');
+}
+
+app.controller("submissionNewController",function($scope,$http,$location,$timeout,apiService,codeService,judgeService,$rootScope)
 {
 
 	$scope.parent = $scope.api;
@@ -30,7 +37,7 @@ app.controller("submissionNewController",function($scope,$http,$location,$timeou
 
 	$scope.api.success = function()
 	{
-		$scope.$broadcast('components/submission/new/success');
+		$rootScope.$broadcast('components/submission/new/success');
 	}
 
 	$scope.$on('components/submission/new/init',function(ev,data)
@@ -88,6 +95,8 @@ app.controller("submissionNewController",function($scope,$http,$location,$timeou
 
 	$scope.run_code = function()
 	{
+		$scope.run.error = "";
+		scrollTo("scroll-run-results");
 		if(model.content=="")
 		{
 			$scope.run.error ="Code can not be blank";
@@ -114,6 +123,7 @@ app.controller("submissionNewController",function($scope,$http,$location,$timeou
 		{
 			$scope.run.loading = false;
 			$scope.run.results = results;
+			scrollTo("scroll-run-results");
 		},function(err)
 		{
 		});

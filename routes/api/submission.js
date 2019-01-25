@@ -13,6 +13,7 @@ var PERMISSIONS  =
    	language: 3,
    	author : 1,
    	verdict: 1,  
+   	date: 1
 }
 
 
@@ -41,7 +42,8 @@ router.post('/', lib.logged,  function(req, res){
 					submission[i] = req.body[i];
 				}
 			}
-			submission.author = req.session.passport.user
+			submission.author = req.session.passport.user;
+			submission.date = new Date();
 			submission.get_verdict(res,challenge,function(results)
 			{
 				submission.verdict.testcases = results;

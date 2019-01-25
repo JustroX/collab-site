@@ -147,7 +147,10 @@ app.service('apiService', function(session,$http,$timeout,$rootScope)
 
 
 				if( api_.page*api_.limit > api_.options.collectionCount )
+				{
 					api_.page = Math.floor(api_.options.collectionCount/api_.limit ) -1;
+				}
+				api_.page_max = Math.ceil(api_.options.collectionCount/api_.limit) -1;
 			});
 		}
 
