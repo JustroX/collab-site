@@ -38,7 +38,7 @@ SubmissionSchema.methods.get_verdict = function(res,challenge,cb)
 
 		Judge.judge(res,data,function(result)
 		{
-			this.verdict.testcases = results;
+			this.verdict.testcases = result;
 			cb();
 		});
 	}
