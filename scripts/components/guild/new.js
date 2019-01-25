@@ -1,4 +1,4 @@
-app.controller("guildNewController",function($scope,$http,$location,$timeout,session,apiService)
+app.controller("guildNewController",function($scope,$http,$location,$timeout,session,apiService,$rootScope)
 {
 	let model = 
 	{
@@ -25,4 +25,9 @@ app.controller("guildNewController",function($scope,$http,$location,$timeout,ses
 
 
 	$scope.api    = api;
+
+	$scope.api.success =function(res)
+	{
+		$rootScope.$broadcast('components/guild/new/success',{_id: res._id});
+	}
 });

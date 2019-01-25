@@ -10,6 +10,7 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 		session.onready(function()
 		{
 			$scope.subpage.goto("discover");
+			$scope.$broadcast("component/guild/list",{param: "users.user="+session.getUser()._id, identifier: "navbar"});
 		});
 	});
 
@@ -78,6 +79,11 @@ app.controller("staticDashboardController",function($scope,$http,$location,sessi
 	$scope.$on('components/guild/join/success',function(ev,data)
 	{
 		window.location.href = "#/guild/"+data.id;
+	});
+
+	$scope.$on('components/guild/new/success',function(ev,data)
+	{
+		window.location.href = "#/guild/"+data._id+"?members=1";
 	});
 	   
 	$scope.$on('components/post/new/success',function(ev,data)

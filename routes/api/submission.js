@@ -44,9 +44,8 @@ router.post('/', lib.logged,  function(req, res){
 			}
 			submission.author = req.session.passport.user;
 			submission.date = new Date();
-			submission.get_verdict(res,challenge,function(results)
+			submission.get_verdict(res,challenge,function()
 			{
-				submission.verdict.testcases = results;
 				submission.save(function(err)
 				{
 					if(err) return res.send({ err: "Database error", code: 500});

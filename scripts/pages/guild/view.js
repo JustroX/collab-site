@@ -6,7 +6,11 @@ app.controller("pageGuildViewController",function($scope,$http,$location,$timeou
 
 	session.onready(function(){
 		$timeout(function() {
-			$scope.subpage.goto("feed");
+			if($routeParams.members)
+				$scope.subpage.goto("members");
+			else
+				$scope.subpage.goto("feed");
+
 			$scope.$broadcast("component/guild/view",{ _id: $routeParams.id});
 		}, 1);
 	});

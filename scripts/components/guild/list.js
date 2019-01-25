@@ -19,6 +19,11 @@ app.controller("guildListController",function($scope,$http,$location,$timeout,se
 	});
 	$scope.$on("component/guild/list",function(ev,data)
 	{
+		if($scope.identifier)
+		{
+			if(data.identifier!=$scope.identifier)
+				return;
+		}
 		$scope.api.param = data.param;
 		$scope.api.load(); 
 	});

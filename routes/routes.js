@@ -11,4 +11,5 @@ module.exports = function(app,passport)
 	app.use('/test', require('./test/test.js')(passport) )
 	app.use('/scripts', require('./scripts/script.js')(passport) )
 	app.use('/assets', require('./asset/asset.js')(passport) )
+	app.use('/page', require('./page.js')(passport) )
 };

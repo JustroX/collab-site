@@ -151,6 +151,10 @@ app.config(function($routeProvider) {
         templateUrl : "/pages/submission/edit"
     })
 
+    .when("/static/:location", {
+        templateUrl : "/pages/static/static"
+    })
+
     .otherwise({
         redirectTo: '/dashboard'
     })
