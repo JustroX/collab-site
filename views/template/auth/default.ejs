@@ -1,0 +1,10 @@
+<form ng-submit='$ctrl.login()'>			
+	<p>Log In with your credentials</p>
+	<div ng-show='$ctrl.form.error' >{{$ctrl.form.error}}</div>
+	<div ng-show='$ctrl.form.loading'>Loading...</div>
+	<div ng-hide='$ctrl.form.loading'>
+		<input required ng-model='$ctrl.form.email' type="email" placeholder="Email">
+	    <input required ng-model='$ctrl.form.password' type="password" placeholder="Password">
+		<button type="submit">Log In</button>
+	</div>
+</form>

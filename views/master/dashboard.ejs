@@ -1,0 +1,185 @@
+
+<div ng-controller='masterController'>
+	<pages subpage='subpage'>
+		<div page="login">
+
+			<auth success="logged"></auth>
+
+		</div>
+		<div page="dashboard">
+			
+			<h2>Master Dashboard</h2>
+			<div>
+				<a href="javascript:void(0)" ng-click='subpage.goto("dashboard")'>Explore</a> &middot;
+				<a href="javascript:void(0)" ng-click='subpage.goto("dashboard/view")'>Details</a> &middot;
+				<a href="javascript:void(0)" ng-click='subpage.goto("dashboard/new")'>New</a> &middot;
+				<a href="javascript:void(0)" ng-click='logout()'>Logout</a> &middot;
+			</div>
+			<div page="dashboard/view">
+				<hr>
+					<entity bind="user-model">
+							<div>
+								<a href="javascript:void(0)" ng-click='$ctrl.mode="view"'>Details</a> &middot;
+								<a href="javascript:void(0)" ng-click='$ctrl.mode="edit"'>Edit</a> &middot;
+								<a href="javascript:void(0)" ng-click='$ctrl.mode="delete"'>Delete</a> &middot;
+							</div>
+							
+							<div>
+								<div ng-show="$ctrl.mode == 'view'" >
+									<handler bind='{{$ctrl.get.config.id}}'  model='$ctrl.value.model' default='$ctrl.value.persistent'>
+										<h2>User Details</h2>
+										<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+										<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+										<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.model'>
+											<table>
+												<tr>
+													<th>_id</th>
+													<td>{{$ctrl.model._id}}</td>
+												</tr>
+												<tr>
+													<th>Fullname</th>
+													<td>{{$ctrl.model.fullname}}</td>
+												</tr>
+												<tr>
+													<th>Email</th>
+													<td>{{$ctrl.model.email}}</td>
+												</tr>
+											</table>
+										</div>
+									</handler>
+								</div>
+								<div ng-show="$ctrl.mode == 'edit'">
+									<handler bind='{{$ctrl.put.config.id}}' model='$ctrl.value.model' default='$ctrl.value.persistent'>
+										<h2>Edit User</h2>
+										<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+										<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+										<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.model'>
+											<form ng-submit='$ctrl.submit()'>
+												<table>
+													<tr>
+														<th>_id</th>
+														<td>{{$ctrl.model._id}}</td>
+													</tr>
+													<tr>
+														<th>Fullname</th>
+														<td><input type="text" ng-model='$ctrl.model.name.first' placeholder="{{$ctrl.default.name.first}}"></td>
+														<td><input type="text" ng-model='$ctrl.model.name.middle' placeholder="{{$ctrl.default.name.middle}}"></td>
+														<td><input type="text" ng-model='$ctrl.model.name.last' placeholder="{{$ctrl.default.name.last}}"></td>
+													</tr>
+													<tr>
+														<th>Email</th>
+														<td><input type="email" ng-model='$ctrl.model.email' placeholder="{{$ctrl.default.email}}"></td>
+													</tr>
+													<tr>
+														<th>Password</th>
+														<td><input type="Password" ng-model='$ctrl.model.password'></td>
+													</tr>
+												</table>
+												
+												<hr>
+												Authorization 
+												<table>
+													<tr>
+														<th>#</th>
+														<th>Model</th>
+														<th>GET</th>
+														<th>POST</th>
+														<th>PUT</th>
+														<th>DELETE</th>
+														<th>Permission</th>
+													</tr>
+													<tr ng-repeat='m in models track by $index'>
+														<td>{{$index+1}}</td>
+														<td><a ng-click='field_permission.name=m.toLowerCase()+"s"' href="javascript:void(0)">{{m}}</a></td>
+														<td><input ng-click='cbox_permit(m,1)' ng-model='temp[m+"0"]' ng-checked='cbox_checked(m,1)' type="checkbox" ></td>
+														<td><input ng-click='cbox_permit(m,2)' ng-model='temp[m+"1"]' ng-checked='cbox_checked(m,2)' type="checkbox" ></td>
+														<td><input ng-click='cbox_permit(m,4)' ng-model='temp[m+"2"]' ng-checked='cbox_checked(m,4)' type="checkbox" ></td>
+														<td><input ng-click='cbox_permit(m,8)' ng-model='temp[m+"3"]' ng-checked='cbox_checked(m,8)' type="checkbox" ></td>
+														<td>{{$ctrl.model.authorization[m.toLowerCase()+"s"].all}}</td>
+													</tr>
+												</table>
+												<div ng-show='field_permission.name'>
+													<h2>Hello World</h2>
+													<table>
+														<tr ng-repeat='(k,v) in $ctrl.model.authorization[field_permission.name] ' ng-hide="k=='all'">
+															<th>{{k}}</th>
+															<td>{{v}}</td>
+															<td><a ng-click='field_permission_delete(k)' href="javascript:void(0)">Delete</a></td>
+														</tr>
+														<tr>
+															<td><input ng-model='field_permission.key' type="text" placeholder="field"></td>
+															<td><input ng-model='field_permission.value' type="number" placeholder="Permission"></td>
+															<td><button ng-click='field_permission_add()' type="button" >Add</button></td>
+														</tr>
+
+													</table>
+												</div>
+
+												<br>
+
+												<button type="submit">Submit</button>
+
+											</form>
+										</div>
+									</handler>
+								</div>
+								<div ng-show="$ctrl.mode == 'delete'">
+									<handler bind='{{$ctrl.delete.config.id}}'  model='$ctrl.value.model' default='$ctrl.value.persistent'></handler>
+								</div>
+							</div>
+					</entity>
+				<hr>
+			</div>
+			<div page="dashboard/new">
+				<handler bind="user-new">
+					<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+					<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+					<div ng-hide='$ctrl.api.config.state.loading'>
+						<form ng-submit='$ctrl.submit()'>
+							<table>
+								<tr>
+									<th>Fullname</th>
+									<td><input type="text" ng-model='$ctrl.model.name.first' required placeholder="First Name"></td>
+									<td><input type="text" ng-model='$ctrl.model.name.middle' required placeholder="Middle Name"></td>
+									<td><input type="text" ng-model='$ctrl.model.name.last' required placeholder="Last Name"></td>
+								</tr>
+								<tr>
+									<th>Email</th>
+									<td><input type="email" ng-model='$ctrl.model.email' required placeholder="Email"></td>
+								</tr>
+								<tr>
+									<th>Password</th>
+									<td><input type="Password" required ng-model='$ctrl.model.password'></td>
+								</tr>
+							</table>
+							<button type="submit">Submit</button>
+						</form>
+					</div>
+				</handler>
+			</div>
+			<handler bind='user-list'>
+				<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+				<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+				<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.model'>
+					<table>
+						<tr>
+							<th>#</th>
+							<th>Action</th>
+							<th>ID</th>
+							<th>Fullname</th>
+							<th>Email</th>
+						</tr>
+						<tr ng-repeat='i in $ctrl.model track by $index'>
+							<td>{{$index+1}}</td>
+							<td><a ng-click='$ctrl.view(i)' href="javascript:void(0)">View</a></td>
+							<td>{{i._id}}</td>
+							<td>{{i.fullname}}</td>
+							<td>{{i.email}}</td>
+						</tr>
+					</table>
+				</div>
+			</handler>	
+			
+		</div>
+	</pages>
+</div>

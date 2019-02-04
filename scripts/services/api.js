@@ -1,331 +1,237 @@
-app.service('apiService', function(session,$http,$timeout,$rootScope) 
+app.service('apiService', function($http,$timeout,$rootScope,schemaService) 
 {
-	class deleteAPI
-	{
-		constructor($scope,target="")
-		{
-			this.target = ($scope.parent_api && $scope.parent_api.target) || target;
-			this.loading = false;
-			this.error = "";
-			this.$scope = $scope;
-			this.succ = "";
-		}
-		delete()
-		{
-			let api_ = this;
-			this.error ="";
-			if(!this.target) return this.error="API: Target not specified";
-			this.loading = true;
-			$http.delete('/api/'+api_.url+'/'+api_.target).then((res)=>
-			{
-				res = res.data;
-				api_.loading = false;
-				api_.target = '';
-				if(res.err)
-					return api_.err(res.err);
-				api_.success(res)
-			});
-		}
-		err(mes)
-		{
-			this.error = mes;
-			console.log("API ERROR: "+mes);
-		}
-		success(res)
-		{
-			this.succ = res;
-			if(this.$scope.parent_api)
-				this.$scope.parent_api.delete.success(res);
-		}
-	}
+  let apiService  = this;
+  this.apis = [];
 
-	class newAPI
-	{
-		constructor($scope,model_name='model')
-		{
-			this.loading = false;
-			this.$scope = $scope;
-			this.error = "";
-			this.succ = "";
-			this.model_name = model_name;
-		}
-		submit()
-		{
-			let api_ = this;
-			if(!api_.validate())
-			{
-				api_.error = "Please fill up all necessary information.";
-				return;
-			}	
-			api_.error = '';
-			api_.loading = true;
-			$http.post('/api/'+api_.url+'',this.$scope[this.model_name]).then((res)=>
-			{
-				res = res.data;
+  this.find = function(id)
+  {
+    let match  = [];
+    for(let i in this.apis)
+      if(this.apis[i].config.id==id)
+        match.push(this.apis[i]);
 
-				api_.loaded(res);
+    let a  = 
+    { 
+      apis: match, 
+      config: function(key,val)
+      {
+        for(let i in match)
+          match[i].config[key] = val;
+        return a;
+      },
+      on: function(event,f_)
+      {
+        for(let i in match)
+          match[i].on(event,f_);
+        return a;
+      },
+      load: function(cb_success,cb_error)
+      {
+        for(let i in match)
+          match[i].load(cb_success,cb_error);
+        return a;
+      },
+      each: function(cb)
+      {
+        for(let i in match)
+          cb(match[i])
+        return a;
+      }
+    };
+    return a;
+  };
 
-				api_.loading = false;
-				if(res.err)
-					return api_.err(res.err);
+  this.new = function(config)
+  {
+    let a = new Api(config);
+    this.apis.push(a);
+    return a;
+  }
 
-				if(api_.$scope.parent_api)
-					api_.$scope.parent_api.new.success(res);
-				api_.success(res)
-			});
-		}
-		err(mes)
-		{
-			this.error = mes;
-			console.log("API ERROR: "+mes);
-		}
-		loaded(res)
-		{
-			;
-		}
-		validate()
-		{
-			return true;
-		}
-		success(res)
-		{
-			;
-		}
-	}
+  class Api
+  {
+    constructor(config)
+    {
+      this.config = 
+      {
+        //required
+        model: "",
+        method: "",
 
-	class listAPI
-	{
-		constructor($scope,...args)
-		{
-			this.loading = false;
-			this.error  = false;
+        //public
+        url: "",
+        param: "",
+        target: "",
 
-			this.limit = 10;
-			this.page = 0;
-			this.options = null;
+        //readonly
+        id: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10),
+        value: "",
+        feedback: 
+        {
+          success: "",
+          error: "",
+        },
+        state: 
+        {
+          loading: false
+        },
+        missing_fields: [],
 
-			this.list = [];
-			this.param = "";
-			this.$scope = $scope;
-
-			let _api = this;
-			if($scope.parent_api && $scope.parent_api.post && $scope.parent_api.post.list && $scope.parent_api.post.list.ready)
-				$timeout(function()
-				{
-					_api.$scope.parent_api.post.list.ready(_api.$scope.api);
-				},1);
+        //private
+        event: {}
+      }
 
 
-		}
+      for(let i in config)
+        this.config[i] = config[i];
+      behavior[this.config.method](this);
+    }
 
-		load()
-		{
-			let api_ = this;
-			session.onready(function()
-			{
-				api_.loading = true;
-				console.log('/api/'+api_.url+'?limit='+api_.limit+'&offset='+api_.page+'&'+api_.param);
-				$http.get('/api/'+api_.url+'?limit='+api_.limit+'&offset='+api_.page+'&'+api_.param).then((res)=>
-				{
-					api_.load_options();
-					res = res.data;
-					api_.loading = false;
-					if(res.err)
-						return api_.err(res.err);
-					api_.success(res);
-				});
-			});
-		}
+    load(payload,restrict)
+    {
+        let api = this.config;
+        let event = this;
 
-		load_options()
-		{
-			let api_ = this;
-			$http.get('/api/'+api_.url+'?option=true').then((res)=>
-			{
-				res = res.data;
-				api_.options = res;
+        api.feedback.error = "";
 
 
-				if( api_.page*api_.limit > api_.options.collectionCount )
-				{
-					api_.page = Math.floor(api_.options.collectionCount/api_.limit ) -1;
-				}
-				api_.page_max = Math.ceil(api_.options.collectionCount/api_.limit) -1;
-			});
-		}
+        if(restrict)
+        {
+          let temp_load = JSON.parse(JSON.stringify(payload));
+          let field = restrict.split(",");
+          for(let i in temp_load)
+          {
+            if(!field.includes(i))
+              delete temp_load[i];
+          }
+          payload = temp_load;
+        }
 
-		next()
-		{
-			this.page+=1;
-			this.load();
-		}
+        let destination = (api.url || api.model) + ((api.method == "list" || api.method == "post")? "": "/"+api.target);
+        let param  = api.param? "?" + api.param : "";
+        this.emit("preload");
 
-		prev()
-		{
-			this.page = (this.page <= 0) ? 0 : (this.page - 1);
-			this.load();
-		}
+        if(!this.validate(payload))
+            return api.feedback.error = "Please fill up required fields";
+        api.state.loading =true;
+        $http[api.method=="list"? "get": api.method]("/api/"+destination,payload).then(
+          function(res)
+          {
+            res = res.data;
+            api.state.loading = false;
 
-		err(mes)
-		{
-			this.error = mes;
-			console.log("API ERROR: "+mes);
-		}
+            if(res.err)
+            {
+              console.log(res.err);
+              api.feedback.error = res.err;
+              event.emit("error",res.err);
+              return;
+            }
+            
+            event.emit("success",res);
+          },
+          function(err)
+          {
+            api.state.loading = false;
+            event.emit("error",err);
+          });
 
-		success(res)
-		{
-			this.list = res;
-		}
-
-		init()
-		{
-			let api_ = this;
-			session.onready(function()
-			{
-				api_.param = '';
-				api_.load();
-			});
-		}
-	}
-
-
-	class viewAPI
-	{
-		constructor($scope)
-		{
-			this.loading = false;
-			this.error = "";
-			this.value =  null;
-			this.target = ($scope.parent_api && $scope.parent_api.target) || '';
-			this.param = "";
-			this.$scope  = $scope;
-		}
-		load(cb=function(){})
-		{
-			let api_ = this;
-			// session.onready(function()
-			// {
-			api_.loading = true;
-			$http.get('/api/'+api_.url+'/'+api_.target+'?'+api_.param).then((res)=>
-			{
-				api_.loaded(res);
-				api_.load_options();
-				res = res.data;
-				api_.loading = false;
-				if( res.err || res == "" )
-					return api_.err(res.err);
-				api_.success(res,cb);
-			});
-			// });
-		}
-		load_options()
-		{
-			let api_ = this;
-			$http.get('/api/'+api_.url+'?option=true').then((res)=>
-			{
-				res = res.data;
-				api_.options = res;
-			});
-		}
-		loaded()
-		{
-			;
-		}
-		err(mes)
-		{
-			this.error = mes;
-			console.log("API ERROR: "+mes);
-		}
-		success(res,cb)
-		{
-			this.value = res;
-			this.$scope.model = res;
-			cb();
-		}
-	}
-
-	class editAPI
-	{
-		constructor($scope,model_name="model")
-		{
-			this.loading = false;
-			this.error = "";
-			this.$scope  =$scope;
-			this.model_name = model_name;
-
-		}
-		submit()
-		{
-			let api_ = this;
-			if(!api_.validate())
-			{
-				api_.error = "Can't update an empty content.";
-				return;
-			}	
-			api_.error = '';
-			api_.loading = true;
-			$http.put('/api/'+api_.url+'/'+api_.view.target,this.$scope[this.model_name]).then((res)=>
-			{
-				res = res.data;
-				api_.loaded(res);
-				api_.loading = false;
-				if(res.err)
-					return api_.err(res.err);
-
-				if(this.$scope.parent_api && this.$scope.parent_api.edit && this.$scope.parent_api.edit.success)
-					this.$scope.parent_api.edit.success(res);
-				api_.success(res)
-			});
-		}
-		err(mes)
-		{
-			this.error = mes;
-			console.log("API ERROR: "+mes);
-		}
-		loaded(res)
-		{
-			;
-		}
-		validate()
-		{
-			return true;
-		}
-		success(res)
-		{
-		}
-	}
+        let r =
+        {
+           on: function(ev,cb)
+           {
+                event.on(ev,cb);
+           }
+        };
+        return r;
+    }
 
 
-	this.delete = function(model,...args)
-	{
-		let a = new deleteAPI(...args);
-		a.url = model;
-		return a;
-	}
-	this.new = function(model,...args)
-	{
-		let a = new newAPI(...args);
-		a.url = model;
-		return a;
-	}
-	this.list = function(model,...args)
-	{
-		let a = new listAPI(...args);
-		a.url = model;
-		return a;
-	}
-	this.view = function(model,...args)
-	{
-		let a = new viewAPI(...args);
-		a.url = model;
-		return a;
-	}
-	this.edit =  function(model,...args)
-	{
-		let a = new editAPI(...args);
-		a.url = model;
-		return a;
-	}
+    validate()
+    {
+      return true;
+    }
+    on(event,f_)
+    {
+      if(!this.config.event[event])
+        this.config.event[event] = [];
+      this.config.event[event].push(f_);
+    }
+    emit(event,...args)
+    {
+      let a = true;
+      for(let i in this.config.event[event])
+      {
+        a = this.config.event[event][i](...args) && a;
+      }
+      return a;
+    }
+  }
+
+
+  let behavior ={}
+  behavior["list"] = function(api)
+  {
+      api.limit = 10;
+      api.page = 0;
+
+
+      api.load_options = function()
+      {
+        let destination = api.config.url || api.config.model;
+        $http.get('/api/'+destination+'?option=true').then((res)=>
+        {
+          res = res.data;
+          api.options = res;
+          if( api.page*api.limit > api.options.collectionCount )
+          {
+            api.page = Math.floor(api.options.collectionCount/api.limit ) -1;
+          }
+          api.page_max = Math.ceil(api.options.collectionCount/api.limit) -1;
+        });
+      }
+
+      api.next = function()
+      {
+        api.page+=1;
+        api.load();
+      }
+
+      api.prev = function()
+      {
+        api.page = (api.page <= 0) ? 0 : (api.page - 1);
+        api.load();
+      }
+  }
+  behavior["post"] =  function(api){
+    api.validate = function(payload)
+    {
+        let required = schemaService.getRequired("post",api.config.model);
+        let missing = [];
+        for(let field of required)
+        {
+          if( payload[field] && [NaN,undefined,null,""].includes(payload[field])  )
+            missing.push(field);
+        }
+        api.missing_fields  =missing;
+        return !missing.length;
+    }
+  }
+  behavior["get"] =  function(api){}
+  behavior["put"] =  function(api){
+    api.validate = function(payload)
+    {
+        let required = schemaService.getRequired("put",api.config.model);
+        let missing = [];
+        for(let field of required)
+        {
+          if( [NaN,undefined,null,""].includes(payload[field])  )
+            missing.push(field);
+        }
+        api.missing_fields  =missing;
+        return !missing.length;
+    }}
+  behavior["delete"] =  function(api){}
 });
 
 

@@ -1,0 +1,20 @@
+<div>
+	<h2>Model: {{$ctrl.entity.config.model}}</h2>
+	<div>
+		<a href="javascript:void(0)" ng-click='$ctrl.mode="view"'>View</a> &middot;
+		<a href="javascript:void(0)" ng-click='$ctrl.mode="edit"'>Edit</a> &middot;
+		<a href="javascript:void(0)" ng-click='$ctrl.mode="delete"'>Delete</a> &middot;
+	</div>
+	<div>
+		<div ng-show="$ctrl.mode == 'view'"  model='$ctrl.value.model'>
+			<handler bind='{{$ctrl.get.config.id}}'></handler>
+		</div>
+		<div ng-show="$ctrl.mode == 'edit'">
+			<handler bind='{{$ctrl.put.config.id}}' model='$ctrl.value.model'></handler>
+		</div>
+		<div ng-show="$ctrl.mode == 'delete'">
+			<handler bind='{{$ctrl.delete.config.id}}'></handler>
+		</div>
+	</div>
+	<hr>
+</div>

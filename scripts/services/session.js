@@ -1,29 +1,30 @@
-app.service('session', function($http,$timeout) 
+app.service('session', function($http,$timeout,modelService) 
 {
-	let user ;
-	let init = function()
+	let model = modelService.new({ id: "session_user", model: "user", target: "self" });
+	let no_model = true;
+
+	this.load = function(cb)
 	{
-		$http.get('/api/user/self').then((res)=>
+		cb = cb || function(){};
+		model.load("self")
+		.then(function(res)
 		{
-			res = res.data;
-			if(res.err) return console.log(res.err);
-			user = res;
+			no_model = false;
+			cb(res);
+		})
+		.error(function(err){
+			no_model = true;
+			cb(err);
 		});
 	}
-
-	let onready = function(_f)
+	this.end = function()
 	{
-		if( user )
-			_f();
-		else
-			$timeout(function(){onready(_f);},3);
-	};
-
-	init();
-	this.init = init;
-	this.getUser = function(){return user;}
-
-	this.onready = onready;
+		no_model = true;
+	}
+	this.getUser = function()
+	{
+		return no_model? false : model.value.model;
+	}
 
 });
 

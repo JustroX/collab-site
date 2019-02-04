@@ -1,9 +1,0 @@
-<div ng-controller='articleDeleteController'>
-	<input type="text" class="uk-input" ng-model='api.target'>
-	<div ng-if='api.error' class="uk-alert uk-alert-danger" uk-alert>
-	    <a class="uk-alert-close" uk-close></a>
-		{{ api.error }}
-	</div>
-	<div ng-if='api.loading' uk-spinner></div>
-	<button ng-click='api.delete()' class="uk-button uk-button-danger">DELETE</button>
-</div>

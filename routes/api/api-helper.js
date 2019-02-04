@@ -1,6 +1,8 @@
-var User = require('../../models/user.js');
+var divider = require('../../models/model_divider.js');
+var User = divider.model("User");
 
-exports.fields  =function(req,PERMISSIONS)
+
+exports.fields  =function(req,PERMISSIONS,endpoint)
 {
 	let fields = [];
 	if(req.query.fields)
@@ -14,10 +16,39 @@ exports.fields  =function(req,PERMISSIONS)
 			}
 		}
 	}
+	if(endpoint)
+		for(let i in fields)
+			fields[i] = endpoint +"."+fields[i];
 	if(fields.length==0) 
-		fields = ['-private','-__v'];
+		fields = ['-__v','-private.local.password'];
 	return fields;
 }
+
+var authorize = function(config,res)
+{
+	//{ model: "model" , user: _id, model_id: _id, field: _id }
+	let a;
+	let b2;
+	let Model = divider.model(config.model);
+	Model.findById(config.model_id,function(err,instance)
+	{
+		if(instance[config.field].includes(config._id))
+			a && a(b2,res);
+		else
+			return res.send({ err: "Not authorized for "+config.model , code: 501 });
+	});
+	let r =	{	
+
+		authorize: function(config2)
+		{
+			b2 = config2;
+			a = authorize;
+		}
+	}
+	return r;
+}
+
+exports.authorize =  authorize;
 
 exports.sort = function(req,PERMISSIONS)
 {
@@ -126,66 +157,6 @@ exports.hide_fields = function(obj,PERMISSIONS)
 	}
 	return a;
 }
-
-exports.logged	 = function(req,res,next)
-{
-	if(!(req.session && req.session.passport && req.session.passport.user))
-		return res.send({ err: 'Please login to continue', code: 403})
-	next();
-
-	// WHEN GMAIL API IS DONE
-	// User.find({_id: req.session.passport.user}).exec(function(err,user)
-	// {
-	// 	if(err) return res.send({err:"Database Error", code: 500});
-	// 	if(!user.confirmed)
-	// 		return res.send({err:"Please confirm your account.", err: 403});
-	// 	next();
-	// });
-}
-exports.loggedAlone	 = function(req,res,next)
-{
-	if(!(req.session && req.session.passport && req.session.passport.user))
-		return res.send({ err: 'Please login to continue', code: 403})
-	next();
-}
-
-exports.admin_user = function(perm)
-{
-	return function(req,res,next)
-	{
-		let id = req.session.passport.user;
-		User.findById(id, function(err,user)
-		{
-			if(user.admin_user_permissions & perm )
-				next();
-			else
-				return res.send({err: 'Permission Denied'});
-		});
-		
-	}
-}
-
-
-exports.admin_user_or_self = function(perm)
-{
-	return function(req,res,next)
-	{
-		let id = req.session.passport.user;
-		if(req.params.id == id)
-			next();
-		else
-		User.findById(id, function(err,user)
-		{
-			if(user.admin_user_permissions & perm )
-				next();
-			else
-				return res.send({err: 'Permission Denied'});
-		});
-		
-	}
-}
-
-
 
 exports.validate_fields = function(req,res,PERMISSIONS)
 {

@@ -1,30 +1,94 @@
 var mongoose  = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
+var mongoose  = require('mongoose');
+var Schema = mongoose.Schema;
 
-
-var ModuleSchema = mongoose.Schema({
-   name: String, 
-   description: String, 
-   guild: Schema.Types.ObjectId,
-   badges: [Schema.Types.ObjectId ],
-   articles: [{ page: Number, article:{ type: Schema.Types.ObjectId , ref : "Article" }}],
-   challenges: [{ page: Number, challenge:{ type: Schema.Types.ObjectId, ref: "Challenge"}  }],
-   users: [{ type: Schema.Types.ObjectId , ref : "User" } ]
-  
-});
-
-ModuleSchema.methods.is_registered = function(user)
+module.exports = 
 {
-	if(!this.users.length)
-		return false;
-
-	for(let i in this.users)
+	schema:
 	{
-		if( (typeof this.users[i] == "object") && (this.users[i].equals) && this.users[i].equals(user))
-			return true;
-	}
-	return false;
-}
+		name: String,
+		description: String,
+		
+		group: { type: Schema.Types.ObjectId , ref: "Group" },
 
-module.exports = mongoose.model('Module', ModuleSchema);
+		articles: 
+		[{ 
+			page: Number,
+			content: { type: Schema.Types.ObjectId , ref: "Article"  } 
+		}],
+		challenges: 
+		[{ 
+			page: Number,
+			content: { type: Schema.Types.ObjectId , ref: "Challenge"  }
+		}],
+
+		badges: 
+		[{ 
+			badge: {type: Schema.Types.ObjectId, ref: "Badge"}
+		}],
+		users: [ { type: Schema.Types.ObjectId, ref: "User" } ]
+	},
+	endpoints:
+	{
+		articles:
+		{
+			page: 7,
+			content: 3,
+		},
+		challenges:
+		{
+			page: 5,
+			content: 3,
+		},
+		badges:
+		{
+			populate: 
+			{
+				badge: "name"
+			},
+			badge: 3,
+		},
+	},
+	config:
+	{
+		toObject : { virtuals: true },
+		toJSON : { virtuals: true },
+	},
+	virtual:
+	{
+	
+	},
+	populate: 
+	{
+
+	},
+	permissions:
+	{
+
+	},
+	required:
+	{
+	
+	},
+	default:
+	{
+		permission : 7,
+	},
+	methods:
+	{
+		is_registered: function(user)
+		{
+			if(!this.users.length)
+				return false;
+
+			for(let i in this.users)
+			{
+				if( (typeof this.users[i] == "object") && (this.users[i].equals) && this.users[i].equals(user))
+					return true;
+			}
+			return false;
+		}
+	}
+}

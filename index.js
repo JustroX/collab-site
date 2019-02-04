@@ -1,5 +1,6 @@
 //global variables
 const PORT = process.env.PORT || 5000;
+const DATABASE_URI = process.env.DATABASE_URI;
 
 //modules
 var app = require('express')();
@@ -17,7 +18,11 @@ var session = require('express-session');
 
 var urlencodedParser = bodyParser.urlencoded({extended: true});
 
-var configDB = require('./config/database.js');
+//schema
+require("./models/model_divider.js").init();
+
+
+var configDB = DATABASE_URI  || require('./config/database.js');
 var MongoStore = require('connect-mongo')(session);
 mongoose.connect(configDB.url);
 
@@ -36,38 +41,13 @@ app.use(passport.session());
 app.use(flash());
 
 app.set('view engine','ejs');
-// app.set('views', 'views/'); 
 app.set('views', __dirname + '/views');
 app.get('/',function(req,res)
 {
 	res.render('pages/index')
 });
 
-//test for passport and mongoose
 require('./routes/routes.js')(app, passport);
-
-
-//angular tutorial
-var names = [];
-app.get('/angular-tutorial-1/names',function(req,res)
-{
-	res.send(JSON.stringify(names));
-});
-app.post('/angular-tutorial-1/names',function(req,res)
-{
-	if(!req.body.form) return res.send({ err: "Invalid Parameter"});
-	names.push(req.body.form);
-	res.send({ success: "Done" });
-});
-
-
-//getting-started
-app.get('/try/*',function(req,res){
-	var path = req.originalUrl.substr(5,req.originalUrl.length-5);
-	res.sendFile(pth.join(__dirname,"/try/",path));
-});
-
-//api route 
 app.use('/api', require('./routes/api.js'));
 
 

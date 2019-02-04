@@ -1,0 +1,22 @@
+<div>
+	<b>LIST API</b><br>
+	<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+	<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+	<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.model'>
+		<table>
+			<tr>
+				<th>#</th>
+				<th ng-repeat='(i,v) in $ctrl.model[0]'>{{i}}</th>
+				<th>Action</th>
+			</tr>
+			<tr ng-repeat='i in $ctrl.model track by $index'>
+				<td>{{$index+1}}</td>
+				<td ng-repeat='j in i'>{{j}}</td>
+				<td>
+					<a ng-click='$ctrl.view(i)' href="javascript:void(0)">View</a>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>

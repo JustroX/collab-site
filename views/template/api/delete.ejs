@@ -1,0 +1,11 @@
+<div>
+	<b>DELETE API</b><br>	
+	<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+	<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+	<div ng-hide='$ctrl.api.config.target'>No target specified.</div>
+	<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.api.config.target'>
+		<form ng-submit='$ctrl.submit()'>
+			<button type="submit">Delete</button>
+		</form>
+	</div>
+</div>

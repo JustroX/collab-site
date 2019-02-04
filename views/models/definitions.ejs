@@ -1,0 +1,6 @@
+{
+	<% for(let i in models) { %>
+	 "<%= models[i] %>" : <%- include(  models[i] ) %> <%= (i==models.length-1)? "" : "," %>
+	<% } %>
+}
+

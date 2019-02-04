@@ -1,0 +1,11 @@
+<div>
+	<b>POST API</b><br>	
+	<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+	<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+	<div ng-hide='$ctrl.api.config.state.loading'>
+		<form ng-submit='$ctrl.submit()'>
+			<div ng-repeat='i in $ctrl.fields'><input ng-model='$ctrl.model[i]' placeholder="{{i}}" ng-required='$ctrl.required.includes(i)' ></div>
+			<button type="submit">Submit</button>
+		</form>
+	</div>
+</div>

@@ -6,6 +6,7 @@ app.service('subpageService', function(session,$http,$timeout,$rootScope)
 		{
 			this.page = [];
 			this.onloadObj = {};
+			this.condition = {};
 		}
 
 		Ispage(str)
@@ -22,14 +23,22 @@ app.service('subpageService', function(session,$http,$timeout,$rootScope)
 			return str.split("/").join("/") == this.page.join("/");
 		}
 
+		when(location,cb)
+		{
+			this.condition[location.split("/").join("/")] = cb;
+		}
+
 		goto(location,param)
 		{
 			let _page = this;
 			$timeout(function()
 			{
-				_page.page = location.split("/")
-				if(_page.onloadObj[location.split("/").join("/")])
-					_page.onloadObj[location.split("/").join("/")](param);
+				if( (_page.condition[location.split("/").join("/")] && _page.condition[location.split("/").join("/")]()) || (!_page.condition[location.split("/").join("/")]) )
+				{
+					_page.page = location.split("/")
+					if(_page.onloadObj[location.split("/").join("/")])
+						_page.onloadObj[location.split("/").join("/")](param);
+				}
 			},1);
 		}
 

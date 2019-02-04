@@ -1,0 +1,13 @@
+<div>
+	<b>PUT API</b><br>	
+	<div ng-show='$ctrl.api.config.state.loading'>Loading...</div>
+	<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+	{{$ctrl.api.config.target}}
+	<div ng-hide='$ctrl.api.config.target'>No target specified.</div>
+	<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.api.config.target'>
+		<form ng-submit='$ctrl.submit()'>
+			<div ng-repeat='i in $ctrl.fields'><input ng-model='$ctrl.model[i]' placeholder="{{i}}" ng-required='$ctrl.required.includes(i)' ></div>
+			<button type="submit">Submit</button>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,6 @@
+<div>
+	<select class="{{$ctrl.class}}" style="{{$ctrl.style}}" ng-options="i as $ctrl.picker.label(i) for i in $ctrl.picker.config.list track by i.id" 
+			ng-model="$ctrl.picker.config.value"
+			ng-change="$ctrl.picker.change()">
+	</select>
+</div>
