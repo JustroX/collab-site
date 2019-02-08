@@ -4,7 +4,13 @@ var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
 
-router.post('/', api.logged, api.post(Group));
+router.post('/', api.logged, api.post(Group ,function(req,res,model)
+{
+	model.ranks.push({ name: "admin", permissions: 15, default: false  });
+	model.ranks.push({ name: "member", permissions: 1, default: true   });
+	model.users.push({ user: req.session.passport.user, rank: model.ranks[0]._id});
+	return model;
+}));
 router.get('/', api.list(Group) );
 router.get('/:id', api.get(Group));
 router.put('/:id', api.put(Group));
@@ -20,7 +26,30 @@ router.delete('/:id/ranks/:field_id', api.delete_endpoint(Group , "ranks"));
 
 //users
 router.get('/:id/users/', api.list_endpoint(Group , "users"));
-router.post('/:id/users/', api.post_endpoint(Group , "users"));
+router.post('/:id/users/', api.post_endpoint(Group , "users" , function(req,res,model)
+{
+	if(!model.is_authorized(req,res,2)) return;
+
+	for(let i in model.users)
+	{
+		let obj = model.users[i];
+		if(obj.user._id.equals(req.body.user))
+		{
+			res.send({ err: "User is already a memeber.", code : 403});
+			return false;
+		}
+	}
+
+	for(let i in model.users_pending)
+	{
+		let obj = model.users_pending[i];
+		if(obj.user._id.equals(req.body.user))
+		{
+			model.users_pending.splice(i,1);
+			return model;
+		}
+	}
+} ));
 router.get('/:id/users/:field_id', api.get_endpoint(Group , "users"));
 router.put('/:id/users/:field_id', api.put_endpoint(Group , "users"));
 router.delete('/:id/users/:field_id', api.delete_endpoint(Group , "users"));

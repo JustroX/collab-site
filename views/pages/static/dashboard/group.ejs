@@ -1,0 +1,149 @@
+<div>
+	<div class="uk-child-width-1-2" uk-grid>
+		<div>
+			<h7>Your Groups</h7>
+		</div>
+		<div class="uk-text-right" style="padding-right: 30px">
+			<a href="javascript:void(0)" uk-toggle="target: #modal-new-group">
+				<i class="fas fa-plus-circle ex-post-feedback"></i>
+			</a>
+		</div>
+	</div>
+
+	<handler bind="group-list-own">
+		<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+			<div uk-spinner></div>
+		</div>
+		<div uk-scrollspy="target: > div; cls:uk-animation-slide-bottom-small; delay: 400">
+			<div ng-hide='$ctrl.api.config.state.loading' ng-repeat='i in $ctrl.model' style="margin-top: 5px" class="ex-boundary">
+				<div class="uk-child-width-1-4" uk-grid>
+					<div class="uk-width-auto">
+						<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg"> 
+					</div>
+					<div class="uk-width-1-2">
+						<p class="uk-panel uk-panel-box uk-text-truncate">
+							{{i.name}} &middot; <small>{{i.description}}</small>
+						</p>
+					</div>
+					<div class="uk-text-right uk-width-expand">
+						<a href="javascript:void(0)" ng-click='$ctrl.view(i)' class="uk-button uk-button-default uk-button-small" style="border-radius: 7px">Go</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</handler>
+
+	<hr>
+
+	<h7>Discover Groups</h7>
+
+
+
+	<handler bind="group-list-not-own" >
+		<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+			<div uk-spinner></div>
+		</div>
+		<div uk-scrollspy="target: > div; cls:uk-animation-slide-bottom-small; delay: 400">
+			<div ng-hide='$ctrl.api.config.state.loading' ng-repeat='i in $ctrl.model' style="margin-top: 5px" class="ex-boundary">
+				<div class="uk-child-width-1-4" uk-grid>
+					<div class="uk-width-auto">
+						<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg"> 
+					</div>
+					<div class="uk-width-1-2">
+						<p class="uk-panel uk-panel-box uk-text-truncate">
+							{{i.name}} &middot; <small>{{i.description}}</small>
+						</p>
+					</div>
+					<div class="uk-text-right uk-width-expand">
+						<a href="javascript:void(0)" ng-click='$ctrl.view(i)' class="uk-button uk-button-default uk-button-small" style="border-radius: 7px">JOIN</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</handler>
+
+</div>
+
+<div id="modal-new-group" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+    	<div class="uk-padding uk-text-center">
+	    	<img  class="uk-animation-slide-bottom-small" src="https://storage.googleapis.com/neris/public/images/types/scenes/diplomats_Protagonist_ENFJ_friendships.svg"><br>
+			<div>
+				<h2 style="margin-bottom: 2px" >Start a community!</h2>
+				<p class="uk-text-meta uk-margin-remove">Create your own group.</p>
+			</div>
+			<handler bind='group-new'>
+				<form ng-submit='$ctrl.submit()'>
+					<b class="uk-text-meta">Group Name</b> <br>
+					<input style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.name'  placeholder="Name" > <br>
+					<b class="uk-text-meta">Describe your group</b> <br>
+					<textarea style="width: 200px; height: 100px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.description'  placeholder="Description" ></textarea>
+					<div ng-show='$ctrl.api.config.state.loading'> <br> <div uk-spinner></div></div>
+			    	<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>
+						{{ $ctrl.api.config.feedback.error }}
+					</div><br>
+					<button style="border-radius: 5px;margin-top: 5px" type="submit" ng-if='!$ctrl.api.config.state.loading' class="uk-button uk-button-primary">Create</button>
+				</form>
+			</handler>	
+    	</div>
+
+    </div>
+</div>
+<div id="modal-group-viewer" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+    	<div class="uk-padding uk-text-center">
+	    	<handler bind="group-view">
+	    		<div ng-show='$ctrl.api.config.state.loading'>
+	    			<div uk-spinner></div>
+	    		</div>
+	    		<div class="uk-animation-slide-bottom-small" ng-hide='$ctrl.api.config.state.loading'>
+		    		<img src="https://storage.googleapis.com/neris/public/images/types/scenes/explorers_Adventurer_ISFP_introduction.svg">
+		    		<h2 style="margin-bottom: 0px">{{$ctrl.model.name}}</h2>
+		    		<p>{{$ctrl.model.description}}</p>
+
+	    			<div class="uk-margin-medium-top">
+					    <ul class="uk-flex-center" uk-tab>
+						    <li ng-class='{"uk-active": modal_subpage.here("badge")}'><a ng-click='modal_subpage.goto("badge")' href="javascript:void(0)">Join by Badge</a></li>
+						    <li ng-class='{"uk-active": modal_subpage.here("request")}'><a ng-click='modal_subpage.goto("request")' href="javascript:void(0)">Join by Request</a></li>
+					    </ul>
+					</div>
+	    			<div ng-show="modal_subpage.here('badge')">
+	    				<small ng-show="$ctrl.model.badges_required.length" >You need to have the following badges to automatically join the group.</small>
+	    				<div class="uk-padding-small" style="overflow-y: scroll; max-height: 30vh;">
+	    					<div  ng-hide="$ctrl.model.badges_required.length"  class="uk-animation-scale-up uk-text-center">
+	    						<h2 class="uk-text-muted">No badges required.</h2>
+	    					</div>
+	    					<div  ng-repeat='i in $ctrl.model.badges_required'  class="ex-boundary uk-animation-slide-bottom-small" style="margin-top: 5px">
+	    						<div class="uk-child-width-1-4" uk-grid>
+									<div class="uk-width-auto">
+			    						<img width="50" height="50" src="https://img.icons8.com/dusk/64/000000/prize.png">
+									</div>
+									<div class="uk-width-1-2">
+										<p class="uk-panel uk-panel-box uk-text-truncate uk-text-left">
+											{{i.badge.name}} <br>
+											<small>{{ i.badge.description }}</small>
+										</p>
+									</div>
+									<div class="uk-width-expand uk-text-center">
+										<i style="font-size: 20pt; color: #ff9999; margin-top: 12px; cursor: pointer;" uk-tooltip="title: You do not have this badge." class="fas fa-question-circle"></i>
+									</div>
+								</div>
+	    					</div>
+	    				</div>
+	    				<button style="margin-top: 4px" class="uk-button uk-button-secondary ex-button">Join</button>
+	    			</div>
+	    			<div class="uk-animation-slide-bottom-small" ng-show="modal_subpage.here('request')">
+	    				<small>Group moderators will review your request first before you can join.</small>
+	    				<div>
+	    					<textarea style="width: 400px; height: 100px; border-radius: 5px" type="text" class="uk-input" placeholder="I should be in this group because ..." ></textarea>
+	    				</div>
+	    				<button style="margin-top: 10px" class="uk-button uk-button-secondary ex-button uk-animation-scale-up">Send Request</button>
+	    			</div>
+
+	    		</div>
+	    	</handler>
+    	</div>
+
+    </div>
+</div>

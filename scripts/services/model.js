@@ -10,7 +10,6 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 		for(let i in populate)
 		{
 			let fields = populate[i].split(".");
-
 			let parent = obj;
 			let key = fields[i];
 			let x = 0;
@@ -20,7 +19,14 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 				key = fields[i+1];
 			};
 
-			parent[key] = parent[key]._id;
+			if(parent[key])
+			{
+				if(parent[key].length)
+					for(let j in parent[key])
+						parent[key][j] = parent[key][j]._id;
+				else
+					parent[key] = parent[key]._id;
+			}
 		}
 		return JSON.parse(JSON.stringify(obj));
 	}

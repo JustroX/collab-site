@@ -68,7 +68,7 @@ module.exports.init = function()
 		}
 
 		let mongoose_model = mongoose.model(i, ModelSchema); 
-		mongoose_model.config = { PERMISSIONS: model.permissions , POPULATE: model.populate , endpoints: model.endpoints };
+		mongoose_model.config = { PERMISSIONS: model.permissions , POPULATE: model.populate , endpoints: model.endpoints, PERMISSIONS_ENDPOINT: model.endpoint_permissions };
 		global.divider.MODELS[i] = mongoose_model;
 	}
 }

@@ -21,8 +21,31 @@
 	background: linear-gradient(45deg,#0086b3,#00b3b3); 
 	border-radius: 5px
 }
+.ex-button-danger
+{
+	background: linear-gradient(45deg,#9546ea,#ea4679); 
+	border-radius: 5px
+}
+
+.ex-boundary
+{
+	padding: 10px;
+	border-radius: 10px;
+	border: 1px solid #bebebe
+}
+
+.ex-post-feedback
+{
+	color: #bbb;
+	cursor: pointer;
+}
+.ex-post-feedback:hover
+{
+	color: #222
+}
 
 body
 {
 	background: linear-gradient(135deg,	#ffffff ,#e6ffff)
 }
+

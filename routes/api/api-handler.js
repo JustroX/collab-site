@@ -25,9 +25,14 @@ function get_permission(Model,req,res,perm,PERMISSIONS,cb)
 				}
 			}
 			else
-			if(data._id.equals(user))
+			if(data._id.equals(req.params.id))
+			{
 				num = Model.selfPermission();
-
+			}
+			else
+			{
+				num = Model.defaultPermission();
+			}
 			if(num&perm)
 				cb(new_perm);
 			else
@@ -44,55 +49,6 @@ function get_permission(Model,req,res,perm,PERMISSIONS,cb)
 
 
 }
-
-exports.list = function(Model,cb)
-{
-	let PERMISSIONS = Model.config.PERMISSIONS;
-	let POPULATE = Model.config.POPULATE;
-	return function(req,res,next)
-	{
-		get_permission(Model,req,res,1,PERMISSIONS,function(PERMISSIONS)
-		{
-			let fields = lib.fields(req,PERMISSIONS);
-			let sort = lib.sort(req,PERMISSIONS);
-			let query = lib.filter(req,PERMISSIONS);
-			let options = req.query.option;
-
-			let limit =  (req.query.limit || 10)-1+1;
-			let offset = (req.query.offset || 0)-1+1;
-
-			if(options)
-			{
-				let opt = {};
-				Model.count({},function(err,count)
-				{
-					opt.collectionCount = count;
-					if(cb)
-						cb(req,res,opt)
-					else
-						res.send(opt);
-				});
-			}
-			else
-			{
-				let q = Model.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset);
-				for(let i in POPULATE)
-					q = q.populate(i,POPULATE[i]);
-
-				q.exec(function(err,docs)
-				{
-					if(err) return res.send({ err: "Database Error" , code: 500 });
-					if(cb)
-						cb(req,res,docs);
-					else
-						res.send(docs);
-				});
-			}
-		});
-	}
-}
-
-
 exports.get = function(Model,cb)
 {
 	let PERMISSIONS = Model.config.PERMISSIONS;
@@ -139,7 +95,7 @@ exports.post = function(Model,custom,cb)
 
 			model.set(temp_query);
 			if(custom)
-				model = custom(req,res,model);
+				model = custom(req,res,model,temp_query);
 			model.save(function(err,model)
 			{
 				if(err) return res.send({ code: 500, err: 'Database Error' });
@@ -221,6 +177,8 @@ exports.list = function(Model,cb)
 			let limit =  (req.query.limit || 10)-1+1;
 			let offset = (req.query.offset || 0)-1+1;
 
+			console.log(query);
+
 			if(options)
 			{
 				let opt = {};
@@ -272,7 +230,7 @@ function get_permission_endpoint(Model,endpoint,req,res,perm,cb)
 				if( num&perm && auth[endpoint])
 					num = auth[endpoint]
 				else
-					num = Model.config.PERMISSIONS[endpoint];
+					num = Model.config.PERMISSIONS_ENDPOINT[endpoint];
 			}
 			else
 			if(data._id.equals(user))
@@ -286,7 +244,7 @@ function get_permission_endpoint(Model,endpoint,req,res,perm,cb)
 		});
 	else
 	{
-		num  = Model.config.PERMISSIONS[endpoint];
+		num  = Model.config.PERMISSIONS_ENDPOINT[endpoint];
 		if(num&perm)
 			cb();
 		else
@@ -299,7 +257,7 @@ function get_permission_endpoint(Model,endpoint,req,res,perm,cb)
 exports.list_endpoint = function(Model,endpoint,cb)
 {
 	let PERMISSIONS = Model.config.endpoints[endpoint];
-	let POPULATE = PERMISSIONS.populate;
+	let POPULATE = PERMISSIONS.populate || {};
 
 	return function(req,res,next)
 	{
@@ -353,7 +311,7 @@ exports.list_endpoint = function(Model,endpoint,cb)
 exports.get_endpoint = function(Model,endpoint,cb)
 {
 	let PERMISSIONS = Model.config.endpoints[endpoint];
-	let POPULATE = PERMISSIONS.populate;
+	let POPULATE = PERMISSIONS.populate || {};
 
 	return function(req,res,next)
 	{
@@ -382,7 +340,13 @@ exports.get_endpoint = function(Model,endpoint,cb)
 					}
 				}
 				output = lib.hide_fields(output,PERMISSIONS);
-
+				output.sort(function(a,b){ 
+					for(let i in sort)
+					{
+						if(a[i]!=b[i])
+							return (1-2*(a[i]>b[i]))*sort[i];
+					}
+				});
 				if(cb)
 					cb(req,res,output);
 				else
@@ -414,10 +378,10 @@ exports.post_endpoint = function(Model,endpoint,custom,cb)
 				model[endpoint].push(temp_query);
 				if(custom)
 					model = custom(req,res,model);
+				if(model)
 				model.save(function(err,model)
 				{
 					if(err) return res.send({ code: 500, err: 'Database Error' });
-					console.log("YOE");
 					let output = lib.hide_fields(model[endpoint][model[endpoint.length-1]],PERMISSIONS);
 					if(cb) cb(req,res,output); else res.send(output);
 				});

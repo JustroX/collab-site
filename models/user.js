@@ -93,20 +93,20 @@ module.exports =
 	{
 	   _id: 1, 
 	   name: 7,
-	   bio: 7,
-	   birthday: 7,
-	   school: 7,
-	   username: 7,
-	   sex: 7,
+	   bio: 5,
+	   birthday: 5,
+	   school: 5,
+	   username: 5,
+	   sex: 5,
 	   confirmed: 1,
-	   email: 7,
+	   email: 5,
 
 	   private: 0,
 	   fullname: 1,
 	   authorization: 0,
 	   password: 4,
 
-	   follows: 15,
+	   follows: 13,
 	},
 	required:
 	{

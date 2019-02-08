@@ -5,5 +5,10 @@ module.exports =
 		"User",
 		"Group",
 		"Module",
+		"Challenge",
+		"Article",
+		"Invitation",
+		"Badge",
+		"Post"
 	]
 }

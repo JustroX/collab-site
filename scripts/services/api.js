@@ -43,8 +43,14 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
 
   this.new = function(config)
   {
-    let a = new Api(config);
-    this.apis.push(a);
+    let a;
+    if(this.find(config.id).apis[0])
+      a = this.find(config.id).apis[0];
+    else
+    {
+      a = new Api(config);
+      this.apis.push(a);
+    }
     return a;
   }
 
@@ -107,19 +113,19 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
           payload = temp_load;
         }
 
-        let destination = (api.url || api.model) + ((api.method == "list" || api.method == "post")? "": "/"+api.target);
+        let destination = (api.url || api.model) + ((api.method == "list" || api.method == "post")? "": "/"+api.target) + (api.param? ("?"+api.param) : "");
         let param  = api.param? "?" + api.param : "";
         this.emit("preload");
 
         if(!this.validate(payload))
-            return api.feedback.error = "Please fill up required fields";
+            return api.feedback.error = api.incomplete_default || "Please fill up required fields";
         api.state.loading =true;
+        console.log("/api/"+destination,payload);
         $http[api.method=="list"? "get": api.method]("/api/"+destination,payload).then(
           function(res)
           {
             res = res.data;
             api.state.loading = false;
-
             if(res.err)
             {
               console.log(res.err);
@@ -127,7 +133,6 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
               event.emit("error",res.err);
               return;
             }
-            
             event.emit("success",res);
           },
           function(err)
@@ -208,12 +213,14 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
     {
         let required = schemaService.getRequired("post",api.config.model);
         let missing = [];
+        if(!api.config.url)
         for(let field of required)
         {
-          if( payload[field] && [NaN,undefined,null,""].includes(payload[field])  )
+          if( (field.split(".").length > 1)? [NaN,undefined,null,""].includes(payload[field.split(".")[0]][field.split(".")[1]]) : [NaN,undefined,null,""].includes(payload[field])    )
             missing.push(field);
         }
         api.missing_fields  =missing;
+        console.log(missing);
         return !missing.length;
     }
   }
@@ -225,7 +232,7 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
         let missing = [];
         for(let field of required)
         {
-          if( [NaN,undefined,null,""].includes(payload[field])  )
+          if( (field.split(".").length > 1)? [NaN,undefined,null,""].includes(payload[field.split(".")[0]][field.split(".")[1]]) : [NaN,undefined,null,""].includes(payload[field])    )
             missing.push(field);
         }
         api.missing_fields  =missing;

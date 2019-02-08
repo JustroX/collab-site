@@ -1,5 +1,5 @@
 
-var app = angular.module("site", ["ngRoute"]);
+var app = angular.module("site", ["ngRoute","ngSanitize"]);
 
 
 app.config(function($routeProvider) {
@@ -11,10 +11,22 @@ app.config(function($routeProvider) {
         templateUrl : "/master/dashboard",
     })
     .when("/dashboard", {
+        redirectTo : "/dashboard/feed",
+    })
+    .when("/dashboard/:subpage", {
         templateUrl : "/page/dashboard",
     })
+    .when("/group/:id/", {
+        redirectTo: '/group/:id/feed',
+    })
+    .when("/group/:id/:subpage", {
+        templateUrl : "/page/group",
+    })
+    .when("/404", {
+        templateUrl : "/page/404",
+    })
     .otherwise({
-        redirectTo: '/404'
+        redirectTo: '/404',
     })
 });
 

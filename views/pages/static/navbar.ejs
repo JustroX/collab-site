@@ -1,17 +1,15 @@
-<div  style="padding: 0px; margin: 0px">
-    <nav style="z-index: 200;" uk-sticky="offset: 0"  class=" uk-navbar-container uk-margin uk-light" id="ex-navbar-primary" uk-navbar>
+<div class="uk-animation-slide-top" style="padding: 0px; margin: 0px"  uk-sticky="offset: 0">
+    <nav style="z-index: 200; height: 50px"  class=" uk-navbar-container uk-margin uk-light" id="ex-navbar-primary" uk-navbar>
         <div class="uk-navbar-left" style="margin-left: 5vw;">
             <ul class="uk-navbar-nav">
                 <li><a style="color: white" href="#!/dashboard">  &nbsp;  Home</a></li>
                 <li><a style="color: white" ng-click='profile()' href="javascript:void(0)"">    &nbsp;  Profile</a></li>
-                <li><a style="color: white" href="javascript:void(0)" ng-click="invite()">    &nbsp;  Invite Friends</a></li>
+                <li><a style="color: white" href="javascript:void(0)" ng-click="invite()">    &nbsp;  Invite</a></li>
             </ul>
         </div>
 
         <div class="uk-navbar-center" >
-            <a class="uk-navbar-item uk-logo" href="javascript:void(0)" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a>
-
-            
+            <a class="uk-navbar-item uk-logo" href="javascript:void(0)" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a> 
         </div>
 
         <div class="uk-navbar-right" style="margin-right: 5vw;">
@@ -19,7 +17,7 @@
                 <li>
                     <div style="padding-top: 20px">
                         <form class="uk-search uk-search-default">
-                            <input ng-model='search.query' ng-change="searchtry()" class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
+                            <input style="height:30px; margin-top:5px" ng-model='search.query' ng-change="searchtry()" class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
                         </form>
                         <div  uk-sticky='offset: 100'>
                             <div ng-if='search.query' >

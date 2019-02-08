@@ -10,7 +10,8 @@ module.exports =
 		ranks:
 		[{
 			name: String,
-			permissions: Number
+			permissions: Number,
+			default: Boolean
 		}],
 		users: 
 		[{
@@ -20,7 +21,8 @@ module.exports =
 	 	users_pending : 
 	 	[{ 
 	 		user: { type: Schema.Types.ObjectId, ref: "User"}, 
-	 		message: String 
+	 		message: String ,
+	 		date: Date
 	 	}],	
 	 	badges_required:
 	 	[{ 
@@ -45,12 +47,20 @@ module.exports =
 	{
 		users: "name",
 		created_by: "fullname email",
+		"badges_required.badge": "name description"
 	},
 	permissions:
 	{
 		_id: 1,
 		name: 7,
-		
+		description: 7,
+
+		"users.user": 1,
+		badges_required: 13,
+		ranks: 13,
+	},
+	endpoint_permissions:
+	{
 		users_pending: 15,
 		ranks: 15,
 		users: 15,
@@ -58,6 +68,33 @@ module.exports =
 	},
 	methods:
 	{
+		get_permission: function(user_id)
+		{
+			let rank_id = -1;
+			for(let i of this.users)
+			{
+				if(i.user.equals(user_id))
+				{
+					rank_id = i.rank;	
+				}
+			}
+			if(rank_id<0) return 0;
+			for(let i of this.ranks)
+			{
+				if(i._id.equals(rank_id))
+				{
+					return i.permission;
+				}
+			}
+		},
+		is_authorized: function(req,res,num)
+		{
+			if(this.get_permission(req.session.passport.user)&num)
+				return true;
+			else
+				res.send({ err: "Group: Permission  denied.", code: 403}  );
+			return false;
+		}
 	},
 	endpoints:
 	{
@@ -76,6 +113,7 @@ module.exports =
 			_id: 1,
 			name: 7,
 			permission: 7,
+			default: 7,
 		},
 		users: 
 		{

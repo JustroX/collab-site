@@ -1,0 +1,71 @@
+
+<div id="feed-editor-container" style="display: none;margin: 10px;" class="uk-card uk-card-body ex-boundary">
+	
+
+	<div id="feed-editor" style="display: none;" ng-show='!feed_editor_active' class="uk-grid-small uk-flex-middle" uk-grid>
+        <div class="uk-width-auto ">
+            <img class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+        </div>
+		<div class="uk-width-expand">
+			<div ng-click='feed_editor_toggle()' class="ex-boundary uk-text-muted" style="padding: 2px;padding-left: 10px; cursor: text;">
+				<small>{{ SESSION_USER.name.first }}, write something...</small>
+			</div>
+		</div>
+    </div>
+	<div id="feed-editor-block" style="display: none">
+		<handler bind='post-new-group' model='postListModel'>
+			<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_feed_editor" style='height: 30vh;'></editor>
+			<div style="margin-top: 5px;padding-left: 5px">
+				<div class="uk-float-left">
+					<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+		           	<small>{{ SESSION_USER.fullname }}</small>
+				</div>
+				<div class="uk-float-right">
+					<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+					<div ng-show='!$ctrl.api.config.state.loading'>
+						<button ng-click='feed_editor_toggle()' class="uk-button uk-button-small uk-button-default" style="border-radius: 4px">Cancel</button>
+						<button ng-class="{ 'ex-button uk-button-primary': $ctrl.model.content, 'uk-button-default': !$ctrl.model.content  }" ng-click='$ctrl.submit()' class="uk-button uk-button-small uk-button-primary ex-button ">Post</button>
+					</div>
+				</div>
+				<div class="uk-float-right" style="color: red; padding-right: 5px" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
+			</div>
+		</handler>
+	</div>
+</div>
+
+<br>
+<handler bind='post-list-group'>
+	<div style="color: red;" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
+	<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+		<div uk-spinner></div>
+	</div>
+	<div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 500;">
+
+		<div ng-show='!$ctrl.api.config.state.loading' class="uk-card uk-card-body ex-boundary " style="margin-top: 5px" ng-repeat='i in $ctrl.model'>
+			<div>
+				<div uk-grid> 
+					<div class="uk-width-auto ">
+		                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+		            </div>
+		            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
+		            	<a href="javascript:void(0)" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
+		            	<i><small><a class="uk-link-muted" href="javascript:void(0)">@{{i.author.username}}</a></small></i>
+		            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
+		            </div>
+		            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
+	            		<a href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+		            </div>
+				</div>
+			</div>
+			<div style="padding: 5px;">
+				<editor-view data='{{i.content}}'></editor-view>
+				<div class="uk-text-right">
+					<a href="javascript:void(0)"><i class="fas fa-heart ex-post-feedback"></i></a> &nbsp;&nbsp;
+					<a href="javascript:void(0)"><i class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+					<a href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
+				</div>
+			</div>
+		</div>
+
+	</div>
+</handler>

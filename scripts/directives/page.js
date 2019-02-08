@@ -9,9 +9,9 @@ app.directive('page', function() {
     require: "^^pages",
     link: function(scope,element,attrs,ctrl)
     {
-    	scope.subpage = ctrl.subpage;
+    	scope.minipage = ctrl.subpage;
     },
-    template: `<div ng-show='subpage.Ispage(page)'><div ng-transclude></div></div>`
+    template: `<div ng-show='minipage.Ispage(page)'><div ng-transclude></div></div>`
   };
 })
 .directive('pages', function() {
@@ -21,11 +21,17 @@ app.directive('page', function() {
     scope:
     {
     	page: "@",
-    	subpage: "="
+    	subpage: "=",
+        default: "@"
     },
     controller: function($scope)
     {
     	this.subpage = $scope.subpage;
+        this.$onInit = function()
+        {
+            if($scope.default)
+                this.subpage.goto($scope.default);
+        }
     },
     template: `<div><div ng-transclude></div></div>`
   };

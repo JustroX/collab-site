@@ -73,10 +73,23 @@ exports.filter = function(req,PERMISSIONS)
 	let filters = [];	
 	for(var i in req.query)
 	{
-		if(PERMISSIONS[i] && PERMISSIONS[i]&1)
+		if(i=="search" || (PERMISSIONS[i.split(".")[0]] &1) || (PERMISSIONS[i] && PERMISSIONS[i]&1))
 		{
 			let val = req.query[i].split("..");
 			let item = { field: i };
+			if(i=="search")
+			{
+				let subfields  = val[0].split(",");
+				item.or = [];
+				for(let j in subfields)
+				{
+					let b = subfields[j].split(":");
+					let a = {};
+					a[b[0]] = { $regex: new RegExp(b[1]) , $options: 'i' };
+					item.or.push(a);
+				}
+			}
+			else
 			if(val.length==1 && val[0].substring(0,3)=="rx_")
 			{
 				item.regex = val[0].substring(3);
@@ -99,10 +112,14 @@ exports.filter = function(req,PERMISSIONS)
 			filters.push(item);
 		}
 	};
-
 	let query = {};
 	for(var i of filters)
 	{
+		if(i.or)
+		{
+			query["$or"] = i.or;
+		}
+		else
 		if(i.regex)
 		{
 			query[i.field] = { $regex: new RegExp(i.regex) , $options: 'i' };
