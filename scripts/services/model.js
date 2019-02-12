@@ -107,6 +107,8 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 			for(let i of ["get","put","delete"])
 			{
 				let api = this.api[i];
+				if(config.url)
+					api.config.url =  config.url;
 			}
 
 

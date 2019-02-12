@@ -75,14 +75,59 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		}
 	}
 
+
+	let memberSearch = apiService.new({ id: "member-search", model:"user" , method: "list", param: "fullname=rx_" });
+	let memberNew = apiService.new({ id: "member-new" , model: "group", method: "post" , url: "group/"+$routeParams.id+"/users" });
+	let memberView = modelService.new({ id: "member-view", model: "group", url: "group/"+$routeParams.id+"/users" });
+
 	$scope.add_new_member = function()
 	{
 		UIkit.modal("#modal-new-member").show();
 	}
 
-	let memberSearch = apiService.new({ id: "member-search", model:"user" , method: "list", param: "fullname=rx_" });
-	let memberNew = apiService.new({ id: "member-new" , model: "group", method: "post" , url: "group/"+$routeParams.id+"/users" });
+	memberView.api.put.on("success",function(res)
+	{
+		memberList.load();
+		UIkit.modal("#modal-view-member").hide();
+		UIkit.notification("Member updated","success");
+	});
+
+	memberView.api.delete.on("success",function(res)
+	{
+		memberList.load();
+		UIkit.modal("#modal-view-member").hide();
+		UIkit.notification("Member removed","success");
+	});
+	memberView.api.put.on("error",function(err)
+	{
+		UIkit.modal("#modal-view-member").hide();
+		UIkit.notification(err,"danger");
+	});
+	memberView.api.delete.on("error",function(err)
+	{
+		UIkit.modal("#modal-view-member").hide();
+		UIkit.notification(err,"danger");
+	});
+
+
+	memberList.on("selected",function(u)
+	{
+		UIkit.modal("#modal-view-member").show();
+		memberView.load(u._id);
+	});
+
+
 	$scope.member_new = {};
+	memberNew.on("error",function(err)
+	{
+		UIkit.modal("#modal-new-member").hide();
+		UIkit.notification(err,"danger");
+	});
+	memberNew.on("success",function()
+	{
+		UIkit.modal("#modal-new-member").hide();
+		memberList.load();
+	});
 
 	memberSearch.on("selected",function(u)
 	{
@@ -94,16 +139,6 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 		$scope.member_new.user = u._id;
 		memberNew.load($scope.member_new);
-		memberNew.on("success",function()
-		{
-			UIkit.modal("#modal-new-member").hide();
-			memberList.load();
-		});
-		memberNew.on("error",function(err)
-		{
-			UIkit.modal("#modal-new-member").hide();
-			UIkit.notification(err,"danger");
-		});
 	});
 
 

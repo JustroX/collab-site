@@ -67,7 +67,7 @@
 							<i class="uk-text-meta uk-text-capitalize">{{ get_rank_name(i.rank) }}</i>
 						</small>
 						<hr style="margin-bottom: 0px">
-						<button class="uk-button uk-button-small uk-button-text"><small>Edit</small></button>
+						<button ng-click='$ctrl.view(i)' class="uk-button uk-button-small uk-button-text"><small>Edit</small></button>
 					</div>
 				</div>
 			</div>
@@ -120,13 +120,56 @@
 							<hr style="margin:0px">
 							<div>
 								<handler bind='member-new' model='member_new'>
-									<div ng-show='$ctrl.api.config.state.loading'><div uk-spinner></div></div>
+									<div>
+										<div ng-show='$ctrl.api.config.state.loading && member_new.user == i._id'><div uk-spinner></div></div>
+									</div>
 								</handler>
 								<button ng-click="$ctrl.view(i)" class="uk-button uk-button-small uk-button-text"><small>Add</small></button>
 							</div>
 						</div>
 					</div>
 				</search>
+			</div>			
+    	</div>
+    </div>
+</div>
+
+
+<div id="modal-view-member" class="uk-flex-top" uk-modal="stack: true">
+    <div class="uk-modal-dialog uk-modal-body">
+    	<div class="uk-padding uk-text-center">
+	    	<div ng-hide='$ctrl'.>
+				<entity bind="member-view">
+					<handler model='$ctrl.value.model' bind='{{$ctrl.get.config.id}}'>
+						<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+						<div ng-hide='$ctrl.api.config.state.loading'>
+							<img width="160" height="160" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+							<h4>{{$ctrl.model.user.fullname}}</h4>
+							Select Rank
+						</div>
+					</handler>
+					<div ng-show='$ctrl.put.config.state.loading || $ctrl.delete.config.state.loading' uk-spinner></div>
+					<div ng-hide='$ctrl.get.config.state.loading || $ctrl.put.config.state.loading || $ctrl.delete.config.state.loading'>
+						<handler model='$ctrl.value.model' bind='{{$ctrl.put.config.id}}'>
+							<select class="uk-select" ng-model='$ctrl.model.rank' ng-options='i._id as i.name for i in group.value.model.ranks'></select>
+							<button style="border-radius: 5px;margin-top: 5px;" class="uk-button uk-button-primary" ng-click='$ctrl.submit()'>Update</button>
+						</handler>
+					</div>
+					<div  ng-hide='$ctrl.get.config.state.loading || $ctrl.put.config.state.loading || $ctrl.delete.config.state.loading'>
+						<br>
+						<handler bind='{{$ctrl.delete.config.id}}' model='$ctrl.value.model'>
+							<button uk-toggle="target:#delete-confirm " class="uk-button uk-button-text"><small>Remove from Group</small></button>
+							<div id="delete-confirm" class="uk-flex-top" uk-modal="stack: true">
+							    <div style="width: 500px" class="uk-modal-dialog  uk-margin-auto-vertical uk-padding uk-text-center">
+							    	<p>
+								        Are you sure you want to remove <b>{{$ctrl.model.user.fullname}}</b> from <b>{{group.value.model.name}}</b> ? 
+							    	</p>
+							        <button class="uk-button uk-button-secondary uk-modal-close" ng-click='$ctrl.submit()'>REMOVE</button>
+							    </div>
+							</div>
+						</handler>
+					</div>
+				</entity>	
 			</div>			
     	</div>
     </div>

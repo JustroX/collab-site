@@ -177,7 +177,6 @@ exports.list = function(Model,cb)
 			let limit =  (req.query.limit || 10)-1+1;
 			let offset = (req.query.offset || 0)-1+1;
 
-			console.log(query);
 
 			if(options)
 			{
@@ -297,6 +296,14 @@ exports.list_endpoint = function(Model,endpoint,cb)
 
 					docs = docs[0][endpoint];
 
+					docs.sort(function(a,b){ 
+						for(let i in sort)
+						{
+							if(a[i]!=b[i])
+								return (1-2*(a[i]>b[i]))*sort[i];
+						}
+					});
+
 					if(cb)
 						cb(req,res,docs);
 					else
@@ -340,13 +347,6 @@ exports.get_endpoint = function(Model,endpoint,cb)
 					}
 				}
 				output = lib.hide_fields(output,PERMISSIONS);
-				output.sort(function(a,b){ 
-					for(let i in sort)
-					{
-						if(a[i]!=b[i])
-							return (1-2*(a[i]>b[i]))*sort[i];
-					}
-				});
 				if(cb)
 					cb(req,res,output);
 				else
@@ -356,7 +356,7 @@ exports.get_endpoint = function(Model,endpoint,cb)
 	}
 }
 
-exports.post_endpoint = function(Model,endpoint,custom,cb)
+exports.post_endpoint = function(Model,endpoint,pre,custom,cb)
 {
 	let PERMISSIONS = Model.config.endpoints[endpoint];
 	return function(req,res,next)
@@ -370,6 +370,10 @@ exports.post_endpoint = function(Model,endpoint,custom,cb)
 				if(err) return res.send({ code: 500, err: "Database Error."});
 				if(!model) return res.send({ code: 500, err: "Model not found" });
 
+				if(pre)
+					model = pre(req,res,model);
+				if(!model) return;
+
 				let temp_query = {};
 				for(let i in PERMISSIONS)
 					if(PERMISSIONS[i]&2)
@@ -378,6 +382,7 @@ exports.post_endpoint = function(Model,endpoint,custom,cb)
 				model[endpoint].push(temp_query);
 				if(custom)
 					model = custom(req,res,model);
+
 				if(model)
 				model.save(function(err,model)
 				{

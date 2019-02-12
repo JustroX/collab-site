@@ -14,11 +14,11 @@ app.controller("masterController",function($scope,$http,$location,$timeout,$root
 	{
 		return user_model.config.target;
 	});
+	user_model.api.put.on("success",function(){user_list.load();});
+	user_model.api.delete.on("success",function(){user_list.load();});
 	user_list.on("selected",function(u)
 	{
 		user_model.load(u._id);
-		user_model.api.put.on("success",function(){user_list.load();});
-		user_model.api.delete.on("success",function(){user_list.load();});
 		subpage.goto("dashboard/view");
 	});
 	user_new.on("success",function(res)

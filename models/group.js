@@ -73,22 +73,25 @@ module.exports =
 			let rank_id = -1;
 			for(let i of this.users)
 			{
+				console.log(i)
 				if(i.user.equals(user_id))
 				{
 					rank_id = i.rank;	
 				}
 			}
+			console.log(rank_id);
 			if(rank_id<0) return 0;
 			for(let i of this.ranks)
 			{
 				if(i._id.equals(rank_id))
 				{
-					return i.permission;
+					return i.permissions;
 				}
 			}
 		},
 		is_authorized: function(req,res,num)
 		{
+			console.log(this.get_permission(req.session.passport.user));
 			if(this.get_permission(req.session.passport.user)&num)
 				return true;
 			else
