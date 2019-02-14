@@ -17,7 +17,8 @@ module.exports =
 				module: Number,
 				post: Number,
 			},
-			default: Boolean
+			default: Boolean,
+			persistent: Boolean,
 		}],
 		users: 
 		[{

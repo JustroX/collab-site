@@ -11,14 +11,14 @@ router.post('/', api.logged, api.post(Group ,function(req,res,model)
 		users: 15,
 		module: 15,
 		post: 15,
-	}, default: false  });
+	}, default: false, persistent: true  });
 	model.ranks.push({ name: "member", permissions: 
 	{
 		group: 1,
 		users: 0,
 		module: 0,
 		post: 0,		
-	}, default: true   });
+	}, default: true, persistent: true   });
 	model.users.push({ user: req.session.passport.user, rank: model.ranks[0]._id});
 	return model;
 }));

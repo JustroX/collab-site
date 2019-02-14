@@ -177,6 +177,12 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	{
 		rankList.load();
 	});
+	rank.on("delete",function()
+	{
+		rankList.load();
+		UIkit.notification("Group deleted", "success");
+		rank.value.model._id = null;
+	});
 
 	$scope.temp_permission_obj = 
 	{

@@ -15,7 +15,6 @@
 					</handler>
 				</entity>	
 				<hr>
-				Ranks
 				<div class="uk-grid uk-child-width-1-3">
 						<div>
 							<h3>Ranks</h3>
@@ -97,7 +96,18 @@
 									    	<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
 										</handler>
 										<br>
-									    	<button ng-hide='edit.loading || delete.loading' ng-click='delete_this()' class="uk-button uk-button-danger  uk-margin-remove"> <span ng-show='!delete_confirm'> Delete Rank </span><span  ng-show='delete_confirm'> Confirm? </span> </button>
+										<handler bind='{{$ctrl.delete.config.id}}'  model='$ctrl.value.model'>
+									    	<button uk-toggle="target:#delete-rank " class="uk-button uk-button-text"><small>Delete Rank</small></button>
+											<div id="delete-rank" class="uk-flex-top" uk-modal="stack: true">
+											    <div style="width: 500px" class="uk-modal-dialog  uk-margin-auto-vertical uk-padding uk-text-center">
+											    	<p>
+												        Are you sure you want to remove rank <b>{{$ctrl.model.name}}</b> ? 
+											    	</p>
+											        <button class="uk-button uk-button-secondary uk-modal-close" ng-click='$ctrl.submit()'>REMOVE</button>
+											    </div>
+											</div>
+										</handler>
+										<br><br><br>
 							    	</div>
 								</div>
 								<div ng-hide='$ctrl.value.model._id || $ctrl.get.config.state.loading' class="uk-padding">
