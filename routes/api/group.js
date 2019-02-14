@@ -6,8 +6,19 @@ var api = require('./api-handler.js');
 
 router.post('/', api.logged, api.post(Group ,function(req,res,model)
 {
-	model.ranks.push({ name: "admin", permissions: 15, default: false  });
-	model.ranks.push({ name: "member", permissions: 1, default: true   });
+	model.ranks.push({ name: "admin", permissions: {
+		group: 15,
+		users: 15,
+		module: 15,
+		post: 15,
+	}, default: false  });
+	model.ranks.push({ name: "member", permissions: 
+	{
+		group: 1,
+		users: 0,
+		module: 0,
+		post: 0,		
+	}, default: true   });
 	model.users.push({ user: req.session.passport.user, rank: model.ranks[0]._id});
 	return model;
 }));
@@ -29,7 +40,7 @@ router.get('/:id/users/', api.list_endpoint(Group , "users"));
 router.post('/:id/users/', api.post_endpoint(Group , "users" ,
 function(req,res,model)
 {
-	if(!model.is_authorized(req,res,2)) return;
+	if(!model.is_authorized(req,res,"users",2)) return;
 	return model;
 },
 function(req,res,model)

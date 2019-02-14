@@ -10,7 +10,13 @@ module.exports =
 		ranks:
 		[{
 			name: String,
-			permissions: Number,
+			permissions: 
+			{
+				group: Number,
+				users: Number,
+				module: Number,
+				post: Number,
+			},
 			default: Boolean
 		}],
 		users: 
@@ -68,31 +74,29 @@ module.exports =
 	},
 	methods:
 	{
-		get_permission: function(user_id)
+		get_permission: function(user_id,field)
 		{
 			let rank_id = -1;
 			for(let i of this.users)
 			{
-				console.log(i)
 				if(i.user.equals(user_id))
 				{
 					rank_id = i.rank;	
 				}
 			}
-			console.log(rank_id);
 			if(rank_id<0) return 0;
 			for(let i of this.ranks)
 			{
 				if(i._id.equals(rank_id))
 				{
-					return i.permissions;
+					return i.permissions[field];
 				}
 			}
 		},
-		is_authorized: function(req,res,num)
+		is_authorized: function(req,res,field,num)
 		{
 			console.log(this.get_permission(req.session.passport.user));
-			if(this.get_permission(req.session.passport.user)&num)
+			if(this.get_permission(req.session.passport.user,field)&num)
 				return true;
 			else
 				res.send({ err: "Group: Permission  denied.", code: 403}  );
@@ -115,7 +119,7 @@ module.exports =
 		{
 			_id: 1,
 			name: 7,
-			permission: 7,
+			permissions: 7,
 			default: 7,
 		},
 		users: 

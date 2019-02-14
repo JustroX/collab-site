@@ -8,13 +8,20 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	$scope.$on('ready',function()
 	{
 		$scope.group.load($routeParams.id);
-		$scope.group.on("loaded",function()
-		{
-			subpage.goto($routeParams.subpage);
-		});
 	});
 	$scope.group  = modelService.new({id:"group-model",model:"group"});
 	$scope.group_id = $routeParams.id;
+	let page_info_loaded = false;
+	$scope.group.on("loaded",function()
+	{
+		if(!page_info_loaded)
+			subpage.goto($routeParams.subpage);
+		page_info_loaded = true;
+	});
+	$scope.group.on("saved",function()
+	{
+		UIkit.notification("Group settings saved", "success");
+	});
 
 
 	//FEED
@@ -64,6 +71,10 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		pendingList.load();
 		memberList.load();
 	});
+	subpage.onload("settings",function()
+	{
+		rankList.load();
+	});
 
 	$scope.get_rank_name = function(_id)
 	{
@@ -74,7 +85,6 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 				return group.ranks[i].name;
 		}
 	}
-
 
 	let memberSearch = apiService.new({ id: "member-search", model:"user" , method: "list", param: "fullname=rx_" });
 	let memberNew = apiService.new({ id: "member-new" , model: "group", method: "post" , url: "group/"+$routeParams.id+"/users" });
@@ -141,5 +151,52 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		memberNew.load($scope.member_new);
 	});
 
+	//ranks
+	let rankList  = apiService.new({ id: "rank-list" , model: "group", url: "group/"+$routeParams.id+"/ranks", method: "list", param: "sort=name"});
+	let rankNew = apiService.new({ id: "rank-new" , model: "group", url: "group/"+$routeParams.id+"/ranks", method: "post" });
+	let rank = modelService.new({ id: "rank", model: "group", url: "group/"+$routeParams.id+"/ranks" });
+
+	rankNew.on("success",function()
+	{
+		rankList.load();
+	});
+	rankList.on("selected",function(u)
+	{
+		rank.load(u._id);
+	});
+	rank.on("loaded",function()
+	{
+		for(let i in rank.value.model.permissions)
+		{
+			console.log(i);
+			for(let p in [1,2,3])
+				$scope.temp_permission_obj[i][p] = (rank.value.model.permissions[i] & (1<<p))? true: false;
+		}
+	});
+	rank.on("saved",function()
+	{
+		rankList.load();
+	});
+
+	$scope.temp_permission_obj = 
+	{
+		module : [0,0,0],
+		users : [0,0,0],
+		group : [0,0,0],
+		post: [0,0,0]
+	};
+
+	$scope.rank_permission_change = function(model,permission)
+	{
+		let num = 0;
+		for(let i in $scope.temp_permission_obj[permission])
+			num += $scope.temp_permission_obj[permission][i] ? (1<<i) : 0;
+		model.permissions[permission] = num;
+	}
+
+	$scope.rank_checked = function(model,permission,num)
+	{
+		return model.permissions[permission]&num;
+	}
 
 });

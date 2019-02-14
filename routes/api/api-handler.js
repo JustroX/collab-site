@@ -292,6 +292,7 @@ exports.list_endpoint = function(Model,endpoint,cb)
 				q.exec(function(err,docs)
 				{
 					if(err) return res.send({ err: "Database Error" , code: 500 });
+					console.log(docs);
 					if(!docs[0]) return res.send({ err: "Document not found.", code: 500});
 
 					docs = docs[0][endpoint];
@@ -403,7 +404,7 @@ exports.put_endpoint = function(Model,endpoint,custom,cb)
 	{
 		get_permission_endpoint(Model,endpoint,req,res,4,function()
 		{
-			if(! lib.validate_fields(req,res,PERMISSIONS)) return;
+			// if(! lib.validate_fields(req,res,PERMISSIONS)) return;
 
 			let query = lib.sanitize(req,PERMISSIONS);
 
