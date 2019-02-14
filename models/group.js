@@ -135,6 +135,10 @@ module.exports =
 		},
 		badges_required:
 		{
+			populate:
+			{
+				badge: "name description"
+			},
 			_id: 1,
 			badge: 7,
 		}

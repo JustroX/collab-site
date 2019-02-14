@@ -118,5 +118,76 @@
 							</entity>
 						</div>
 				</div>
+				<hr>
+				<div>
+					<div>
+						<hr class="uk-divider-icon">
+						<section>
+							<h3>Badge Requirements</h3>
+							<handler bind="badge-list">
+								<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+									<div uk-spinner></div>
+								</div>
+								<div ng-hide='$ctrl.api.config.state.loading' style="max-height: 50vh; overflow-y: scroll;">
+
+									<table class="uk-table uk-table-striped">
+									    <thead>
+									        <tr>
+									            <th>#</th>
+									            <th></th>
+									            <th>Badge</th>
+									            <th>Description</th>
+									        </tr>
+									    </thead>
+									    <tbody>
+									        <tr ng-repeat='i in $ctrl.model track by $index'>
+									            <td>{{ $index+1 }}</td>
+									            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
+									            <td>{{i.badge.name}}</td>
+									            <td>{{i.badge.description}}</td>
+									        </tr>
+									    </tbody>
+									</table>
+								</div>
+							</handler>
+							<div class="uk-text-center">
+								<h3>Add new Badge</h3>
+							</div>
+							<search field='name' bind='badge-search'>
+								<input type="text" ng-model='$ctrl.query' ng-change='$ctrl.change()' class="uk-input" style="border-radius: 5px">
+								<div style="margin-top: 5px" ng-show='($ctrl.api.config.state.loading || $ctrl.timer>0) && $ctrl.query'><div uk-spinner></div></div>
+								<div ng-show='$ctrl.query && !$ctrl.api.config.state.loading'>
+									<div ng-hide='$ctrl.model.length' class="ex-boundary uk-text-muted">No search results.</div>
+								</div>
+								<div style="margin-top: 10px" ng-hide='$ctrl.api.config.state.loading || $ctrl.model.length==0'>
+									<div  ng-repeat='i in $ctrl.model'  class="ex-boundary uk-animation-slide-bottom-small" style="margin-top: 5px">
+			    						<div class="uk-child-width-1-4" uk-grid>
+											<div class="uk-width-auto">
+					    						<img width="50" height="50" src="https://img.icons8.com/dusk/64/000000/prize.png">
+											</div>
+											<div class="uk-width-1-2">
+												<p class="uk-panel uk-panel-box uk-text-truncate uk-text-left">
+													{{i.name}} <br>
+													<small>{{ i.description }}</small>
+												</p>
+											</div>
+											<div class="uk-width-expand uk-text-center">
+												<div>
+													<button style="margin-top: 10px;" ng-click="$ctrl.view(i)" class="uk-button uk-button-secondary ex-button"><small>Add</small></button>
+													<handler bind='badge-new' model='badge_new'>
+														<div>
+															<div ng-show='$ctrl.api.config.state.loading && badge_new.badge == i._id'><div uk-spinner></div></div>
+														</div>
+													</handler>
+												</div>
+											</div>
+										</div>
+			    					</div>
+								</div>
+							</search>
+							<br>
+						</section>
+					</div>
+				</div>
 			</div>
 	</div>

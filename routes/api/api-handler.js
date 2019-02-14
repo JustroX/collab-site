@@ -471,6 +471,7 @@ exports.delete_endpoint = function(Model,endpoint,custom,cb)
 
 				if(custom)
 					model = custom(req,res,model);
+				if(model)
 				model.save(function(err,model)
 				{
 					if(err) return res.send({ code: 500, err: 'Database Error' });

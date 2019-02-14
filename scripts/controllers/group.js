@@ -74,6 +74,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	subpage.onload("settings",function()
 	{
 		rankList.load();
+		badgeList.load();
 	});
 
 	$scope.get_rank_name = function(_id)
@@ -204,5 +205,25 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	{
 		return model.permissions[permission]&num;
 	}
+
+
+	//badges
+	let badgeList  = apiService.new({ id: "badge-list" 	, model: "group", url: "group/"+$routeParams.id+"/badges_required", method: "list", param: "sort=name"});
+	let badgeNew = apiService.new({ id: "badge-new" 	, model: "group", url: "group/"+$routeParams.id+"/badges_required", method: "post" });
+	let badge = modelService.new({ id: "badge"			, model: "group", url: "group/"+$routeParams.id+"/badges_required" });
+	let badgeSearch = apiService.new({ id: "badge-search", model:"badge" , method: "list", param: "fullname=rx_" });
+	
+	$scope.badge_new = {};
+	badgeSearch.on("selected",function(u)
+	{
+		$scope.badge_new.badge = u._id;
+		badgeNew.load($scope.badge_new);
+	});	
+	badgeNew.on("success",function()
+	{
+		badgeList.load();
+	});
+
+
 
 });
