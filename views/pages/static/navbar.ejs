@@ -1,10 +1,10 @@
 <div class="uk-animation-slide-top" style="padding: 0px; margin: 0px"  uk-sticky="offset: 0">
-    <nav style="z-index: 200; height: 50px"  class=" uk-navbar-container uk-margin uk-light" id="ex-navbar-primary" uk-navbar>
-        <div class="uk-navbar-left" style="margin-left: 5vw;">
+    <nav style="z-index: 200; height: 50px; margin-top: 0px"  class=" uk-navbar-container uk-margin uk-light" id="ex-navbar-primary" uk-navbar>
+        <div class="uk-navbar-left" >
             <ul class="uk-navbar-nav">
-                <li><a style="color: white" href="#!/dashboard">  &nbsp;  Home</a></li>
-                <li><a style="color: white" ng-click='profile()' href="javascript:void(0)"">    &nbsp;  Profile</a></li>
-                <li><a style="color: white" href="javascript:void(0)" ng-click="invite()">    &nbsp;  Invite</a></li>
+                <li><a style="min-height: 20px" href="#!/dashboard">  &nbsp;  Home</a></li>
+                <li><a style="min-height: 20px" ng-click='profile()' href="javascript:void(0)"">    &nbsp;  Profile</a></li>
+                <li><a style="min-height: 20px" href="javascript:void(0)" ng-click="invite()">    &nbsp;  Invite</a></li>
             </ul>
         </div>
 
@@ -12,10 +12,10 @@
             <a class="uk-navbar-item uk-logo" href="javascript:void(0)" style="color: white">  <i class="fab fa-fort-awesome" style="font-size: 20pt"></i> &nbsp; Guild  </a> 
         </div>
 
-        <div class="uk-navbar-right" style="margin-right: 5vw;">
+        <div class="uk-navbar-right" style="margin-right: 5vw; min-height: 20px">
             <ul class="uk-navbar-nav">
                 <li>
-                    <div style="padding-top: 20px">
+                    <div style="padding-top: 3px; min-height: 15px">
                         <form class="uk-search uk-search-default">
                             <input style="height:30px; margin-top:5px" ng-model='search.query' ng-change="searchtry()" class="uk-search-input uk-input" id="ex-input" type="search" placeholder="Search...">
                         </form>
@@ -40,7 +40,7 @@
                 </li>
                 
                 <li>
-                    <a href="javascript:void(0)"><span uk-navbar-toggle-icon></span> </a>
+                    <a style="min-height: 20px;padding-top:15px" href="javascript:void(0)"><span uk-navbar-toggle-icon></span> </a>
                     <div class="uk-navbar-dropdown">
                         <ul class="uk-nav uk-navbar-dropdown-nav">
                             <li><a ng-click='settings()' href="javascript:void(0)">Settings</a></li>

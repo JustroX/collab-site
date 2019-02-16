@@ -60,6 +60,12 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		postList.load();
 	});
 
+	subpage.onload("about",function()
+	{
+		memberList.load();
+	});
+
+
 
 	//GROUP
 
@@ -207,11 +213,12 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	}
 
 
-	//badges
+	// badges
 	let badgeList  = apiService.new({ id: "badge-list" 	, model: "group", url: "group/"+$routeParams.id+"/badges_required", method: "list", param: "sort=name"});
 	let badgeNew = apiService.new({ id: "badge-new" 	, model: "group", url: "group/"+$routeParams.id+"/badges_required", method: "post" });
 	let badge = modelService.new({ id: "badge"			, model: "group", url: "group/"+$routeParams.id+"/badges_required" });
 	let badgeSearch = apiService.new({ id: "badge-search", model:"badge" , method: "list", param: "fullname=rx_" });
+	let badgeDelete = apiService.new({ id: "badge-delete", model: "group", method: "delete", url: "group/"+$routeParams.id+"/badges_required" });
 	
 	$scope.badge_new = {};
 	badgeSearch.on("selected",function(u)
@@ -219,6 +226,16 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		$scope.badge_new.badge = u._id;
 		badgeNew.load($scope.badge_new);
 	});	
+	badgeList.on("selected",function(u)
+	{
+		badgeDelete.config.url  = "group/"+$routeParams.id+"/badges_required/"+u._id;
+		badgeDelete.load();
+	});
+	badgeDelete.on("success",function()
+	{
+		UIkit.notification("Badge removed","success");
+		badgeList.load();
+	});
 	badgeNew.on("success",function()
 	{
 		badgeList.load();

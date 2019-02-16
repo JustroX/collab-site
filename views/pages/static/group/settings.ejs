@@ -142,7 +142,7 @@
 									    <tbody>
 									        <tr ng-repeat='i in $ctrl.model track by $index'>
 									            <td>{{ $index+1 }}</td>
-									            <td><a href="" class="uk-icon-button" uk-icon="trash"></a></td>
+									            <td><a href="javascript:void(0)" ng-click='$ctrl.view(i)' class="uk-icon-button" uk-icon="trash"></a></td>
 									            <td>{{i.badge.name}}</td>
 									            <td>{{i.badge.description}}</td>
 									        </tr>

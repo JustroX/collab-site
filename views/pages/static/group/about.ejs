@@ -1,0 +1,29 @@
+<div class="ex-boundary">
+	<div class="uk-cover-container uk-height-medium">
+	    <img src="assets/guild-cover-default.jpg" alt="" uk-cover>
+	</div>
+	<div class="uk-padding-small uk-margin-small-top">
+		<article class="uk-article uk-text-center">
+		    <h4 class="uk-article-title"><a class="uk-link-reset" href="javascript:void(0)">{{group.value.model.name}}</a></h4>
+		    <blockquote>{{group.value.model.description}}</blockquote>
+		    <hr>
+		    <div class="uk-child-width-1-2" uk-grid>
+		    	<div>
+			    	Members
+
+					<handler bind="group-member">
+						<div style="color: red;" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
+						<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+							<div uk-spinner></div>
+						</div>
+						<div class="uk-padding uk-padding-remove-bottom uk-padding-remove-top">			
+					    	<ol>
+					    		<li ng-repeat='i in $ctrl.model'>{{i.user.fullname}} <i class="uk-text-meta uk-text-capitalize">{{ get_rank_name(i.rank) }}</i></li>
+					    	</ol>	
+						</div>
+					</handler>
+		    	</div>
+		    </div>
+		</article>
+	</div>
+</div>
