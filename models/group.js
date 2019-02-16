@@ -62,7 +62,7 @@ module.exports =
 		name: 7,
 		description: 7,
 
-		"users.user": 1,
+		"users": 1,
 		badges_required: 13,
 		ranks: 13,
 	},

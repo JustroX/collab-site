@@ -5,12 +5,26 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	$scope.subpage  = subpage;
 	$scope.moment = moment;
 
+
 	$scope.$on('ready',function()
 	{
 		$scope.group.load($routeParams.id);
 	});
 	$scope.group  = modelService.new({id:"group-model",model:"group"});
 	$scope.group_id = $routeParams.id;
+
+	$scope.admin_permission = function(field,num)
+	{
+		for(let i in $scope.group.value.model.users)
+		{
+			let obj  =$scope.group.value.model.users[i];
+			if(obj.user == $scope.SESSION_USER._id)
+			{
+				let a = $scope.get_rank_permission(obj.rank)[field] & num;	
+				return a;
+			}
+		}	
+	}
 	let page_info_loaded = false;
 	$scope.group.on("loaded",function()
 	{
@@ -65,6 +79,11 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		memberList.load();
 	});
 
+	subpage.onload("module",function()
+	{
+		moduleList.load();
+	});
+
 
 
 	//GROUP
@@ -90,6 +109,15 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		{
 			if(group.ranks[i]._id == _id)
 				return group.ranks[i].name;
+		}
+	}
+	$scope.get_rank_permission = function(_id)
+	{
+		let group = $scope.group.value.model;
+		for(let i in group.ranks)
+		{
+			if(group.ranks[i]._id == _id)
+				return group.ranks[i].permissions;
 		}
 	}
 
@@ -241,6 +269,22 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		badgeList.load();
 	});
 
+	//modules
+	let moduleList  = apiService.new({ id: "module-list" , model: "module", method: "list", param: "sort=name&group="+$routeParams.id});
+	let moduleNew = apiService.new({ id: "module-new"    , model: "module", method: "post"})
 
+	moduleNew.on("success",function(res)
+	{
+		UIkit.modal("#modal-new-module").hide();
+		UIkit.notification("Module created","success");
+		moduleList.load();
+	});
+	moduleList.on("selected",function(u,type)
+	{
+		if(type=="view")
+			$location.path("module/"+u._id+"/view");
+		if(type=="edit")
+			$location.path("module/"+u._id+"/edit");
+	});
 
 });

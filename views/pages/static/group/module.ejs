@@ -1,0 +1,60 @@
+
+<div class="uk-child-width-1-2" uk-grid>
+	<div>
+		<h7>Group Modules</h7>
+	</div>
+	<div ng-show='admin_permission("module",2)' class="uk-text-right" style="padding-right: 30px">
+		<a href="javascript:void(0)" uk-toggle="target: #modal-new-module">
+			<i class="fas fa-plus-circle ex-post-feedback"></i>
+		</a>
+	</div>
+</div>
+<br>
+<handler bind="module-list">
+	<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+		<div uk-spinner></div>
+	</div>
+	<div uk-scrollspy="target: > div; cls:uk-animation-slide-bottom-small; delay: 400">
+		<div ng-hide='$ctrl.api.config.state.loading' ng-repeat='i in $ctrl.model' style="margin-top: 5px" class="ex-boundary">
+			<div class="uk-child-width-1-2" uk-grid>
+				<div class="uk-width-expand">
+					<div style="padding-top: 5px;padding-left: 10px">
+						<h4 style="margin-bottom: 0px;">{{ i.name }}</h4>
+						<p style="margin-top: 0px" class="uk-text-truncate">{{i.description}}</p>
+					</div>
+				</div>
+				<div class="uk-width-auto">
+					<br><br><br>
+					<button ng-click='$ctrl.view(i,"view")' class="uk-button uk-button-secondary ex-button uk-button-small">Go</button>
+					<button ng-show='admin_permission("module",4)'  ng-click='$ctrl.view(i,"edit")' class="uk-button uk-button-secondary ex-button uk-button-small">Edit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-show='!$ctrl.model.length'>
+		<div class="uk-text-center">
+			No modules present
+		</div>
+	</div>
+</handler>
+
+<div id="modal-new-module" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <handler bind='module-new'>
+	        <h2 class="uk-modal-title">Create new module</h2>
+	        	<div ng-hide='$ctrl.api.config.state.loading'>
+	        		<small>Module Name</small>
+	        		<input ng-model='$ctrl.model.name' class="uk-input" placeholder="Module name">
+	        		<small>Describe your module</small>
+	        		<textarea ng-model='$ctrl.model.description' class="uk-textarea" placeholder="Description"></textarea>
+	        	</div>
+	        <p class="uk-text-right">
+	            <div ng-show='$ctrl.api.config.state.loading' ><div uk-spinner></div></div>
+	            <div ng-hide='$ctrl.api.config.state.loading'>
+		            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+		            <button  ng-click='$ctrl.submit()' class="uk-button uk-button-primary" type="button">Save</button>
+	            </div>
+	        </p>
+        </handler>
+    </div>
+</div>

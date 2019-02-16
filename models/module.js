@@ -66,7 +66,8 @@ module.exports =
 	},
 	permissions:
 	{
-
+		name: 7,
+		description: 7,
 	},
 	required:
 	{
