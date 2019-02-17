@@ -212,7 +212,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	{
 		rankList.load();
 	});
-	rank.on("delete",function()
+	rank.on("deleted",function()
 	{
 		rankList.load();
 		UIkit.notification("Group deleted", "success");

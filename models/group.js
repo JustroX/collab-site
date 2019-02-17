@@ -96,7 +96,6 @@ module.exports =
 		},
 		is_authorized: function(req,res,field,num)
 		{
-			console.log(this.get_permission(req.session.passport.user));
 			if(this.get_permission(req.session.passport.user,field)&num)
 				return true;
 			else

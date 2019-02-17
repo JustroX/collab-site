@@ -3,6 +3,13 @@ var Group = require('../../models/model_divider.js').model("Group");
 var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
+function permit(endpoint,num) 
+{
+	return function(req,res,model)
+	{
+		return model.is_authorized(req,res,endpoint,num);
+	}
+}
 
 router.post('/', api.logged, api.post(Group ,function(req,res,model)
 {
@@ -22,30 +29,23 @@ router.post('/', api.logged, api.post(Group ,function(req,res,model)
 	model.users.push({ user: req.session.passport.user, rank: model.ranks[0]._id});
 	return model;
 }));
-router.get('/', api.list(Group) );
-router.get('/:id', api.get(Group));
-router.put('/:id', api.put(Group));
-router.delete('/:id', api.delete(Group));
+router.get('/', api.logged, api.list(Group) );
+router.get('/:id', api.logged, api.get(Group));
+router.put('/:id', api.logged,  api.put(Group,null,permit("group",2)));
+router.delete('/:id', api.logged, api.delete(Group,null,permit("group",4)));
 
 
 //ranks
-router.get('/:id/ranks/', api.list_endpoint(Group , "ranks"));
-router.post('/:id/ranks/', api.post_endpoint(Group , "ranks"));
-router.get('/:id/ranks/:field_id', api.get_endpoint(Group , "ranks"));
-router.put('/:id/ranks/:field_id', api.put_endpoint(Group , "ranks"));
-router.delete('/:id/ranks/:field_id', api.delete_endpoint(Group , "ranks"));
+router.get('/:id/ranks/', 			 api.logged, api.list_endpoint  (Group , "ranks"));
+router.get('/:id/ranks/:field_id', 	 api.logged, api.get_endpoint   (Group , "ranks"));
+router.post('/:id/ranks/', 			 api.logged, api.post_endpoint  (Group , "ranks" , null, null, permit("group",2) ));
+router.put('/:id/ranks/:field_id', 	 api.logged, api.put_endpoint   (Group , "ranks" , null, null, permit("group",2) ));
+router.delete('/:id/ranks/:field_id',api.logged, api.delete_endpoint(Group , "ranks" , null, null, permit("group",2) ));
 
 //users
 router.get('/:id/users/', api.list_endpoint(Group , "users"));
-router.post('/:id/users/', api.post_endpoint(Group , "users" ,
-function(req,res,model)
+router.post('/:id/users/', api.logged, api.post_endpoint(Group , "users" ,function(req,res,model)
 {
-	if(!model.is_authorized(req,res,"users",2)) return;
-	return model;
-},
-function(req,res,model)
-{
-
 	let count = 0;
 	for(let i in model.toObject().users)
 	{
@@ -69,26 +69,45 @@ function(req,res,model)
 		}
 	}
 	return model;
-} ));
+}, null, permit("users",1)));
+
+
 
 router.get('/:id/users/:field_id', api.get_endpoint(Group , "users"));
-router.put('/:id/users/:field_id', api.put_endpoint(Group , "users"));
-router.delete('/:id/users/:field_id', api.delete_endpoint(Group , "users"));
+router.put('/:id/users/:field_id', api.logged, api.put_endpoint(Group , "users",		null, null, permit("users",2) ));
+router.delete('/:id/users/:field_id', api.logged, api.delete_endpoint(Group , "users",	null, null, permit("users",4) ));
 
 //users_pending
 router.get('/:id/users_pending/', api.list_endpoint(Group , "users_pending"));
-router.post('/:id/users_pending/', api.post_endpoint(Group , "users_pending"));
+router.post('/:id/users_pending/', api.logged, api.post_endpoint(Group , "users_pending"));
 router.get('/:id/users_pending/:field_id', api.get_endpoint(Group , "users_pending"));
-router.put('/:id/users_pending/:field_id', api.put_endpoint(Group , "users_pending"));
-router.delete('/:id/users_pending/:field_id', api.delete_endpoint(Group , "users_pending"));
+
+
+router.put('/:id/users_pending/:field_id', api.logged,    api.put_endpoint   (Group , "users_pending", null, null, permit("users_pending", 2)));
+router.delete('/:id/users_pending/:field_id', api.logged, api.delete_endpoint(Group , "users_pending", null, null, permit("users_pending", 4)));
 
 
 //badges_required
-router.get('/:id/badges_required/', api.list_endpoint(Group , "badges_required"));
-router.post('/:id/badges_required/', api.post_endpoint(Group , "badges_required"));
-router.get('/:id/badges_required/:field_id', api.get_endpoint(Group , "badges_required"));
-router.put('/:id/badges_required/:field_id', api.put_endpoint(Group , "badges_required"));
-router.delete('/:id/badges_required/:field_id', api.delete_endpoint(Group , "badges_required"));
+router.get('/:id/badges_required/', 						api.list_endpoint(Group , "badges_required"));
+router.post('/:id/badges_required/', api.logged,			api.post_endpoint(Group , "badges_required", function(req,res,model)
+{
+	let count = 0;
+	for(let i in model.toObject().badges_required)
+	{
+		let obj = model.badges_required[i];
+		if(obj.badge._id.equals(req.body.badge))
+			count++;
+	}
+	if(count >1)
+	{	
+		res.send({ err: "Badge is already selected.", code : 403});
+		return false;
+	}
+	return model;
+}, null, permit("group",2) ));
+router.get('/:id/badges_required/:field_id', 				api.get_endpoint(Group , "badges_required"));
+router.put('/:id/badges_required/:field_id', api.logged, 	api.put_endpoint(Group , "badges_required", null, null, permit("group",2)));
+router.delete('/:id/badges_required/:field_id', api.logged, api.delete_endpoint(Group , "badges_required", null, null, permit("group",2)));
 
 
 

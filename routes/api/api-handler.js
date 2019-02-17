@@ -106,7 +106,7 @@ exports.post = function(Model,custom,cb)
 	}
 }
 
-exports.put = function(Model,custom,cb)
+exports.put = function(Model,custom,pre,cb)
 {
 	let PERMISSIONS = Model.config.PERMISSIONS;
 	return function(req,res,next)
@@ -120,6 +120,8 @@ exports.put = function(Model,custom,cb)
 			{
 				if(err) return res.send({ code: 500, err: 'Database Error' });	
 				if(!model) return res.send({ code: 500 , err: 'Doc not found.' });
+				if(pre && !pre(req,res,model)) 
+					return;
 				model.set(query);
 				if(custom)
 					model = custom(req,res,model);
@@ -137,7 +139,7 @@ exports.put = function(Model,custom,cb)
 
 }
 
-exports.delete = function(Model,cb)
+exports.delete = function(Model,cb,pre)
 {
 	let PERMISSIONS = Model.config.PERMISSIONS;
 	return function(req,res,next)
@@ -145,15 +147,20 @@ exports.delete = function(Model,cb)
 		get_permission(Model,req,res,8,PERMISSIONS,function(PERMISSIONS)
 		{
 			let target_id = req.params.id;
-			Model.deleteOne({ _id: target_id },function(err)
+			Model.findById(target_id,function(err,mod)
 			{
-				if(err) return res.send({ err : "Unknown Error" });
-				else
+				if(err) return res.send({ err: "Database Error", code: 500});
+				if(!pre || pre(req,res,mod))
+				Model.deleteOne({ _id: target_id },function(err)
 				{
-					if(cb) cb(req,res);
-					else return res.send({ message: "Delete successful" })
-				}
-			})
+					if(err) return res.send({ err : "Unknown Error" });
+					else
+					{
+						if(cb) cb(req,res);
+						else return res.send({ message: "Delete successful" })
+					}
+				});
+			});
 		});
 
 	}
@@ -357,7 +364,7 @@ exports.get_endpoint = function(Model,endpoint,cb)
 	}
 }
 
-exports.post_endpoint = function(Model,endpoint,pre,custom,cb)
+exports.post_endpoint = function(Model,endpoint,custom,cb,pre)
 {
 	let PERMISSIONS = Model.config.endpoints[endpoint];
 	return function(req,res,next)
@@ -371,8 +378,8 @@ exports.post_endpoint = function(Model,endpoint,pre,custom,cb)
 				if(err) return res.send({ code: 500, err: "Database Error."});
 				if(!model) return res.send({ code: 500, err: "Model not found" });
 
-				if(pre)
-					model = pre(req,res,model);
+				if(pre && !pre(req,res,model))
+					return;
 				if(!model) return;
 
 				let temp_query = {};
@@ -397,7 +404,7 @@ exports.post_endpoint = function(Model,endpoint,pre,custom,cb)
 }
 
 
-exports.put_endpoint = function(Model,endpoint,custom,cb)
+exports.put_endpoint = function(Model,endpoint,custom,cb,pre)
 {
 	let PERMISSIONS = Model.config.endpoints[endpoint];
 	return function(req,res,next)
@@ -413,6 +420,9 @@ exports.put_endpoint = function(Model,endpoint,custom,cb)
 				if(err) return res.send({ code: 500, err: "Database Error."});
 				if(!model) return res.send({ code: 500, err: "Model not found" });
 
+
+				if(pre && !pre(req,res,model))
+					return;
 				let modObj = model.toObject()[endpoint]
 				for(let i in modObj)
 				{
@@ -447,7 +457,7 @@ exports.put_endpoint = function(Model,endpoint,custom,cb)
 	}
 }
 
-exports.delete_endpoint = function(Model,endpoint,custom,cb)
+exports.delete_endpoint = function(Model,endpoint,custom,cb,pre)
 {	
 	let PERMISSIONS = Model.config.endpoints[endpoint];
 	return function(req,res,next)
@@ -459,6 +469,9 @@ exports.delete_endpoint = function(Model,endpoint,custom,cb)
 				if(err) return res.send({ code: 500, err: "Database Error."});
 				if(!model) return res.send({ code: 500, err: "Model not found" });
 
+				if(pre && !pre(req,res,model))
+					return;
+				
 				let modObj = model.toObject()[endpoint]
 				for(let i in modObj)
 				{
