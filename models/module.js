@@ -68,6 +68,7 @@ module.exports =
 	{
 		name: 7,
 		description: 7,
+		group: 3,
 	},
 	required:
 	{

@@ -270,7 +270,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	});
 
 	//modules
-	let moduleList  = apiService.new({ id: "module-list" , model: "module", method: "list", param: "sort=name&group="+$routeParams.id});
+	let moduleList  = apiService.new({ id: "module-list" , model: "module", method: "list", param: "group="+$routeParams.id});
 	let moduleNew = apiService.new({ id: "module-new"    , model: "module", method: "post"})
 
 	moduleNew.on("success",function(res)
@@ -282,9 +282,10 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	moduleList.on("selected",function(u,type)
 	{
 		if(type=="view")
-			$location.path("module/"+u._id+"/view");
+			$location.path("/module/"+u._id+"/view");
 		if(type=="edit")
-			$location.path("module/"+u._id+"/edit");
+			$location.path("/module/"+u._id+"/edit");
 	});
 
+	$scope.module_new_model = {group: $scope.group_id};
 });

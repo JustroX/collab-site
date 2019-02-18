@@ -22,6 +22,9 @@ app.config(function($routeProvider) {
     .when("/group/:id/:subpage", {
         templateUrl : "/page/group",
     })
+    .when("/module/:id/edit/", {
+        templateUrl : "/page/moduleEdit",
+    })
     .when("/404", {
         templateUrl : "/page/404",
     })
