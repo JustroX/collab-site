@@ -239,10 +239,11 @@ function get_permission_endpoint(Model,endpoint,req,res,perm,cb)
 					num = Model.config.PERMISSIONS_ENDPOINT[endpoint];
 			}
 			else
-			if(data._id.equals(user))
-				num = Model.selfPermission();
-			
-
+			{
+				console.log(Model.config)
+				num = Model.config.PERMISSIONS_ENDPOINT[endpoint];
+			}
+			console.log(num,perm);
 			if(num&perm)
 				cb();
 			else

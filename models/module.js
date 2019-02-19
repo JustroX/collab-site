@@ -51,6 +51,12 @@ module.exports =
 			badge: 3,
 		},
 	},
+	endpoint_permissions:
+	{
+		articles: 7,
+		challenges: 7,
+		badges: 7
+	},
 	config:
 	{
 		toObject : { virtuals: true },

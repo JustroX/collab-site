@@ -7,7 +7,7 @@
 				<h5>CONFIGURATION</h5>
 			    <ul class="uk-nav uk-nav-default">
 			        <li><a href="javascript:void(0)" uk-toggle='target: #modal-module-title' ><span uk-icon="icon: bookmark"></span> Module Title</a></li>
-			        <li><a href="javascript:void(0)" ><span uk-icon="icon: bookmark"></span> Badge Rewards</a></li>
+			        <li><a href="javascript:void(0)" uk-toggle='target: #modal-module-badge' ><span uk-icon="icon: bookmark"></span> Badge Rewards</a></li>
 			        <li>
 			        	<a href="javascript:void(0)" ng-click='delete_module()' class="uk-link-muted"><span uk-icon="icon: bookmark"></span> Delete Module</a>
 						<div>
@@ -300,12 +300,29 @@
 		        <h2 class="uk-modal-title">Choose Badge Rewards</h2>
 		        <div class="uk-child-width-1-3" uk-grid>
 		        	<div>
-		        		<input type="text" class="uk-input" placeholder="Search Badge...">
-		        		<div style="height: 40vh; overflow-y: scroll;">
-							<ul class="uk-list uk-list-striped">
-							    <li  ng-repeat='i in [1,2,3,4,5,6,7,8,9]'><a class="uk-link-muted" href="">List item {{i}}</a></li>
-							</ul>
-		        		</div>
+		        		<search field='name' bind='module-badge-search'>
+			        		<div>
+				        		<input  ng-model='$ctrl.query' ng-change='$ctrl.change()' type="text" class="uk-input" placeholder="Search Badge...">
+			        		</div>
+			        		<div ng-show='$ctrl.query' class="uk-padding-remove" uk-dropdown='mode: click'>
+				        		<div style="max-height: 40vh; overflow-y: scroll;">
+									<ul class="uk-list uk-list-striped">
+										<li style="margin-top: 5px" ng-show='($ctrl.api.config.state.loading || $ctrl.timer>0) && $ctrl.query'><div uk-spinner></div></li>
+									    <li ng-show='$ctrl.query && !$ctrl.api.config.state.loading'>
+											<p ng-hide='$ctrl.model.length' class="uk-text-muted"><small>No search results.</small></p>
+										</li>
+									    <li  ng-repeat='i in $ctrl.model'><a class="uk-link-muted" ng-click='$ctrl.view(i)' href="javascript:void(0)">{{i.name}}</a></li>
+									</ul>
+				        		</div>
+			        		</div>
+		        		</search>
+		        		<handler bind='module-badge-list'>
+			        		<div style="height: 40vh; overflow-y: scroll;">
+								<ul class="uk-list uk-list-striped">
+								    <li  ng-repeat='i in $ctrl.model'><a class="uk-link-muted" href="">{{i}}</a></li>
+								</ul>
+			        		</div>
+		        		</handler>
 		        		<button class="uk-button uk-button-small uk-button-default" ng-click='badge_forge()'><small>FORGE NEW BADGE</small></button>
 		        	</div>
 			    	<div class="uk-width-expand">
