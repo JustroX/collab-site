@@ -7,7 +7,7 @@
 				<h5>CONFIGURATION</h5>
 			    <ul class="uk-nav uk-nav-default">
 			        <li><a href="javascript:void(0)" uk-toggle='target: #modal-module-title' ><span uk-icon="icon: bookmark"></span> Module Title</a></li>
-			        <li><a href="javascript:void(0)" uk-toggle='target: #modal-module-badge' ><span uk-icon="icon: bookmark"></span> Badge Rewards</a></li>
+			        <li><a href="javascript:void(0)" uk-toggle='target: #modal-module-badge' ng-click='open_modal_badge()' ><span uk-icon="icon: bookmark"></span> Badge Rewards</a></li>
 			        <li>
 			        	<a href="javascript:void(0)" ng-click='delete_module()' class="uk-link-muted"><span uk-icon="icon: bookmark"></span> Delete Module</a>
 						<div>
@@ -319,20 +319,35 @@
 		        		<handler bind='module-badge-list'>
 			        		<div style="height: 40vh; overflow-y: scroll;">
 								<ul class="uk-list uk-list-striped">
-								    <li  ng-repeat='i in $ctrl.model'><a class="uk-link-muted" href="">{{i}}</a></li>
+								    <li  ng-repeat='i in $ctrl.model'><a class="uk-link-muted" href="javascript:void(0)" ng-click='$ctrl.view(i)'>{{i.badge.name}}</a></li>
 								</ul>
 			        		</div>
 		        		</handler>
-		        		<button class="uk-button uk-button-small uk-button-default" ng-click='badge_forge()'><small>FORGE NEW BADGE</small></button>
+		        		<!-- <button class="uk-button uk-button-small uk-button-default" ng-click='badge_forge()'><small>FORGE NEW BADGE</small></button> -->
 		        	</div>
 			    	<div class="uk-width-expand">
-			    		<img class="uk-align-center" src="/assets/badge-sample.png" width="140px"  height="140px">
-		    			<div style="text-align: center;">
-			    			<h4 style="margin: 0px">SQUIRE BADGE</h4>
-			    			<i>of Hello World guild</i>
-			    			<br><br>
-			    			<button class="uk-button uk-button-small uk-button-primary">SELECT</button>
-		    			</div>
+			    		<entity bind='module-badge-model'>
+				    		<div ng-hide='$ctrl.value.model.name'>
+				    			Nothing selected
+				    		</div>
+				    		<div>
+				    			<handler bind='{{$ctrl.get.config.id}}' model='$ctrl.value.model'>
+									<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center"><div uk-spinner></div></div>
+									<div ng-show='$ctrl.api.config.feedback.error'>ERROR: {{$ctrl.api.config.feedback.error}}</div>
+									<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.model.name'>
+							    		<img class="uk-align-center" src="/assets/badge-sample.png" width="140px"  height="140px">
+						    			<div style="text-align: center;">
+							    			<h4 style="margin: 0px">{{$ctrl.model.name}}</h4>
+							    			<i>{{$ctrl.model.description}}</i>
+							    			<br><br>
+							    			<button ng-hide='is_badge_selected()' ng-click='select_badge()' class="uk-button uk-button-small uk-button-primary">SELECT</button>
+							    			<button ng-show='is_badge_selected()' ng-click='delete_badge()' class="uk-button uk-button-small uk-button-secondary">REMOVE</button>
+						    			</div>
+									</div>
+
+				    			</handler>
+				    		</div>
+			    		</entity>
 			    	</div>
 		        </div>
 

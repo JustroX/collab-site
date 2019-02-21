@@ -16,6 +16,7 @@ module.exports =
 	},
 	permissions:
 	{
+		_id: 1,
 		name: 7,
 		description: 7,
 		asset: 5,

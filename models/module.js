@@ -53,9 +53,9 @@ module.exports =
 	},
 	endpoint_permissions:
 	{
-		articles: 7,
-		challenges: 7,
-		badges: 7
+		articles: 15,
+		challenges: 15,
+		badges: 15
 	},
 	config:
 	{
