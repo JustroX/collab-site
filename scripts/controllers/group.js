@@ -281,6 +281,8 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	});
 	moduleList.on("selected",function(u,type)
 	{
+		apiService.reset_events();
+		modelService.reset_events();
 		if(type=="view")
 			$location.path("/module/"+u._id+"/view");
 		if(type=="edit")

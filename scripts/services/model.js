@@ -30,6 +30,12 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 		}
 		return JSON.parse(JSON.stringify(obj));
 	}
+
+	this.reset_events = function()
+	{
+	    for(let i in this.apis)
+	      this.models[i].reset_events();
+	}
 	this.find = function(id)
 	{
 		let match  = [];
@@ -185,12 +191,20 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 		delete()
 		{
 			let a;
-			this.api.delete.load().on("succes",function(res)
+			this.api.delete.load().on("success",function(res)
 			{
 				model.emit("deleted",res);
 				a && a();
 			});
 			return { then: function(cb){ a = cb; } };
+		}
+
+		reset_event()
+		{
+			let p = ["get","put","delete"];
+			for(let i of p)
+				this.api[i].reset_events();
+			this.config.event = {};
 		}
 
 

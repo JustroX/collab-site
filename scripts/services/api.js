@@ -3,6 +3,12 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
   let apiService  = this;
   this.apis = [];
 
+  this.reset_events = function()
+  {
+    for(let i in this.apis)
+      this.apis[i].reset_events();
+  }
+
   this.find = function(id)
   {
     let match  = [];
@@ -156,6 +162,11 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
     {
       return true;
     }
+    reset_events()
+    {
+      this.config.event = {};
+    }
+
     on(event,f_)
     {
       if(!this.config.event[event])

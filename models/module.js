@@ -82,7 +82,7 @@ module.exports =
 	},
 	default:
 	{
-		permission : 7,
+		permission : 15,
 	},
 	methods:
 	{

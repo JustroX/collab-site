@@ -21,6 +21,18 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		UIkit.notification("Module description updated","success");
 	});
 
+	$scope.module.on("deleted",function()
+	{
+		UIkit.modal("#modal-module-delete").hide();
+		UIkit.notification("Module deleted","success");
+		$timeout(function()
+		{
+			apiService.reset_events();
+			modelService.reset_events();
+			$location.path("/group/"+$scope.module.value.model.group+"/module");
+		},1000);
+	});
+
 	$scope.open_modal_badge = function()
 	{
 		badgeList.load();
