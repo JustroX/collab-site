@@ -18,7 +18,7 @@ module.exports =
 		title: 7,
 		content: 5,
 		module: 3,
-		authors: 15,
+		authors: 13,
 	},
 	config:
 	{

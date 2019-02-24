@@ -12,6 +12,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	{
 		$scope.module.load($routeParams.id);
 		badgeList.load();
+		load_pages();
 	});
 	$scope.module.load($routeParams.id);
 
@@ -90,4 +91,47 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		badgeList.load();
 	});
 
+
+	$scope.pages = [];
+	$scope.pages_loading =false;
+	//page
+	let articleList = apiService.new({ id: "module-article-list" , url: "module/"+$routeParams.id+"/articles", model: "module", method: "list" });
+	let challengeList = apiService.new({ id: "module-challenge-list" , url: "module/"+$routeParams.id+"/challenges", model: "module", method: "list" });
+
+	articleList.on("success",function(res)
+	{
+		$scope.pages_loading = false;
+		for(let i in res)
+			res[i].type = "article";
+		
+		$scope.pages.push(...res);
+	});
+	challengeList.on("success",function(res)
+	{
+		$scope.pages_loading = false;
+		for(let i in res)
+			res[i].type = "challenge";
+		
+		$scope.pages.push(...res);
+	});
+
+	function load_pages()
+	{
+		$scope.pages = [];
+		$scope.pages_loading = true;
+		articleList.load();
+		challengeList.load();
+	}
+
+	$scope.show_page = function(u)
+	{
+
+	}
+
+	//articles
+	let articleNew    = apiService.new({ id: "article-new" 	, model: "article", method: "post" });
+	articleNew.on("success",function()
+	{
+		load_pages();
+	});
 });

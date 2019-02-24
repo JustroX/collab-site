@@ -78,6 +78,37 @@ exports.get = function(Model,cb)
 	}
 }
 
+exports.postAsync = function(Model,custom,cb)
+{
+	let PERMISSIONS = Model.config.PERMISSIONS;
+	return function(req,res,next)
+	{
+		get_permission(Model,req,res,2,PERMISSIONS,function(PERMISSIONS)
+		{
+			if(! lib.validate_fields(req,res,PERMISSIONS)) return;
+			let model = new Model();
+			let temp_query = {};
+			for(let i in PERMISSIONS)
+				if(PERMISSIONS[i]&2)
+					temp_query[i] = req.body[i];
+
+			model.set(temp_query);
+			if(custom)
+				custom(req,res,model,done);
+			else
+				done();
+			function done()
+			{
+				model.save(function(err,model)
+				{
+					if(err) return res.send({ code: 500, err: 'Database Error' });
+					let output = lib.hide_fields(model,PERMISSIONS);
+					if(cb) cb(req,res,output); else res.send(output);
+				});
+			}
+		});
+	}
+}
 
 exports.post = function(Model,custom,cb)
 {
@@ -96,6 +127,8 @@ exports.post = function(Model,custom,cb)
 			model.set(temp_query);
 			if(custom)
 				model = custom(req,res,model,temp_query);
+
+			if(model)
 			model.save(function(err,model)
 			{
 				if(err) return res.send({ code: 500, err: 'Database Error' });

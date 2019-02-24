@@ -34,11 +34,19 @@ module.exports =
 	{
 		articles:
 		{
+			populate:
+			{
+				content: "title",
+			},
 			page: 7,
 			content: 3,
 		},
 		challenges:
 		{
+			populate:
+			{
+				content: "",
+			},
 			page: 5,
 			content: 3,
 		},
