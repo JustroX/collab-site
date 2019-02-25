@@ -38,8 +38,8 @@
 								        <a class="uk-accordion-title" href="#"><small>{{i.content.title}}</small></a>
 								        <div class="uk-accordion-content">
 								            <p>
-								            	<a href="javascript:void(0)" ng-click='edit[i.mode](i[i.mode])'  class="uk-icon-button uk-margin-small-right" uk-icon="file-edit"></a>
-								            	<a href="javascript:void(0)" ng-click='delete[i.mode](i[i.mode],$index)' class="uk-icon-button uk-margin-small-right" uk-icon="trash"></a>
+								            	<a href="javascript:void(0)" ng-click='page_edit(i)'  class="uk-icon-button uk-margin-small-right" uk-icon="file-edit"></a>
+								            	<a href="javascript:void(0)" ng-click='page_delete(i)' class="uk-icon-button uk-margin-small-right" uk-icon="trash"></a>
 								            	<!-- <div>
 													<div id="modal-article-delete-{{$index}}" uk-modal>
 													    <div class="uk-modal-dialog uk-modal-body">
@@ -102,36 +102,41 @@
 					<div>
 			           	<small><a class="uk-link-muted" href="#!/group/{{module.value.model.group}}/module"> <span uk-icon="chevron-left"></span> EXIT EDITOR </a></small>
 					</div>
-					<div>
+					<div ng-show='page_editor.type=="article"'>
+						<entity bind='article' >
+							<handler bind='{{$ctrl.put.config.id}}' model='$ctrl.value.model'>
+								<div>
+									<ul class="uk-tab-bottom" uk-tab>
+									    <li class="uk-active"><a href="javascript:void(0)">Article </a></li>
+									    <li style="text-align: center;"><div class="uk-text-muted" ng-hide='$ctrl.api.config.state.loading' ng-click='$ctrl.submit()' style="padding: 5px; cursor: pointer;">SAVE CHANGES  </div><div class="uk-text-center" ng-show='$ctrl.api.config.state.loading'><div uk-spinner="ratio: 0.7"></div></div> </li>
+									</ul>
+								</div>
+							
+								<div>
+									<article ng-hide='page_editor.loading' class="uk-article"> 
+										<div ng-hide='page_editor.edit_heading'>
+										    <h1 class="uk-article-title"><a class="uk-link-reset" href="javascript:void(0)">{{$ctrl.model.title}}</a> <a ng-click='page_editor.edit_heading=true' href="javascript:void(0)"><span uk-icon="icon: pencil; ratio: 1.5"></span></a></h1>
+										</div>
+									    <div ng-show='page_editor.edit_heading'>
+									    	<input ng-blur='page_editor.edit_heading = false' class="uk-input" style="font-size: 24pt" type="text" ng-model='$ctrl.model.title'>
+									    </div>
+										<div class="uk-alert uk-alert-danger" ng-show='api.error'>{{api.error}}</div>
+									    <p class="uk-article-meta">Written by <a ng-repeat='u in $ctrl.model.authors track by $index' href="#/user/{{u.user._id}}" target="_blank" >{{ u.user.fullname + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{ $ctrl.model.module.name }}</a></p>
+									    
 
-						<div ng-show='subpage.here("article")'>
-							<ul class="uk-tab-bottom" uk-tab>
-							    <li class="uk-active"><a ng-click='subpage.goto("article")' href="#">Article </a></li>
-							    <li style="text-align: center;"><div class="uk-text-muted" ng-hide='api.loading' ng-click='api.submit()' style="padding: 5px; cursor: pointer;">SAVE CHANGES  </div><div class="uk-text-center" ng-show='api.loading'><div uk-spinner="ratio: 0.7"></div></div> </li>
-							</ul>
-						</div>
-						
-						<div ng-show='subpage.here("article")' >
-							<div ng-show='api.view.loading' class="uk-text-center">
+										<editor api='$ctrl.api' bind='$ctrl.model.content' access='page_editor.access'  style='min-height: 90vh;'></editor>
+									</article>
+								</div>
+							</handler>
+							<div ng-show='$ctrl.get.config.state.loading' class="uk-text-center">
 								<br><br><br><br><br>
 								<div uk-spinner></div>
 							</div>
-							<article ng-show='!api.view.loading' class="uk-article"> 
-								<div ng-hide='edit_heading'>
-								    <h1 class="uk-article-title"><a class="uk-link-reset" href="javascript:void(0)">{{model.title}}</a> <a ng-click='edit_heading=true' href="javascript:void(0)"><span uk-icon="icon: pencil; ratio: 1.5"></span></a></h1>
-								</div>
-							    <div ng-show='edit_heading'>
-							    	<input ng-blur='edit_heading = false' class="uk-input" style="font-size: 24pt" type="text" ng-model='model.title'>
-							    </div>
-								<div class="uk-alert uk-alert-danger" ng-show='api.error'>{{api.error}}</div>
-							    <p class="uk-article-meta">Written by <a ng-repeat='u in model.authors track by $index' href="#/user/{{u._id}}" target="_blank" >{{ u.name + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{ model.module.name }}</a></p>
-							    <div id="text-editor" style="min-height: 100vh"></div>
-							</article>
-						</div>
+						</entity>
 					</div>
-					<div>
+					<div  ng-show='page_editor.type=="challenge"'>
 
-						<div ng-show='subpage.here("challenge") || subpage.here("settings") '>
+						<div >
 							<ul class="uk-tab-bottom" uk-tab>
 							    <li class="uk-active"><a ng-click='subpage.goto("challenge")' href="#">Description </a></li>
 							    <li><a ng-click='subpage.goto("settings")' href="#">Response Settings</a></li>
@@ -139,7 +144,7 @@
 							</ul>
 						</div>
 						
-						<div ng-show='subpage.here("challenge")' >
+						<div  >
 							<div ng-show='api.view.loading' class="uk-text-center">
 								<br><br><br><br><br>
 								<div uk-spinner></div>
@@ -251,7 +256,7 @@
 					</div>
 
 
-					<div ng-hide='subpage.here("article") || subpage.here("challenge") || subpage.here("settings")' class="uk-padding-large uk-text-center">
+					<div ng-hide='page_editor.type' class="uk-padding-large uk-text-center">
 						<br><br><br><br>
 						<h2 class="uk-text-muted">Nothing is selected</h2>
 					</div>

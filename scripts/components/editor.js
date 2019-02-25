@@ -36,6 +36,10 @@ app.component('editor',{
               toolbar: toolbarOptions
             },
           });
+
+          if(ctrl.bind)
+            quill.setContents(JSON.parse(ctrl.bind));
+
           quill.on('text-change', function(delta, oldDelta, source) 
           {
             $timeout(function()

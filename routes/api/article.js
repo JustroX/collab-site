@@ -16,7 +16,7 @@ router.post('/', api.logged, api.postAsync(Article,function(req,res,model,done)
 	for(let i in model.toObject().authors)
 		found |= (model.authors[i].equals(user));
 	if(!found)
-		model.authors.push(user);
+		model.authors.push({ user: user});
 
 	Module.findById(model.module,function(err,mod)
 	{

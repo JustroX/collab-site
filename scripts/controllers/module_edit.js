@@ -134,4 +134,41 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	{
 		load_pages();
 	});
+	let article = modelService.new({ id: "article", model: "article"  });
+	article.on("loaded",function()
+	{
+		$scope.page_editor.loading = false;
+		if(article.value.model.content)
+		{
+			try{
+				editor.setContents(JSON.parse(article.value.model.content));
+			}
+			catch(e)
+			{
+				console.log("Error parsing content.");
+			}
+		}
+		else
+			editor.setText("");
+	});
+
+	$scope.page_editor  = {  type: null };
+	$scope.page_editor.loading = false;
+
+	let editor;
+	$scope.page_editor.access = function(quill)
+	{
+		editor  = quill;
+	}
+
+	$scope.page_delete = function()
+	{
+		
+	}
+	$scope.page_edit = function(i)
+	{
+		$scope.page_editor.type = i.type;
+		article.load(i.content._id);
+		$scope.page_editor.loading = true;
+	}
 });

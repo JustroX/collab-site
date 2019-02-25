@@ -15,6 +15,7 @@ module.exports =
 	},
 	permissions:
 	{
+		_id: 1,
 		title: 7,
 		content: 5,
 		module: 3,
@@ -28,7 +29,8 @@ module.exports =
 	virtual: {},
 	populate: 
 	{
-		"authors.user": "name fullname email username"
+		"authors.user": "name fullname email username",
+		"module": "name",
 	},
 	required:
 	{
