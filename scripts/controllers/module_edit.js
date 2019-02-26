@@ -5,6 +5,8 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	$scope.subpage  = subpage;
 	$scope.moment = moment;
 
+
+
 	$scope.module  = modelService.new({id:"module-model",model:"module"});
 	$scope.module_id = $routeParams.id;
 
@@ -15,6 +17,12 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		load_pages();
 	});
 	$scope.module.load($routeParams.id);
+
+	let group_id;
+	$scope.module.on("loaded",function()
+	{
+	  group_id = $scope.module.value.model.group;
+	});
 
 	$scope.module.on("saved",function()
 	{
@@ -151,6 +159,14 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		else
 			editor.setText("");
 	});
+	article.on("deleted",function()
+	{
+		UIkit.modal("#modal-article-delete").hide();
+		UIkit.notification("Module deleted.","success");
+		load_pages();
+		$scope.page_edit($scope.pages[0]);
+		$scope.page_editor.type = null;
+	});
 
 	$scope.page_editor  = {  type: null };
 	$scope.page_editor.loading = false;
@@ -160,15 +176,11 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	{
 		editor  = quill;
 	}
-
-	$scope.page_delete = function()
-	{
-		
-	}
 	$scope.page_edit = function(i)
 	{
 		$scope.page_editor.type = i.type;
 		article.load(i.content._id);
 		$scope.page_editor.loading = true;
 	}
+
 });

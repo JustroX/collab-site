@@ -199,6 +199,39 @@ exports.delete = function(Model,cb,pre)
 	}
 }
 
+exports.deleteAsync = function(Model,cb,pre)
+{
+	let PERMISSIONS = Model.config.PERMISSIONS;
+	return function(req,res,next)
+	{
+		get_permission(Model,req,res,8,PERMISSIONS,function(PERMISSIONS)
+		{
+			let target_id = req.params.id;
+			Model.findById(target_id,function(err,mod)
+			{
+				if(err) return res.send({ err: "Database Error", code: 500});
+				let done = function()
+				{
+					Model.deleteOne({ _id: target_id },function(err)
+					{
+						if(err) return res.send({ err : "Unknown Error" });
+						else
+						{
+							if(cb) cb(req,res);
+							else return res.send({ message: "Delete successful" })
+						}
+					});
+				};
+				if(pre)
+					pre(req,res,mod,done)
+				else
+					done();
+			});
+		});
+
+	}
+}
+
 
 
 exports.list = function(Model,cb)
@@ -273,10 +306,8 @@ function get_permission_endpoint(Model,endpoint,req,res,perm,cb)
 			}
 			else
 			{
-				console.log(Model.config)
 				num = Model.config.PERMISSIONS_ENDPOINT[endpoint];
 			}
-			console.log(num,perm);
 			if(num&perm)
 				cb();
 			else
@@ -333,7 +364,6 @@ exports.list_endpoint = function(Model,endpoint,cb)
 				q.exec(function(err,docs)
 				{
 					if(err) return res.send({ err: "Database Error" , code: 500 });
-					console.log(docs);
 					if(!docs[0]) return res.send({ err: "Document not found.", code: 500});
 
 					docs = docs[0][endpoint];

@@ -34,6 +34,28 @@ router.post('/', api.logged, api.postAsync(Article,function(req,res,model,done)
 router.get('/', api.list(Article) );
 router.get('/:id', api.get(Article));
 router.put('/:id', api.put(Article));
-router.delete('/:id', api.delete(Article));
+router.delete('/:id', api.deleteAsync(Article,null,function(req,res,model,done)
+{
+	Module.findById(model.module,function(err,mod)
+	{
+		if(err) return res.send({ err: "Database Error.", code: 500 });
+		if(!mod) return res.send({ err: "Module not found.", code: 404});
+
+		console.log("LOOK HERE",mod.articles);
+		for(let i in mod.toObject().articles)
+		{
+			if(mod.articles[i].content && mod.articles[i].content.equals(model._id))
+			{
+				mod.articles.splice(i,1);
+				break;
+			}
+		}
+		mod.save(function(err,new_mod)
+		{
+			if(err) return res.send({ err: "Database Error.", code: 500 });
+			done();
+		});
+	});
+}));
 
 module.exports = router;

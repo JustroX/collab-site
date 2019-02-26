@@ -2,6 +2,10 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 {
 	const subpage=subpageService.Page();
 	const models = schemaService.getModels();
+
+	
+
+
 	$scope.subpage  = subpage;
 	$scope.moment = moment;
 

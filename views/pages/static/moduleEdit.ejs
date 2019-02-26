@@ -39,22 +39,7 @@
 								        <div class="uk-accordion-content">
 								            <p>
 								            	<a href="javascript:void(0)" ng-click='page_edit(i)'  class="uk-icon-button uk-margin-small-right" uk-icon="file-edit"></a>
-								            	<a href="javascript:void(0)" ng-click='page_delete(i)' class="uk-icon-button uk-margin-small-right" uk-icon="trash"></a>
-								            	<!-- <div>
-													<div id="modal-article-delete-{{$index}}" uk-modal>
-													    <div class="uk-modal-dialog uk-modal-body">
-													        <h2 class="uk-modal-title">Are you sure you want to delete Article?</h2>
-													    	<div ng-show='api.error' class="uk-alert-danger">{{api.error}}</div>
-													        <p style="color: red;">Note: action can not be undone.</p>
-													        
-													        <div ng-show='api.loading'><div uk-spinner></div></div>
-													        <p ng-hide='api.loading' class="uk-text-right">
-													            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-													            <button ng-click='api.delete()' class="uk-button uk-button-danger" type="button">Delete</button>
-													        </p>
-													    </div>
-													</div>
-												</div>
+												<!--
 												<div>
 													<div id="modal-challenge-delete-{{$index}}" uk-modal>
 													    <div class="uk-modal-dialog uk-modal-body">
@@ -104,14 +89,36 @@
 					</div>
 					<div ng-show='page_editor.type=="article"'>
 						<entity bind='article' >
-							<handler bind='{{$ctrl.put.config.id}}' model='$ctrl.value.model'>
 								<div>
 									<ul class="uk-tab-bottom" uk-tab>
 									    <li class="uk-active"><a href="javascript:void(0)">Article </a></li>
-									    <li style="text-align: center;"><div class="uk-text-muted" ng-hide='$ctrl.api.config.state.loading' ng-click='$ctrl.submit()' style="padding: 5px; cursor: pointer;">SAVE CHANGES  </div><div class="uk-text-center" ng-show='$ctrl.api.config.state.loading'><div uk-spinner="ratio: 0.7"></div></div> </li>
+									    <li style="text-align: center;">
+									    	<handler bind='{{$ctrl.put.config.id}}' model='$ctrl.value.model'>
+										    	<div class="uk-text-muted" ng-hide='$ctrl.api.config.state.loading' ng-click='$ctrl.submit()' style="padding: 5px; cursor: pointer;">SAVE CHANGES  </div>
+										    	<div class="uk-text-center" ng-show='$ctrl.api.config.state.loading'><div uk-spinner="ratio: 0.7"></div></div>
+									    	</handler>				
+									    </li>
+									    <li style="text-align: center;">
+									    	<a href="javascript:void(0)" class="uk-text-muted" uk-toggle='target: #modal-article-delete' style="padding: 5px; cursor: pointer;">DELETE ARTICLE</a>
+										   	<handler bind='{{$ctrl.delete.config.id}}' model='$ctrl.value.model'>
+										    	<div id="modal-article-delete" uk-modal>
+												    <div class="uk-modal-dialog uk-modal-body">
+												        <h2 class="uk-modal-title">Are you sure you want to delete this article?</h2>
+												        <p style="color: red;">Note: action can not be undone.</p>
+												        
+												        <div ng-show='$ctrl.api.config.state.loading'><div uk-spinner></div></div>
+												        <p ng-hide='$ctrl.api.config.state.loading' class="uk-text-right">
+												            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+												            <button ng-click='$ctrl.submit()' class="uk-button uk-button-danger" type="button">Delete</button>
+												        </p>
+												    </div>
+												</div>
+										    </handler>
+									    </li>
 									</ul>
 								</div>
 							
+							<handler bind='{{$ctrl.put.config.id}}' model='$ctrl.value.model'>
 								<div>
 									<article ng-hide='page_editor.loading' class="uk-article"> 
 										<div ng-hide='page_editor.edit_heading'>

@@ -12,9 +12,14 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
   this.find = function(id)
   {
     let match  = [];
+    let ids = [];
+    let _this = this;
     for(let i in this.apis)
       if(this.apis[i].config.id==id)
+      {
         match.push(this.apis[i]);
+        ids.push(i);
+      }
 
     let a  = 
     { 
@@ -42,6 +47,17 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
         for(let i in match)
           cb(match[i])
         return a;
+      },
+      remove: function(cb)
+      {
+        for(let i of ids)
+          _this.apis[i] = null;
+        let offset = 0;
+        for(let i in _this.apis)
+          if(!_this.apis[i])
+          {
+            _this.apis.splice(i-offset++,1);
+          }
       }
     };
     return a;
@@ -51,12 +67,9 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
   {
     let a;
     if(this.find(config.id).apis[0])
-      a = this.find(config.id).apis[0];
-    else
-    {
-      a = new Api(config);
-      this.apis.push(a);
-    }
+      this.find(config.id).remove();
+    a = new Api(config);
+    this.apis.push(a);
     return a;
   }
 
