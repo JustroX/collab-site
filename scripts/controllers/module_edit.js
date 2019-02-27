@@ -137,12 +137,18 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	}
 
 	//articles
-	let articleNew    = apiService.new({ id: "article-new" 	, model: "article", method: "post" });
+	let articleNew      = apiService.new({ id: "article-new" 	, model: "article",   method: "post" });
+	let challengeNew    = apiService.new({ id: "challenge-new" 	, model: "challenge", method: "post" });
 	articleNew.on("success",function()
 	{
 		load_pages();
 	});
+	challengeNew.on("success",function()
+	{
+		load_pages();
+	});
 	let article = modelService.new({ id: "article", model: "article"  });
+	let challenge = modelService.new({ id: "challenge", model: "challenge"  });
 	article.on("loaded",function()
 	{
 		$scope.page_editor.loading = false;

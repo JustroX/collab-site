@@ -73,11 +73,11 @@
 			        	</handler>
 					</li>
 			        <li>
-			        	<div>
-			        		<div ng-show='api.loading'><div uk-spinner></div></div>
-			        		<div ng-show='api.error'>{{api.error}}</div>
-				        	<a ng-hide='api.loading' class="uk-link-muted" href="javascript:void(0)" ng-click='api.submit()' ><span uk-icon="icon: plus"></span> Add Challenge</a>
-			        	</div>
+			        	<handler bind='challenge-new' model='{ title:"New Challenge", content: "", module: module_id }'>
+			        		<div ng-show='$ctrl.api.config.state.loading'><div uk-spinner></div></div>
+			        		<div ng-show='$ctrl.api.config.error'>{{api.error}}</div>
+				        	<a ng-hide='$ctrl.api.config.state.loading' class="uk-link-muted" href="javascript:void(0)" ng-click='$ctrl.submit()' ><span uk-icon="icon: plus"></span> Add Challenge</a>
+			        	</handler>
 			        </li>
 			  	</ul>
 			</div>

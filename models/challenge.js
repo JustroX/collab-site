@@ -36,6 +36,7 @@ module.exports =
 	},
 	permissions:
 	{
+		_id: 1,
 		title: 7,
 		module: 3,
 
@@ -45,8 +46,8 @@ module.exports =
 		settings: 5,
 		answer: 5,
 
-		authors: 15,
-		testcases: 15,
+		authors: 13,
+		testcases: 13,
 
 	},
 	config:
