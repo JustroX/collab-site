@@ -149,6 +149,30 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	});
 	let article = modelService.new({ id: "article", model: "article"  });
 	let challenge = modelService.new({ id: "challenge", model: "challenge"  });
+	challenge.on("loaded",function()
+	{
+		$scope.page_editor.loading = false;
+		if(challenge.value.model.content)
+		{
+			try{
+				editor.setContents(JSON.parse(challenge.value.model.content));
+			}
+			catch(e)
+			{
+				console.log("Error parsing content.");
+			}
+		}
+		else
+			editor.setText("");
+	});
+	challenge.on("deleted",function()
+	{
+		UIkit.modal("#modal-challenge-delete").hide();
+		UIkit.notification("Module deleted.","success");
+		load_pages();
+		$scope.page_edit($scope.pages[0]);
+		$scope.page_editor.type = null;
+	});
 	article.on("loaded",function()
 	{
 		$scope.page_editor.loading = false;
@@ -170,8 +194,23 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		UIkit.modal("#modal-article-delete").hide();
 		UIkit.notification("Module deleted.","success");
 		load_pages();
-		$scope.page_edit($scope.pages[0]);
 		$scope.page_editor.type = null;
+	});
+	challenge.on("deleted",function()
+	{
+		UIkit.modal("#modal-challenge-delete").hide();
+		UIkit.notification("Module deleted.","success");
+		load_pages();
+		$scope.page_editor.type = null;
+	});
+
+	article.on("saved",function()
+	{
+		load_pages();
+	});
+	challenge.on("saved",function()
+	{
+		load_pages();
 	});
 
 	$scope.page_editor  = {  type: null };
@@ -185,7 +224,11 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	$scope.page_edit = function(i)
 	{
 		$scope.page_editor.type = i.type;
-		article.load(i.content._id);
+		if(i.type == "article")
+			article.load(i.content._id);
+		else
+			challenge.load(i.content._id);
+			
 		$scope.page_editor.loading = true;
 	}
 

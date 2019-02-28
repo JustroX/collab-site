@@ -32,14 +32,28 @@ router.post('/', api.logged, api.postAsync(Challenge,function(req,res,model,done
 router.get('/', api.list(Challenge) );
 router.get('/:id', api.get(Challenge));
 router.put('/:id', api.put(Challenge));
-router.delete('/:id', api.delete(Challenge));
+router.delete('/:id',  api.deleteAsync(Challenge,null,function(req,res,model,done)
+{
+	Module.findById(model.module,function(err,mod)
+	{
+		if(err) return res.send({ err: "Database Error.", code: 500 });
+		if(!mod) return res.send({ err: "Module not found.", code: 404});
 
-//testcases
-router.get('/:id/testcases/', api.list_endpoint(Challenge , "testcases"));
-router.post('/:id/testcases/', api.post_endpoint(Challenge , "testcases"));
-router.get('/:id/testcases/:field_id', api.get_endpoint(Challenge , "testcases"));
-router.put('/:id/testcases/:field_id', api.put_endpoint(Challenge , "testcases"));
-router.delete('/:id/testcases/:field_id', api.delete_endpoint(Challenge , "testcases"));
+		for(let i in mod.toObject().challenges)
+		{
+			if(mod.challenges[i].content && mod.challenges[i].content.equals(model._id))
+			{
+				mod.challenges.splice(i,1);
+				break;
+			}
+		}
+		mod.save(function(err,new_mod)
+		{
+			if(err) return res.send({ err: "Database Error.", code: 500 });
+			done();
+		});
+	});
+}));
 
 
 module.exports = router;

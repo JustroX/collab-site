@@ -58,7 +58,8 @@ module.exports =
 	virtual: {},
 	populate: 
 	{
-		"authors.user": "name fullname email username"
+		"authors.user": "name fullname email username",
+		"module": "name",
 	},
 	required:
 	{
@@ -67,7 +68,7 @@ module.exports =
 	},
 	default:
 	{
-		permission : 7,
+		permission : 15,
 		self: 5,
 	},
 	endpoints:
