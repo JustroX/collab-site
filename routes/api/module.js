@@ -1,5 +1,11 @@
 var router = require('express').Router();
-var Module = require('../../models/model_divider.js').model("Module");
+
+var Models = require('../../models/model_divider.js');
+
+var Module = Models.model("Module");
+var Article = Models.model("Article");
+var Challenge = Models.model("Challenge");
+
 var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
@@ -9,7 +15,27 @@ router.post('/', api.post(Module));
 router.get('/', api.list(Module) );
 router.get('/:id', api.get(Module));
 router.put('/:id', api.put(Module));
-router.delete('/:id', api.delete(Module));
+router.delete('/:id', api.deleteAsync(Module,null,function(req,res,mod,done)
+{
+	let articles_arr = [];
+	let challenges_arr = [];
+
+	for(let i in mod.toObject().articles)
+		articles_arr.push(mod.articles[i].content);
+
+	for(let i in mod.toObject().challenges)
+		challenges_arr.push(mod.challenges[i].content);
+
+	Article.deleteMany({ _id : { $in: articles_arr } }, function(err)
+	{
+		if(err) return res.send({ code: 500, err: "Database Error"});
+		Challenge.deleteMany({ _id : { $in: challenges_arr } }, function(err)
+		{
+			if(err) return res.send({ code: 500, err: "Database Error"});
+			done();
+		});
+	});
+}));
 
 //articles
 router.get('/:id/articles/', api.list_endpoint(Module , "articles"));

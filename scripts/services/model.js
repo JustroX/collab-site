@@ -31,6 +31,11 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 		return JSON.parse(JSON.stringify(obj));
 	}
 
+	this.free  = function()
+	{
+		this.models = [];
+	}
+
 	this.reset_events = function()
 	{
 	    for(let i in this.apis)

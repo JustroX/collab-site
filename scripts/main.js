@@ -25,6 +25,12 @@ app.config(function($routeProvider) {
     .when("/module/:id/edit/", {
         templateUrl : "/page/moduleEdit",
     })
+    .when("/module/:id/view/:page", {
+        templateUrl : "/page/moduleView",
+    })
+    .when("/module/:id/view/", {
+        redirectTo: '/module/:id/view/0',  
+    })
     .when("/404", {
         templateUrl : "/page/404",
     })

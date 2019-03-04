@@ -1,5 +1,9 @@
 app.controller("dashboardController",function($scope,$http,$location,$timeout,$rootScope,apiService,schemaService,modelService,utilService,subpageService,session,$sanitize,$route,$routeParams)
 {
+
+	apiService.free();
+	modelService.free();
+
 	const subpage=subpageService.Page();
 	const modal_subpage = subpageService.Page();
 	const models = schemaService.getModels();

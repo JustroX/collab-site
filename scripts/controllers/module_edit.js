@@ -5,6 +5,8 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	$scope.subpage  = subpage;
 	$scope.moment = moment;
 
+	apiService.free();
+	modelService.free();
 
 
 	$scope.module  = modelService.new({id:"module-model",model:"module"});
@@ -61,6 +63,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		$scope.badge_new.badge = u._id;
 		badge.load(u._id);
 	});
+
 
 	badgeList.on("selected",function(u)
 	{

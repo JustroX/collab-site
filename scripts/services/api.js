@@ -3,6 +3,11 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
   let apiService  = this;
   this.apis = [];
 
+  this.free  =function()
+  {
+    this.apis = [];
+  }
+
   this.reset_events = function()
   {
     for(let i in this.apis)

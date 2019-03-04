@@ -79,7 +79,7 @@ app.component('editorView',{
       const ctrl = this;
       ctrl.$onInit = function()
       {
-        $timeout(function()
+        let render =  function()
         {
             let doc  =document.createElement("div");
             let tempQuill=new Quill(doc);
@@ -107,7 +107,9 @@ app.component('editorView',{
                   $(e).css("padding","5px");
               });
             },1);
-        },1);
+        };
+        $timeout(render,1);
+        ctrl.access &&  ctrl.access(function(){$timeout(render,1);});
 
       }
     },
@@ -115,6 +117,7 @@ app.component('editorView',{
     template: `<div class='ql-editor' ng-bind-html='$ctrl.value'></div>`,
     bindings:
     {
-      data: "@"
+      data: "@",
+      access: "=",
     },
 });
