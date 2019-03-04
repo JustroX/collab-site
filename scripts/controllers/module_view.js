@@ -97,12 +97,17 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
 		access_models[page.type].load(page.content._id);
  	}
 
- 	let render;
- 	$scope.get_renderer = function(r){ render = r; };
+ 	let render_a ,render_c;
+ 	$scope.get_renderer_a = function(r){ render_a = r; };
+ 	$scope.get_renderer_c = function(r){ render_c = r; };
 
  	access_models.article.on("loaded",function()
  	{
- 		render();
+ 		render_a();
+ 	});
+ 	access_models.challenge.on("loaded",function()
+ 	{
+ 		render_c();
  	});
 
  	$scope.page_next = function()

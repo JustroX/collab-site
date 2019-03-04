@@ -46,252 +46,253 @@
 			<div ng-show='subpage.here("article")'>
 				<entity bind='article-model'>
 					<handler bind='{{ $ctrl.get.config.id }}' model='$ctrl.model' >
-						<div ng-show='$ctrl.api.config.status.loading' class="uk-text-center">
+						<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
 							<br><br>
 							<h2 class="uk-text-muted">Loading</h2><div uk-spinner='ratio: 1.5'></div>
 						</div>
-						<article ng-hide='$ctrl.api.config.status.loading || !$ctrl.model._id' class="uk-article" >
+						<article ng-hide='$ctrl.api.config.state.loading || !$ctrl.model._id' class="uk-article" >
 						    <h1 style="text-align: center;"  class="uk-article-title uk"><a class="uk-link-reset" href="javascript:void(0)">{{$ctrl.model.title}}</a></h1>
 
 						    <p  style="text-align: center;" class="uk-article-meta">Written by  <a ng-repeat='u in $ctrl.model.authors track by $index' href="#!/user/{{u.user._id}}" target="_blank" >{{ u.user.fullname + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{$ctrl.model.module.name}}</a></p>
 
 						    <div class="uk-padding">
-						    	<editor-view data='{{$ctrl.model.content}}' access='get_renderer'></editor-view>
-						    	<!-- <div ng-bind-html='$ctrl.model.content'></div> -->
+						    	<editor-view data='{{$ctrl.model.content}}' access='get_renderer_a'></editor-view>
 						    </div>
 						</article>
 					</handler>
 				</entity>
 			</div>
-			<!-- <div ng-show='subpage.here("challenge")'>
-				<div >
-					<div ng-show='api.loading' class="uk-text-center">
-						<br><br>
-						<h2 class="uk-text-muted">Loading</h2><div uk-spinner='ratio: 1.5'></div>
-					</div>
-					<div  ng-hide='api.loading' >
-						<article class="uk-article" >
-						    <h1 style="text-align: center;"  class="uk-article-title uk"><a class="uk-link-reset" href="javascript:void(0)">{{api.value.title}}</a></h1>
-
-						    <p  style="text-align: center;" class="uk-article-meta">Written by  <a ng-repeat='u in api.value.authors track by $index' href="#/user/{{u._id}}" target="_blank" >{{ u.name + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{api.value.module.name}}</a></p>
-
-						    <div class="uk-padding">
-						    	<div ng-bind-html='api.value.content'></div>
-						    </div>
-						</article>
-						<hr class="uk-divider-icon">
-
-						<div ng-show='api.value.output_type==1'> 
-							<div style="text-align: center;">
-								<h5>CHALLENGE RESPONSE</h5>
-								Your answer
-								<div class="uk-child-width-1-5 uk-padding-small">
-									<input type="text" class="uk-input" >
-								</div>
-								<button class="uk-button uk-button-primary">SUBMIT</button>
-							</div>
+			<div ng-show='subpage.here("challenge")'>
+				<entity bind='challenge-model' >
+					<handler bind='{{$ctrl.get.config.id}}' model='$ctrl.model' >
+						<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+							<br><br>
+							<h2 class="uk-text-muted">Loading</h2><div uk-spinner='ratio: 1.5'></div>
 						</div>
+						<div ng-hide='$ctrl.api.config.state.loading || !$ctrl.model._id' >
+							<article ng-hide='$ctrl.api.config.state.loading || !$ctrl.model._id' class="uk-article" >
+							    <h1 style="text-align: center;"  class="uk-article-title uk"><a class="uk-link-reset" href="javascript:void(0)">{{$ctrl.model.title}}</a></h1>
 
-						<div ng-show='api.value.output_type==0' >
-							<div style="text-align: left;" class="uk-padding">
-								<b>SAMPLE TEST CASES</b>
-								<br><br>
+							    <p  style="text-align: center;" class="uk-article-meta">Written by  <a ng-repeat='u in $ctrl.model.authors track by $index' href="#!/user/{{u.user._id}}" target="_blank" >{{ u.user.fullname + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{$ctrl.model.module.name}}</a></p>
+
+							    <div class="uk-padding">
+							    	<editor-view data='{{$ctrl.model.content}}' access='get_renderer_c'></editor-view>
+							    </div>
+							</article>
+							<hr class="uk-divider-icon">
+
+						<!-- 	<div ng-show='api.value.output_type==1'> 
+								<div style="text-align: center;">
+									<h5>CHALLENGE RESPONSE</h5>
+									Your answer
+									<div class="uk-child-width-1-5 uk-padding-small">
+										<input type="text" class="uk-input" >
+									</div>
+									<button class="uk-button uk-button-primary">SUBMIT</button>
+								</div>
+							</div>
+
+							<div ng-show='api.value.output_type==0' >
+								<div style="text-align: left;" class="uk-padding">
+									<b>SAMPLE TEST CASES</b>
+									<br><br>
 
 
-								<div ng-repeat='i in api.value.testcases track by $index' class="uk-width-2-3">
-									<b>TESTCASE {{$index}}</b> 	
-									<div class="uk-child-width-1-2" uk-grid>
-										<div>
-											<small style="text-align: center;">INPUT</small>
-											<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{i.input}}</code></pre>
+									<div ng-repeat='i in api.value.testcases track by $index' class="uk-width-2-3">
+										<b>TESTCASE {{$index}}</b> 	
+										<div class="uk-child-width-1-2" uk-grid>
+											<div>
+												<small style="text-align: center;">INPUT</small>
+												<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{i.input}}</code></pre>
+											</div>
+											<div>
+												<small style="text-align: center;">OUTPUT</small>
+												<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{i.output}}</code></pre>
+											</div>
 										</div>
-										<div>
-											<small style="text-align: center;">OUTPUT</small>
-											<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{i.output}}</code></pre>
-										</div>
+										<br>
 									</div>
 									<br>
-								</div>
-								<br>
-								<b>EXPLANATION</b>
+									<b>EXPLANATION</b>
 
-								<p>{{api.value.settings.testcase_description}}</p>
+									<p>{{api.value.settings.testcase_description}}</p>
 
-								<hr class="uk-divider-icon">
+									<hr class="uk-divider-icon">
 
-								<div>
-									<b>CHALLENGE RESPONSE</b>
+									<div>
+										<b>CHALLENGE RESPONSE</b>
 
-									<ul id='tab-submission' uk-tab>
-									    <li class="uk-active"><a href="#">Submit</a></li>
-									    <li><a href="#">Previous Submissions</a></li>
-									</ul>
+										<ul id='tab-submission' uk-tab>
+										    <li class="uk-active"><a href="#">Submit</a></li>
+										    <li><a href="#">Previous Submissions</a></li>
+										</ul>
 
-									<ul id='switcher-submission' class="uk-switcher uk-margin">
-									    <li>
-									    	<div   >
-												<div>
-													<nav style="margin-bottom: 0px" class="uk-navbar uk-navbar-container uk-margin">
-													    <div class="uk-navbar-left">
-													        <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>  
-													        Language &nbsp;&nbsp;
-													        <div class="uk-margin">
-													            <select  class="uk-select" ng-change='change_language()' ng-options='item as language_codes[item] for item in parent.value.settings.languages ' ng-model='model.language' style="border-radius: 10px"></select>
-													        </div>
-													    </div>
-													</nav>
-													
-													<div class="uk-padding-remove-top ">
-														<div>
-															<textarea class="uk-border-rounded" id='editor-challenge'></textarea>
-														</div>
-													</div>
-
-													<div class="uk-text-right">
-														<br>
-														<button ng-click='run_code()' class="uk-button uk-button-default uk-border-rounded">Run Code</button>
-														<button  class="uk-button uk-button-default uk-border-rounded"  style="background-color: #59b761; color: white" href="#modal-submission-confirm" uk-toggle>Submit</button>
-														<div id="modal-submission-confirm" uk-modal>
-														    <div class="uk-modal-dialog">
-														        <button class="uk-modal-close-default" type="button" uk-close></button>
-														        <div class="uk-modal-header">
-														            <h2 class="uk-modal-title">Submit Solution</h2>
-														        </div>
-														        <div class="uk-modal-body">
-														            <p>Are you sure you want to submit code?</p>
-														            <div ng-show='api.error' class="uk-alert uk-alert-danger">{{api.error}}</div>
-														            <div ng-show='api.loading'><div uk-spinner></div></div>
-														        </div>
-														        <div ng-hide='api.loading' class="uk-modal-footer uk-text-right">
-														            <button class="uk-button uk-button-danger uk-modal-close" type="button">Cancel</button>
-														            <button ng-click='api.submit()' style="background-color: #59b761; color: white" class="uk-button uk-button-primary" type="button">Submit</button>
+										<ul id='switcher-submission' class="uk-switcher uk-margin">
+										    <li>
+										    	<div   >
+													<div>
+														<nav style="margin-bottom: 0px" class="uk-navbar uk-navbar-container uk-margin">
+														    <div class="uk-navbar-left">
+														        <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>  
+														        Language &nbsp;&nbsp;
+														        <div class="uk-margin">
+														            <select  class="uk-select" ng-change='change_language()' ng-options='item as language_codes[item] for item in parent.value.settings.languages ' ng-model='model.language' style="border-radius: 10px"></select>
 														        </div>
 														    </div>
+														</nav>
+														
+														<div class="uk-padding-remove-top ">
+															<div>
+																<textarea class="uk-border-rounded" id='editor-challenge'></textarea>
+															</div>
 														</div>
 
+														<div class="uk-text-right">
+															<br>
+															<button ng-click='run_code()' class="uk-button uk-button-default uk-border-rounded">Run Code</button>
+															<button  class="uk-button uk-button-default uk-border-rounded"  style="background-color: #59b761; color: white" href="#modal-submission-confirm" uk-toggle>Submit</button>
+															<div id="modal-submission-confirm" uk-modal>
+															    <div class="uk-modal-dialog">
+															        <button class="uk-modal-close-default" type="button" uk-close></button>
+															        <div class="uk-modal-header">
+															            <h2 class="uk-modal-title">Submit Solution</h2>
+															        </div>
+															        <div class="uk-modal-body">
+															            <p>Are you sure you want to submit code?</p>
+															            <div ng-show='api.error' class="uk-alert uk-alert-danger">{{api.error}}</div>
+															            <div ng-show='api.loading'><div uk-spinner></div></div>
+															        </div>
+															        <div ng-hide='api.loading' class="uk-modal-footer uk-text-right">
+															            <button class="uk-button uk-button-danger uk-modal-close" type="button">Cancel</button>
+															            <button ng-click='api.submit()' style="background-color: #59b761; color: white" class="uk-button uk-button-primary" type="button">Submit</button>
+															        </div>
+															    </div>
+															</div>
+
+														</div>
 													</div>
-												</div>
 
-												<div>
-													
-
-													<div id='scroll-run-results'>
-														<br><br>
-														<pre ng-show='run.loading' class="uk-background-muted" style="min-height: 2vh; padding: 15px; margin-top: 0px"><code>Loading...</code></pre>
-																
-														<ul ng-hide='run.loading'  class="uk-tab-bottom" uk-tab>
-														    <li ng-repeat='i in run.results track by $index' ><a href="#"><i ng-show='i.status.id==3' style="color: green;" class="fas fa-check"></i><i ng-show='i.status.id!=3' style="color: red" class="fas fa-times"></i> Testcase {{$index+1}}</a></li>
-														</ul>
-														<div ng-show='run.error' class="uk-alert uk-alert-danger">
-															{{run.error}}
-														</div>												
-
-														<ul ng-hide='run.loading' class="uk-switcher uk-margin">
-															<li ng-repeat='i in run.results track by $index'>
-																<div>
-																	<div class="uk-text-center">
-																		<b>VERDICT  </b> <br>
-																		<b><em class="uk-text-capitalize" ng-class='{ "uk-text-success" : i.status.id==3 }'>{{ i.status.description  }}</em></b>
-																	</div>
-																	<pre ng-show='i.stderr' class="uk-background-muted" style="min-height: 2vh; padding: 15px; margin-top: 0px"><code>{{i.stderr}}</code></pre>
-																	<pre ng-show='i.compile_output' class="uk-background-muted" style="min-height: 2vh; padding: 15px; margin-top: 0px"><code>{{i.compile_output}}</code></pre>
-																	<div ng-hide='i.status.id == 6 || i.status.id == 13'>
-																		<div class="uk-child-width-1-3" uk-grid>
-																			<div>
-																				<small style="text-align: center;">INPUT</small>
-																				<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{parent.value.testcases[$index].input}}</code></pre>
-																			</div>
-																			<div>
-																				<small style="text-align: center;">OUTPUT</small>
-																				<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{parent.value.testcases[$index].output}}</code></pre>
-																			</div>
-																			<div>
-																				<small style="text-align: center;">YOUR OUTPUT</small>
-																				<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{i.stdout}}</code></pre>
-																			</div>
-																		</div>
-																		
-																	</div>
-																</div>		
-															</li>
-														</ul>
-
+													<div>
 														
 
-														<hr class="uk-divider-icon">
-													</div>
-												</div>
-									    		
-									    	</div>
-									    </li>
-									    <li>
-											<div ng-controller='submissionViewController'>
-												<div id='scroll-submission-results'></div>
+														<div id='scroll-run-results'>
+															<br><br>
+															<pre ng-show='run.loading' class="uk-background-muted" style="min-height: 2vh; padding: 15px; margin-top: 0px"><code>Loading...</code></pre>
+																	
+															<ul ng-hide='run.loading'  class="uk-tab-bottom" uk-tab>
+															    <li ng-repeat='i in run.results track by $index' ><a href="#"><i ng-show='i.status.id==3' style="color: green;" class="fas fa-check"></i><i ng-show='i.status.id!=3' style="color: red" class="fas fa-times"></i> Testcase {{$index+1}}</a></li>
+															</ul>
+															<div ng-show='run.error' class="uk-alert uk-alert-danger">
+																{{run.error}}
+															</div>												
 
-												<div ng-hide='api.loading || !api.value'>
-													<div class="uk-text-center">
-														<b>YOUR SCORE</b> <br>
-														<b><em>{{ parse.compute_score(api.value) }}</em>/{{parse.compute_total(api.value)}}</b> <br>
-														<b>VERDICT: <em ng-class='{ "uk-text-success" : parse.getVerdict(api.value)=="Accepted" }'  >{{ parse.getVerdict(api.value)}}</em></b>
+															<ul ng-hide='run.loading' class="uk-switcher uk-margin">
+																<li ng-repeat='i in run.results track by $index'>
+																	<div>
+																		<div class="uk-text-center">
+																			<b>VERDICT  </b> <br>
+																			<b><em class="uk-text-capitalize" ng-class='{ "uk-text-success" : i.status.id==3 }'>{{ i.status.description  }}</em></b>
+																		</div>
+																		<pre ng-show='i.stderr' class="uk-background-muted" style="min-height: 2vh; padding: 15px; margin-top: 0px"><code>{{i.stderr}}</code></pre>
+																		<pre ng-show='i.compile_output' class="uk-background-muted" style="min-height: 2vh; padding: 15px; margin-top: 0px"><code>{{i.compile_output}}</code></pre>
+																		<div ng-hide='i.status.id == 6 || i.status.id == 13'>
+																			<div class="uk-child-width-1-3" uk-grid>
+																				<div>
+																					<small style="text-align: center;">INPUT</small>
+																					<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{parent.value.testcases[$index].input}}</code></pre>
+																				</div>
+																				<div>
+																					<small style="text-align: center;">OUTPUT</small>
+																					<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{parent.value.testcases[$index].output}}</code></pre>
+																				</div>
+																				<div>
+																					<small style="text-align: center;">YOUR OUTPUT</small>
+																					<pre class="uk-background-muted" style="min-height: 20vh; padding: 15px; margin-top: 0px"><code>{{i.stdout}}</code></pre>
+																				</div>
+																			</div>
+																			
+																		</div>
+																	</div>		
+																</li>
+															</ul>
+
+															
+
+															<hr class="uk-divider-icon">
+														</div>
 													</div>
-													<ul ng-if='api.value' class="uk-list uk-list-striped">
-														<li ng-repeat='i in api.value.verdict.testcases track by $index'> <span class="uk-margin-small-right" uk-icon="check"></span> Test Case {{$index+1}} &middot; {{i.points}} &middot; <em ng-class='{ "uk-text-success" : i.status.id==3 }' >{{i.status.description}}</em> </li>
+										    		
+										    	</div>
+										    </li>
+										    <li>
+												<div ng-controller='submissionViewController'>
+													<div id='scroll-submission-results'></div>
+
+													<div ng-hide='api.loading || !api.value'>
+														<div class="uk-text-center">
+															<b>YOUR SCORE</b> <br>
+															<b><em>{{ parse.compute_score(api.value) }}</em>/{{parse.compute_total(api.value)}}</b> <br>
+															<b>VERDICT: <em ng-class='{ "uk-text-success" : parse.getVerdict(api.value)=="Accepted" }'  >{{ parse.getVerdict(api.value)}}</em></b>
+														</div>
+														<ul ng-if='api.value' class="uk-list uk-list-striped">
+															<li ng-repeat='i in api.value.verdict.testcases track by $index'> <span class="uk-margin-small-right" uk-icon="check"></span> Test Case {{$index+1}} &middot; {{i.points}} &middot; <em ng-class='{ "uk-text-success" : i.status.id==3 }' >{{i.status.description}}</em> </li>
+														</ul>
+													</div>
+													
+													<div ng-show='api.loading' class="uk-text-center">
+														<div uk-spinner></div>
+														<br><br><br>
+													</div>
+													<div ng-show='api.error'>
+														{{api.error}}
+													</div>
+													<div ng-hide='api.loading || !api.value'>
+														<div class="uk-text-center"><b>CODE</b></div>
+														<div class="uk-text-center">
+															<small>{{api.value.language}} &middot; {{api.value.date}}</small>
+														</div>
+														<br>
+														<div style="padding:5px" ng-bind-html='api.value.content'></div>
+														<br><br><br>
+													</div>
+													<div ><hr></div>
+												</div>
+												<div ng-controller='submissionListController'>
+													Previous Submissions
+													<table class="uk-table uk-table-striped">
+													    <thead>
+													        <tr>
+													            <th>#</th>
+													            <th>SCORE</th>
+													            <th>Time of submission</th>
+													            <th>VERDICT</th>
+													        </tr>
+													    </thead>
+													    <tbody>
+													    	<tr ng-show='api.loading'><td colspan="4"><div uk-spinner></div></td></tr>
+													        <tr ng-hide='api.loading' style="cursor: pointer;" ng-click='view_submission(i)' ng-repeat='i in api.list track by $index'>
+													            <td>{{api.page*api.limit+$index+1}}</td>
+													            <td>{{ parse.compute_score(i) }}</td>
+													            <td>{{ i.date }}</td>
+													            <td><em class="uk-text-capitalize" ng-class='{ "uk-text-success" : parse.getVerdict(i)=="Accepted" }'>{{ parse.getVerdict(i) }}</em></td>
+													        </tr>
+													    </tbody>
+													</table>
+													<ul class="uk-pagination">
+													    <li ng-show='api.page!=0'><a href="javascript:void(0)" ng-click='api.prev()'><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+													    <li ng-show='api.page!=api.page_max' class="uk-margin-auto-left"><a href="javascript:void(0)" ng-click='api.next()'>Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
 													</ul>
 												</div>
-												
-												<div ng-show='api.loading' class="uk-text-center">
-													<div uk-spinner></div>
-													<br><br><br>
-												</div>
-												<div ng-show='api.error'>
-													{{api.error}}
-												</div>
-												<div ng-hide='api.loading || !api.value'>
-													<div class="uk-text-center"><b>CODE</b></div>
-													<div class="uk-text-center">
-														<small>{{api.value.language}} &middot; {{api.value.date}}</small>
-													</div>
-													<br>
-													<div style="padding:5px" ng-bind-html='api.value.content'></div>
-													<br><br><br>
-												</div>
-												<div ><hr></div>
-											</div>
-											<div ng-controller='submissionListController'>
-												Previous Submissions
-												<table class="uk-table uk-table-striped">
-												    <thead>
-												        <tr>
-												            <th>#</th>
-												            <th>SCORE</th>
-												            <th>Time of submission</th>
-												            <th>VERDICT</th>
-												        </tr>
-												    </thead>
-												    <tbody>
-												    	<tr ng-show='api.loading'><td colspan="4"><div uk-spinner></div></td></tr>
-												        <tr ng-hide='api.loading' style="cursor: pointer;" ng-click='view_submission(i)' ng-repeat='i in api.list track by $index'>
-												            <td>{{api.page*api.limit+$index+1}}</td>
-												            <td>{{ parse.compute_score(i) }}</td>
-												            <td>{{ i.date }}</td>
-												            <td><em class="uk-text-capitalize" ng-class='{ "uk-text-success" : parse.getVerdict(i)=="Accepted" }'>{{ parse.getVerdict(i) }}</em></td>
-												        </tr>
-												    </tbody>
-												</table>
-												<ul class="uk-pagination">
-												    <li ng-show='api.page!=0'><a href="javascript:void(0)" ng-click='api.prev()'><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
-												    <li ng-show='api.page!=api.page_max' class="uk-margin-auto-left"><a href="javascript:void(0)" ng-click='api.next()'>Next <span class="uk-margin-small-left" uk-pagination-next></span></a></li>
-												</ul>
-											</div>
-									    </li>
-									</ul>
+										    </li>
+										</ul>
+									</div>
 								</div>
-							</div>
-						</div>
+							</div> -->
+					</handler>
 					</div>
-				</div>
+				</entity>
 			</div>	
- -->
+
 			
 		</div>
 
