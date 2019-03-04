@@ -81,7 +81,7 @@
 							</article>
 							<hr class="uk-divider-icon">
 
-						<!-- 	<div ng-show='api.value.output_type==1'> 
+							<div ng-show='$ctrl.model.output_type==1'> 
 								<div style="text-align: center;">
 									<h5>CHALLENGE RESPONSE</h5>
 									Your answer
@@ -91,14 +91,13 @@
 									<button class="uk-button uk-button-primary">SUBMIT</button>
 								</div>
 							</div>
-
-							<div ng-show='api.value.output_type==0' >
+							<div ng-show='$ctrl.model.output_type==0' >
 								<div style="text-align: left;" class="uk-padding">
 									<b>SAMPLE TEST CASES</b>
 									<br><br>
 
 
-									<div ng-repeat='i in api.value.testcases track by $index' class="uk-width-2-3">
+									<div ng-repeat='i in $ctrl.model.testcases track by $index' class="uk-width-2-3">
 										<b>TESTCASE {{$index}}</b> 	
 										<div class="uk-child-width-1-2" uk-grid>
 											<div>
@@ -115,10 +114,11 @@
 									<br>
 									<b>EXPLANATION</b>
 
-									<p>{{api.value.settings.testcase_description}}</p>
+									<p>{{$ctrl.model.settings.testcase_description}}</p>
 
 									<hr class="uk-divider-icon">
 
+							<!-- 
 									<div>
 										<b>CHALLENGE RESPONSE</b>
 
@@ -287,7 +287,8 @@
 										</ul>
 									</div>
 								</div>
-							</div> -->
+							 -->
+							</div>
 					</handler>
 					</div>
 				</entity>
