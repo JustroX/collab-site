@@ -102,29 +102,50 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 
 	$scope.pages = [];
 	$scope.pages_loading =false;
+
+	let pages_article_loaded = false;
+	let pages_challenge_loaded = false;
+
 	//page
-	let articleList = apiService.new({ id: "module-article-list" , url: "module/"+$routeParams.id+"/articles", model: "module", method: "list" });
+	let articleList   = apiService.new({ id: "module-article-list" , url: "module/"+$routeParams.id+"/articles", model: "module", method: "list" });
 	let challengeList = apiService.new({ id: "module-challenge-list" , url: "module/"+$routeParams.id+"/challenges", model: "module", method: "list" });
 
 	articleList.on("success",function(res)
 	{
-		$scope.pages_loading = false;
 		for(let i in res)
 			res[i].type = "article";
-		
 		$scope.pages.push(...res);
+		pages_article_loaded = true;
+
+		if(pages_article_loaded && pages_challenge_loaded)
+			all_loaded();
 	});
 	challengeList.on("success",function(res)
 	{
-		$scope.pages_loading = false;
 		for(let i in res)
-			res[i].type = "challenge";
-		
+			res[i].type = "challenge";		
 		$scope.pages.push(...res);
+		pages_challenge_loaded = true;
+
+		if(pages_article_loaded && pages_challenge_loaded)
+			all_loaded();
 	});
 
-	function load_pages()
+	function all_loaded()
 	{
+		$scope.pages_loading = false;
+		$scope.pages.sort( (a,b)=> a.page-b.page );
+		// for(let i in $scope.pages)
+		// 	$scope.pages[i].page = i;
+		load_pages_cp && load_pages_cp();
+	}
+
+	let load_pages_cp ; 
+	function load_pages(c)
+	{
+		load_pages_cp = c;
+		pages_article_loaded = false;
+		pages_challenge_loaded = false;
 		$scope.pages = [];
 		$scope.pages_loading = true;
 		articleList.load();
@@ -169,9 +190,12 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	{
 		UIkit.modal("#modal-challenge-delete").hide();
 		UIkit.notification("Module deleted.","success");
-		load_pages();
-		$scope.page_edit($scope.pages[0]);
 		$scope.page_editor.type = null;
+		load_pages(function()
+		{
+			if($scope.pages.length)
+				$scope.page_edit($scope.pages[0]);			
+		});
 	});
 	article.on("loaded",function()
 	{
@@ -192,14 +216,14 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	article.on("deleted",function()
 	{
 		UIkit.modal("#modal-article-delete").hide();
-		UIkit.notification("Module deleted.","success");
+		UIkit.notification("Article deleted.","success");
 		load_pages();
 		$scope.page_editor.type = null;
 	});
 	challenge.on("deleted",function()
 	{
 		UIkit.modal("#modal-challenge-delete").hide();
-		UIkit.notification("Module deleted.","success");
+		UIkit.notification("Challenge deleted.","success");
 		load_pages();
 		$scope.page_editor.type = null;
 	});
@@ -221,6 +245,28 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	{
 		editor  = quill;
 	}
+
+
+	let page_put = apiService.new({ id: "module-article-put", model:"module" , method: "put" });;
+
+	$scope.move_up = function(i)
+	{
+		let page =  1; 
+		page_put.config.url =  'module/'+ $routeParams.id + '/' + i.type + 's/'+ i._id ;
+		page_put.load({ inc: page });
+	};
+	$scope.move_down = function(i)
+	{
+		let page =  -1; 
+		page_put.config.url =  'module/'+ $routeParams.id + '/' + i.type + 's/'+ i._id ;
+		page_put.load({ inc: page });
+	};
+
+	page_put.on("success",function()
+	{
+		load_pages();
+	});
+
 	$scope.page_edit = function(i)
 	{
 		$scope.page_editor.type = i.type;

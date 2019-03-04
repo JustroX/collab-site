@@ -32,14 +32,16 @@
 					<div style="max-height: 30vh; overflow-y: scroll; width: 80%">
 							<small>
 								<div ng-show='pages_loading'><div uk-spinner></div></div>
-								<div ng-hide='pages.length'>Nothing here.</div>
+								<div ng-hide='pages.length || pages_loading '>Nothing here.</div>
 								<ul ng-hide='pages_loading' uk-accordion="collapsible: true" style="padding: 0px">
 								    <li ng-repeat='i in pages' style="padding: 0px; margin:0px">
-								        <a class="uk-accordion-title" href="#"><small>{{i.content.title}}</small></a>
+								        <a class="uk-accordion-title" href="#"><small> {{i.content.title}}</small></a>
 								        <div class="uk-accordion-content">
 								            <p>
 								            	<a href="javascript:void(0)" ng-click='page_edit(i)'  class="uk-icon-button uk-margin-small-right" uk-icon="file-edit"></a>
-												<!--
+												<a href="javascript:void(0)" ng-click='move_down(i)'  class="uk-icon-button uk-margin-small-right" uk-icon="arrow-up"></a>
+												<a href="javascript:void(0)" ng-click='move_up(i)'  class="uk-icon-button uk-margin-small-right" uk-icon="arrow-down"></a>
+												<!-- 
 												<div>
 													<div id="modal-challenge-delete-{{$index}}" uk-modal>
 													    <div class="uk-modal-dialog uk-modal-body">
@@ -54,7 +56,7 @@
 													        </p>
 													    </div>
 													</div>
-												</div> -->
+												</div>  -->
 								            </p>
 								        </div>
 

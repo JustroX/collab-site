@@ -21,7 +21,7 @@ router.post('/', api.logged, api.postAsync(Challenge,function(req,res,model,done
 		if(err) return res.send({ err: "Database Error.", code: 500 });
 		if(!mod) return res.send({ err: "Module not found.", code: 404});
 
-		mod.challenges.push({ content: model._id , page: mod.toObject().challenges.length });
+		mod.challenges.push({ content: model._id , page: mod.toObject().challenges.length + mod.toObject().articles.length });
 		mod.save(function(err,new_mod)
 		{
 			if(err) return res.send({ err: "Database Error.", code: 500 });

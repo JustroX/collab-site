@@ -23,7 +23,7 @@ router.post('/', api.logged, api.postAsync(Article,function(req,res,model,done)
 		if(err) return res.send({ err: "Database Error.", code: 500 });
 		if(!mod) return res.send({ err: "Module not found.", code: 404});
 
-		mod.articles.push({ content: model._id , page: mod.toObject().articles.length });
+		mod.articles.push({ content: model._id , page: mod.toObject().challenges.length + mod.toObject().articles.length });
 		mod.save(function(err,new_mod)
 		{
 			if(err) return res.send({ err: "Database Error.", code: 500 });
@@ -50,6 +50,33 @@ router.delete('/:id', api.deleteAsync(Article,null,function(req,res,model,done)
 				break;
 			}
 		}
+
+		let pages = [];
+		pages.push(...mod.toObject().articles,...mod.toObject().challenges );
+		for(let i in pages)
+		{
+			let offset = mod.toObject().articles.length;
+			if( i < offset )
+			{
+				pages[i].type = "article";
+				pages[i].loc = i;
+			}
+			else
+			{
+				pages[i].type = "challenge";
+				pages[i].loc = i-offset;
+			}
+		}
+
+		pages.sort((a,b)=>a.page-b.page);
+		for(let i in pages)
+		{
+			if(pages[i].type=="article")
+				mod.articles[ pages[i].loc ].page = i;
+			else
+				mod.challenges[ pages[i].loc ].page = i;
+		}		
+
 		mod.save(function(err,new_mod)
 		{
 			if(err) return res.send({ err: "Database Error.", code: 500 });
