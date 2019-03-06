@@ -1,5 +1,6 @@
 var lib = require('./api-helper.js');
-var User = require('../../models/model_divider.js').model("User");
+var Divider = require('../../models/model_divider.js');
+var User = Divider.model("User");
 
 function get_permission(Model,req,res,perm,PERMISSIONS,cb)
 {
@@ -46,9 +47,43 @@ function get_permission(Model,req,res,perm,PERMISSIONS,cb)
 		else
 			res.send({err:"Permission Denied", code: 403});
 	}
-
-
 }
+
+
+exports.is_authorized = function(Model, ...args)
+{
+	return function(req,res,next)
+	{
+		Model.findById( req.params.id , function(err,model)
+		{
+			if(err) return res.send({ err: "Database Error" , code: 500 });
+			model.is_authorized(req,res,...args,function(auth)
+			{
+				if(auth) next();
+				else
+					return res.send({ code: 403, err : "Permission Denied."});
+			});
+		});
+	}
+}
+exports.is_authorized_parent = function(Model,field, ...args)
+{
+	return function(req,res,next)
+	{
+		console.log(req.body[field]);
+		Model.findById( req.body[field] , function(err,model)
+		{
+			if(err) return res.send({ err: "Database Error" , code: 500 });
+			model.is_authorized(req,res,...args,function(auth)
+			{
+				if(auth) next();
+				else
+					return res.send({ code: 403, err : "Permission Denied."});
+			});
+		});
+	}
+}
+
 exports.get = function(Model,cb)
 {
 	let PERMISSIONS = Model.config.PERMISSIONS;

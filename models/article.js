@@ -47,6 +47,14 @@ module.exports =
 	},
 	methods:
 	{
-
+		is_authorized : function(req,res,num,cb)
+		{
+			if(!Module) Module  =require("./model_divider.js").model("Module");
+			Module.findById(this.module,function(err,mod)
+			{
+				if(err) return res.send({ err: "Database Error" , code:  500 });
+				mod.is_authorized(req,res,num,cb);
+			});
+		}
 	}
 }

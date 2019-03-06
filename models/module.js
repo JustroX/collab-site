@@ -111,11 +111,11 @@ module.exports =
 		is_authorized: function(req,res,num,cb)
 		{
 			if(!Group) Group = require("./model_divider.js").model("Group");
-			
+
 			Group.findById( this.group , function(err,group)
 			{
 				if(err) return res.send({ err: "Database Error" , code:  500 });
-				cb(group.is_authorized(req,res,"module",num));
+				group.is_authorized(req,res,"module",num,cb);
 			});
 		}
 	}

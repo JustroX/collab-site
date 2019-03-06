@@ -94,13 +94,9 @@ module.exports =
 				}
 			}
 		},
-		is_authorized: function(req,res,field,num)
+		is_authorized: function(req,res,field,num,cb)
 		{
-			if(this.get_permission(req.session.passport.user,field)&num)
-				return true;
-			// else
-				// return res.send({ err: "Group: Permission  denied.", code: 403}  );
-			return false;
+			cb((this.get_permission(req.session.passport.user,field)&num)? true : false);
 		}
 	},
 	endpoints:

@@ -5,17 +5,18 @@ var Models = require('../../models/model_divider.js');
 var Module = Models.model("Module");
 var Article = Models.model("Article");
 var Challenge = Models.model("Challenge");
+var Group = Models.model("Group");
 
 var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
 
 
-router.post('/', api.post(Module));
-router.get('/', api.list(Module) );
-router.get('/:id', api.get(Module));
-router.put('/:id', api.put(Module));
-router.delete('/:id', api.deleteAsync(Module,null,function(req,res,mod,done)
+router.post('/', api.logged , api.is_authorized_parent(Group,"group","module",2) ,  api.post(Module));
+router.get('/',  api.logged , api.list(Module) );
+router.get('/:id', api.logged , api.is_authorized(Module,1) , api.get(Module));
+router.put('/:id', api.logged , api.is_authorized(Module,4) , api.put(Module));
+router.delete('/:id', api.logged , api.is_authorized(Module,8) , api.deleteAsync(Module,null,function(req,res,mod,done)
 {
 	let articles_arr = [];
 	let challenges_arr = [];
@@ -38,10 +39,10 @@ router.delete('/:id', api.deleteAsync(Module,null,function(req,res,mod,done)
 }));
 
 //articles
-router.get('/:id/articles/', api.list_endpoint(Module , "articles"));
-router.post('/:id/articles/', api.post_endpoint(Module , "articles"));
-router.get('/:id/articles/:field_id', api.get_endpoint(Module , "articles"));
-router.put('/:id/articles/:field_id', api.put_endpoint(Module , "articles" , null, null, function(req,res,model)
+router.get('/:id/articles/', api.logged , api.is_authorized(Module,1) , api.list_endpoint(Module , "articles"));
+router.post('/:id/articles/', api.logged , api.is_authorized(Module,4) , api.post_endpoint(Module , "articles"));
+router.get('/:id/articles/:field_id', api.logged , api.is_authorized(Module,1) , api.get_endpoint(Module , "articles"));
+router.put('/:id/articles/:field_id', api.logged , api.is_authorized(Module,4) , api.put_endpoint(Module , "articles" , null, null, function(req,res,model)
 {
 	//sort
 	let pages = [];
@@ -93,12 +94,12 @@ router.put('/:id/articles/:field_id', api.put_endpoint(Module , "articles" , nul
 	return true;
 
 } ));
-router.delete('/:id/articles/:field_id', api.delete_endpoint(Module , "articles"));
+router.delete('/:id/articles/:field_id', api.logged , api.is_authorized(Module,4) , api.delete_endpoint(Module , "articles"));
 //challenges
-router.get('/:id/challenges/', api.list_endpoint(Module , "challenges"));
-router.post('/:id/challenges/', api.post_endpoint(Module , "challenges"));
-router.get('/:id/challenges/:field_id', api.get_endpoint(Module , "challenges"));
-router.put('/:id/challenges/:field_id', api.put_endpoint(Module , "challenges", null, null,function(req,res,model)
+router.get('/:id/challenges/', api.logged , api.is_authorized(Module,1) , api.list_endpoint(Module , "challenges"));
+router.post('/:id/challenges/', api.logged , api.is_authorized(Module,4) , api.post_endpoint(Module , "challenges"));
+router.get('/:id/challenges/:field_id', api.logged , api.is_authorized(Module,1) , api.get_endpoint(Module , "challenges"));
+router.put('/:id/challenges/:field_id', api.logged , api.is_authorized(Module,4) , api.put_endpoint(Module , "challenges", null, null,function(req,res,model)
 {
 	//sort
 	let pages = [];
@@ -150,12 +151,12 @@ router.put('/:id/challenges/:field_id', api.put_endpoint(Module , "challenges", 
 	return true;
 
 } ));
-router.delete('/:id/challenges/:field_id', api.delete_endpoint(Module , "challenges"));
+router.delete('/:id/challenges/:field_id', api.logged , api.is_authorized(Module,4) , api.delete_endpoint(Module , "challenges"));
 //badges
-router.get('/:id/badges/', api.list_endpoint(Module , "badges"));
-router.post('/:id/badges/', api.post_endpoint(Module , "badges"));
-router.get('/:id/badges/:field_id', api.get_endpoint(Module , "badges"));
-router.put('/:id/badges/:field_id', api.put_endpoint(Module , "badges"));
-router.delete('/:id/badges/:field_id', api.delete_endpoint(Module , "badges"));
+router.get('/:id/badges/', api.logged , api.is_authorized(Module,1) , api.list_endpoint(Module , "badges"));
+router.post('/:id/badges/', api.logged , api.is_authorized(Module,4) , api.post_endpoint(Module , "badges"));
+router.get('/:id/badges/:field_id', api.logged , api.is_authorized(Module,1) , api.get_endpoint(Module , "badges"));
+router.put('/:id/badges/:field_id', api.logged , api.is_authorized(Module,4) , api.put_endpoint(Module , "badges"));
+router.delete('/:id/badges/:field_id', api.logged , api.is_authorized(Module,4) , api.delete_endpoint(Module , "badges"));
 
 module.exports = router;
