@@ -9,6 +9,7 @@ module.exports =
 		"Article",
 		"Invitation",
 		"Badge",
-		"Post"
+		"Post",
+		"Submission"
 	]
 }

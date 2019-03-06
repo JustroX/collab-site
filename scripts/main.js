@@ -1,5 +1,5 @@
 
-var app = angular.module("site", ["ngRoute","ngSanitize"]);
+var app = angular.module("site", ["ngRoute","ngSanitize","checklist-model"]);
 
 
 app.config(function($routeProvider) {

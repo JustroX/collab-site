@@ -87,6 +87,7 @@ function get_time_limit(l)
 
 function post_to_judge(body,cb)
 {
+	console.log(body);
 	request.post({
 	    headers: {'content-type': 'application/json'},
 	    url: 'https://api.judge0.com/submissions/?base64_encoded=true&wait=true',
@@ -115,6 +116,7 @@ module.exports.judge = function(res,data,cb)
 		post_to_judge(body,function(err,res,body_output)
 		{
 			if(err) return res.send({ code: 500, err: "Database Error."});
+			if(!body_output) return res.send({ code: 500, err: "Empty response."});
 			body_output = JSON.parse(body_output);
 			body_output._id = data._ids[i];
 			body_output.points = data.scores[i];

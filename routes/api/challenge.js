@@ -30,7 +30,28 @@ router.post('/', api.logged, api.postAsync(Challenge,function(req,res,model,done
 	});
 }));
 router.get('/', api.list(Challenge) );
-router.get('/:id', api.get(Challenge));
+router.get('/:id', api.get(Challenge,function(req,res,output)
+{
+	//check permission for user
+	Challenge.findById(req.params.id,function(err,challenge)
+	{
+		challenge.is_authorized(req,res,4,function(authorized)
+		{
+			if(!authorized)
+			{
+				for(let i =0; i < output.testcases.length ; i++)
+					if(!output.testcases[i].sample)
+					{
+						output.testcases.splice(i,1);
+						i--;
+					}
+			}
+			res.send(output);
+		});
+	});
+	//hide hidden testcase
+
+}));
 router.put('/:id', api.put(Challenge));
 router.delete('/:id',  api.deleteAsync(Challenge,null,function(req,res,model,done)
 {

@@ -98,8 +98,8 @@ module.exports =
 		{
 			if(this.get_permission(req.session.passport.user,field)&num)
 				return true;
-			else
-				res.send({ err: "Group: Permission  denied.", code: 403}  );
+			// else
+				// return res.send({ err: "Group: Permission  denied.", code: 403}  );
 			return false;
 		}
 	},

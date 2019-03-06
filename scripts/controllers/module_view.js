@@ -1,4 +1,4 @@
-app.controller("moduleViewController",function($scope,$http,$location,$timeout,$rootScope,apiService,schemaService,modelService,utilService,subpageService,session,$sanitize,$routeParams)
+app.controller("moduleViewController",function($scope,$http,$location,$timeout,$rootScope,apiService,schemaService,modelService,utilService,subpageService,session,$sanitize,$routeParams,judgeService)
 {
 	const subpage=subpageService.Page();
 	const models = schemaService.getModels();
@@ -11,14 +11,21 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
 	$scope.module  = modelService.new({id:"module-model",model:"module"});
 	$scope.module_id = $routeParams.id;
 
+	let loaded  =false;
 
 	$scope.$on('ready',function()
 	{
-		$scope.module.load($routeParams.id);
-		load_pages(function()
+		if(!loaded)
 		{
-			$scope.access_page($routeParams.page);
-		});
+			$scope.module.load($routeParams.id);
+			load_pages(function()
+			{
+				$scope.access_page($routeParams.page);
+			});
+			submissionList.load();
+		}
+
+		loaded = true;
 	});
 
 	$scope.hide_offcanvas = function()
@@ -90,7 +97,8 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
 	$scope.page = 0;
 	$scope.access_page = function(i)
 	{
-
+		window.location.hash = "!/module/"+$routeParams.id+"/view/"+i;
+		UIkit.offcanvas('#module-sidebar').hide();
 		let page = $scope.pages[i];
 		$scope.page = parseInt(i);
 		subpage.goto(page.type);
@@ -105,9 +113,28 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
  	{
  		render_a();
  	});
+
+ 	$scope.languages = [];
+ 	$scope.submission_new_model = {};
+
+	$scope.language_codes = 
+	{
+		"python2" : "Python 2",
+		"python3" : "Python 3",
+		"cpp" : "C++",
+		"c" : "C",
+	}
  	access_models.challenge.on("loaded",function()
  	{
+ 		$scope.languages = access_models.challenge.value.model.settings.languages;
+ 		$scope.submission_new_model.language = $scope.languages[0];
+ 		$scope.change_language($scope.submission_new_model.language);
  		render_c();
+
+ 		for(let i=0; i< access_models.challenge.value.model.testcases.length ; i++)
+ 			if( !access_models.challenge.value.model.testcases[i].sample  )
+ 				access_models.challenge.value.model.testcases.splice(i--,1);
+
  	});
 
  	$scope.page_next = function()
@@ -119,4 +146,176 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
  		$scope.access_page($scope.page - 1);
  	}
 
+ 	let code_editor;
+
+ 	$scope.get_editor  =function(c)	{ code_editor  = c ;};
+ 	$scope.change_language = function(l)
+ 	{
+ 		code_editor.language_change(l);
+ 	}
+
+ 	$scope.run = {};
+
+
+
+ 	$scope.run_code  =function()
+ 	{
+		$scope.run.error = "";
+		scrollTo("scroll-run-results");
+		if($scope.submission_new_model.content=="")
+		{
+			$scope.run.error ="Code can not be blank";
+			return
+		}
+		let data = 
+		{
+			content: $scope.submission_new_model.content,
+			language: $scope.submission_new_model.language,
+			inputs: [],
+			outputs: [],
+			_ids: [],
+		};
+
+		for(let i in access_models.challenge.value.model.testcases)
+		{
+			data.inputs.push(btoa(access_models.challenge.value.model.testcases[i].input) );
+			data.outputs.push(btoa(access_models.challenge.value.model.testcases[i].output) );
+			data._ids.push(access_models.challenge.value.model.testcases[i]._id);
+		}
+
+		$scope.run.loading = true;
+		judgeService.judge(data,function(results)
+		{
+			$scope.run.loading = false;
+			$scope.run.results = results;
+			scrollTo("scroll-run-results");
+		},function(err)
+		{
+		});
+ 	}
+
+ 	//submission
+	let submissionNew = apiService.new({ id: "submission-new", model: "submission" , method: "post" });
+
+	let submission = modelService.new({ id: "submission", model: "submission" });
+
+	submissionNew.on("success",function()
+	{
+		UIkit.modal("#modal-submission-confirm").hide();
+		submissionList.load();
+	});
+
+	let submissionList = apiService.new({ id: "submission-list", model: "submission", method: "list" });
+	submissionList.on("selected",function(u)
+	{
+		submission.load(u._id);
+	});
+
+	$scope.submit_solution = function()
+	{
+		let model  = 
+		{
+			content : btoa($scope.submission_new_model.content) ,
+		    challenge: access_models.challenge.value.model._id,
+		    language: $scope.submission_new_model.language,
+		};
+
+		submissionNew.load(model);
+	}
+
+		$scope.parse = {};
+
+	$scope.parse.compute_score = function(test)
+	{
+		if(!test.verdict) return;
+		let  sum = 0;
+		for(let i in test.verdict.testcases)
+		{
+			let r  = test.verdict.testcases[i];
+			if(r.status.id==3)
+				sum += r.points;
+		}
+		return sum;
+	}
+
+
+	$scope.parse.compute_total =function(test)
+	{
+		if(!test.verdict) return;
+		let  sum = 0;
+		if(!(test && test.verdict)) return;
+		for(let i in test.verdict.testcases)
+		{
+			let r  = test.verdict.testcases[i];
+			sum += r.points;
+		}
+		return sum;	
+	}
+
+
+	$scope.parse.getVerdict = function(test)
+	{
+		if(!test.verdict) return;
+		let c = {};
+		for(let i in test.verdict.testcases)
+		{
+			let r = test.verdict.testcases[i].status.id;
+			c[r] = (c[r] + 1) || 1;
+		}
+		let mx  = 0;
+		let midx  = 0;
+		let acc = 1;	
+
+		for(let i in c)
+		{
+			acc &= (i==3);
+			if(c[i]>mx && i!=3)
+			{
+				mx = c[i];
+				midx = i;
+			}
+		}
+
+
+		let mes =
+		{
+		1:"In Queue",
+		2:"Processing",
+		3:"Accepted",
+		4:"Wrong Answer",
+		5:"Time Limit Exceeded",
+		6:"Compilation Error",
+		7:"Runtime Error (SIGSEGV)",
+		8:"Runtime Error (SIGXFSZ)",
+		9:"Runtime Error (SIGFPE)",
+		10:"Runtime Error (SIGABRT)",
+		11:"Runtime Error (NZEC)",
+		12:"Runtime Error (Other)",
+		13:"Internal Error"};
+		if(acc)
+			return mes[3];
+		else 
+			return mes[midx];
+	}
+
+	$scope.atob = function(x)
+	{
+		let c = "";
+		try
+		{
+			c = atob(x);
+		}
+		catch(err)
+		{
+		}
+		return c;
+	}
 });
+
+
+function scrollTo(tag_id)
+{
+   $('html, body').animate({
+         scrollTop: $('#'+tag_id).offset().top
+    }, 'slow');
+}

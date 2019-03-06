@@ -1,8 +1,9 @@
 var mongoose  = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
-var mongoose  = require('mongoose');
-var Schema = mongoose.Schema;
+
+
+var Group ;
 
 module.exports = 
 {
@@ -105,6 +106,17 @@ module.exports =
 					return true;
 			}
 			return false;
+		},
+
+		is_authorized: function(req,res,num,cb)
+		{
+			if(!Group) Group = require("./model_divider.js").model("Group");
+			
+			Group.findById( this.group , function(err,group)
+			{
+				if(err) return res.send({ err: "Database Error" , code:  500 });
+				cb(group.is_authorized(req,res,"module",num));
+			});
 		}
 	}
 }
