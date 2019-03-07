@@ -65,7 +65,8 @@ module.exports =
 	{
 		liked_by:
 		{
-			user: 1,
+			_id: 1,
+			user: 15,
 			populate:
 			{
 				user: "name username email"
@@ -85,6 +86,12 @@ module.exports =
 				user: "name username email"
 			}
 		},
+	},
+	endpoint_permissions:
+	{
+		liked_by: 15,
+		shared_by: 15,
+		replies: 15
 	},
 	default:
 	{

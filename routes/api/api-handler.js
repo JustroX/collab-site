@@ -471,7 +471,6 @@ exports.post_endpoint = function(Model,endpoint,custom,cb,pre)
 		get_permission_endpoint(Model,endpoint,req,res,2,function()
 		{
 			if(! lib.validate_fields(req,res,PERMISSIONS)) return;
-
 			Model.findById(req.params.id,function(err,model)
 			{
 				if(err) return res.send({ code: 500, err: "Database Error."});
@@ -494,7 +493,7 @@ exports.post_endpoint = function(Model,endpoint,custom,cb,pre)
 				model.save(function(err,model)
 				{
 					if(err) return res.send({ code: 500, err: 'Database Error' });
-					let output = lib.hide_fields(model[endpoint][model[endpoint.length-1]],PERMISSIONS);
+					let output = lib.hide_fields(model[endpoint][model[endpoint].length-1],PERMISSIONS);
 					if(cb) cb(req,res,output); else res.send(output);
 				});
 			});		

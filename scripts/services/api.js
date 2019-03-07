@@ -117,7 +117,7 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
       behavior[this.config.method](this);
     }
 
-    load(payload,restrict)
+    load(payload,restrict,cb)
     {
         let api = this.config;
         let event = this;
@@ -158,6 +158,7 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
               return;
             }
             event.emit("success",res);
+            cb && cb(res);
           },
           function(err)
           {

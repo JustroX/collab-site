@@ -29,7 +29,11 @@ router.delete('/:id', api.delete(Post));
 
 //liked_by
 router.get('/:id/liked_by/', api.list_endpoint(Post , "liked_by"));
-router.post('/:id/liked_by/', api.post_endpoint(Post , "liked_by"));
+router.post('/:id/liked_by/', api.logged, function(req,res,next)
+{
+	req.body.user = req.session.passport.user;
+	next();
+}  , api.post_endpoint(Post , "liked_by"));
 router.get('/:id/liked_by/:field_id', api.get_endpoint(Post , "liked_by"));
 router.put('/:id/liked_by/:field_id', api.put_endpoint(Post , "liked_by"));
 router.delete('/:id/liked_by/:field_id', api.delete_endpoint(Post , "liked_by"));

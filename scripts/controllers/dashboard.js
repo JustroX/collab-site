@@ -57,6 +57,62 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 		postList.load();
 	});
 
+	let postLikeNew    = apiService.new({ id: "post-like-new"   , model: "post", method: "post" });
+	let postLikeDelete = apiService.new({ id: "post-like-delete", model: "post", method: "delete" });
+
+	$scope.post_check_like = function(u)
+	{
+		let field_id;
+		//check if posts already liked
+		for(let i in u.liked_by)
+		if(u.liked_by[i].user == session.getUser()._id )
+		{
+			field_id = u.liked_by[i]._id;
+			break;
+		}
+		return field_id; 
+	}
+
+	postList.on("selected",function(u,type)
+	{
+		if(type == "like")
+		{
+			let field_id;
+			let pos;
+			//check if posts already liked
+			for(let i in u.liked_by)
+			if(u.liked_by[i].user == session.getUser()._id )
+			{
+				field_id = u.liked_by[i]._id;
+				pos = i;
+				break;
+			}
+
+			if(field_id) // liked
+			{
+				if(field_id == 1)
+					return;
+				postLikeDelete.config.url = 'post/' + u._id + '/liked_by/'+field_id;
+				postLikeDelete.load(null,null,function(res)
+				{
+				});
+				u.liked_by.splice(pos,1);
+			}
+			else
+			{
+				postLikeNew.config.url = 'post/' + u._id + '/liked_by';
+				u.liked_by.push({ user: session.getUser()._id, _id: 1 });
+
+				let ref = u.liked_by.length - 1;
+
+				postLikeNew.load(null,null,function(res)
+				{
+					u.liked_by[ref] = res;
+				});
+			}
+		}
+	});
+
 
 	let groupNew  = apiService.new({ id: "group-new", model: "group", method: "post", incomplete_default: "Please fill up all necessary information." });
 	let groupList = apiService.new({ id: "group-list-own", model: "group", method: "list" });
