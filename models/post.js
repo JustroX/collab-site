@@ -18,8 +18,8 @@ module.exports =
 	   shared_by : 
 	    [{ 
 	   		user:   { type: Schema.Types.ObjectId, ref: 'User'} , 
-	   		group:  { type: Schema.Types.ObjectId, ref: 'User'}  ,
-	   		wall: Boolean
+	   		// group:  { type: Schema.Types.ObjectId, ref: 'User'}  ,
+	   		// wall: Boolean
 	   	}],
 	   replies   : 
 	   [{ 
@@ -74,7 +74,8 @@ module.exports =
 		},
 		shared_by:
 		{
-			user: 1,
+			_id: 1,
+			user: 15,
 			group: 1,
 			wall: 1,
 		},

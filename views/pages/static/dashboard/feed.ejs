@@ -62,8 +62,8 @@
 				<editor-view data='{{i.content}}'></editor-view>
 				<div class="uk-text-right">
 					<a ng-click='$ctrl.view(i,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like(i) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
-					<a ng-click='$ctrl.view(i,"retweet")' href="javascript:void(0)"><i class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
-					<a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
+					<a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+					<a ng-click='$ctrl.view(i,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
 				</div>
 			</div>
 		</div>

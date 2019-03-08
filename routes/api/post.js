@@ -36,14 +36,18 @@ router.post('/:id/liked_by/', api.logged, function(req,res,next)
 }  , api.post_endpoint(Post , "liked_by"));
 router.get('/:id/liked_by/:field_id', api.get_endpoint(Post , "liked_by"));
 router.put('/:id/liked_by/:field_id', api.put_endpoint(Post , "liked_by"));
-router.delete('/:id/liked_by/:field_id', api.delete_endpoint(Post , "liked_by"));
+router.delete('/:id/liked_by/:field_id', api.logged, api.delete_endpoint(Post , "liked_by"));
 
 //shared_by
 router.get('/:id/shared_by/', api.list_endpoint(Post , "shared_by"));
-router.post('/:id/shared_by/', api.post_endpoint(Post , "shared_by"));
+router.post('/:id/shared_by/', api.logged , function(req,res,next)
+{
+	req.body.user = req.session.passport.user;
+	next();
+}, api.post_endpoint(Post , "shared_by"));
 router.get('/:id/shared_by/:field_id', api.get_endpoint(Post , "shared_by"));
 router.put('/:id/shared_by/:field_id', api.put_endpoint(Post , "shared_by"));
-router.delete('/:id/shared_by/:field_id', api.delete_endpoint(Post , "shared_by"));
+router.delete('/:id/shared_by/:field_id', api.logged, api.delete_endpoint(Post , "shared_by"));
 
 //replies
 router.get('/:id/replies/', api.list_endpoint(Post , "replies"));
