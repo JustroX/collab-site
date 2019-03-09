@@ -53,6 +53,9 @@ module.exports.init = function()
 		//methods
 		for(let i in model.methods)
 		    ModelSchema.methods[i]  =	model.methods[i];
+		//static
+		for(let i in model.static)
+		    ModelSchema.statics[i]  =	model.static[i];
 
 		//virtuals
 		for(let i in model.virtual)

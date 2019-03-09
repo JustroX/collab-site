@@ -269,7 +269,7 @@ exports.deleteAsync = function(Model,cb,pre)
 
 
 
-exports.list = function(Model,cb)
+exports.list = function(Model,cb,custom_query)
 {
 	let PERMISSIONS = Model.config.PERMISSIONS;
 	let POPULATE = Model.config.POPULATE;
@@ -280,41 +280,50 @@ exports.list = function(Model,cb)
 			let fields = lib.fields(req,PERMISSIONS);
 			let sort = lib.sort(req,PERMISSIONS);
 			let query = lib.filter(req,PERMISSIONS);
-			let options = req.query.option;
-
-			let limit =  (req.query.limit || 10)-1+1;
-			let offset = (req.query.offset || 0)-1+1;
 
 
-			if(options)
+			let execute = function()
 			{
-				let opt = {};
-				Model.count({},function(err,count)
-				{
-					opt.collectionCount = count;
-					if(cb)
-						cb(req,res,opt)
-					else
-						res.send(opt);
-				});
-			}
-			else
-			{
-				console.log(query);
-				let q = Model.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset);
-				for(let i in POPULATE)
-					q = q.populate(i,POPULATE[i]);
+				let options = req.query.option;
 
-				q.exec(function(err,docs)
+				let limit =  (req.query.limit || 10)-1+1;
+				let offset = (req.query.offset || 0)-1+1;
+
+
+				if(options)
 				{
-					console.log(err);
-					if(err) return res.send({ err: "Database Error" , code: 500 });
-					if(cb)
-						cb(req,res,docs);
-					else
-						res.send(docs);
-				});
+					let opt = {};
+					Model.count({},function(err,count)
+					{
+						opt.collectionCount = count;
+						if(cb)
+							cb(req,res,opt)
+						else
+							res.send(opt);
+					});
+				}
+				else
+				{
+					console.log(query);
+					let q = Model.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset);
+					for(let i in POPULATE)
+						q = q.populate(i,POPULATE[i]);
+
+					q.exec(function(err,docs)
+					{
+						console.log(err);
+						if(err) return res.send({ err: "Database Error" , code: 500 });
+						if(cb)
+							cb(req,res,docs);
+						else
+							res.send(docs);
+					});
+				}
 			}
+
+			if(custom_query) custom_query(req,res,query,execute);
+			else execute();
+
 		});
 	}
 }

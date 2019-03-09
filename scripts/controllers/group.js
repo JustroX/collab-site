@@ -46,7 +46,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	//FEED
 	let postNew  = apiService.new({ id: "post-new-group", model: "post", method: "post", incomplete_default: "Can't post empty content." });
-	let postList = apiService.new({ id: "post-list-group", model: "post", method: "list", param: "group="+$scope.group_id+"&sort=-date&parent=$n_null" });
+	let postList = apiService.new({ id: "post-list-group", model: "post", method: "list", url: "post/feed", param: "group="+$scope.group_id+"&sort=-date&parent=$n_null" });
 	postNew.on("success",function()
 	{
 		postList.load();

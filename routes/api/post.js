@@ -27,7 +27,22 @@ api.post(Post,function(req,res,model)
 
 	return model;
 }));
+
 router.get('/', api.logged, api.list(Post) );
+
+router.get('/feed', api.logged, api.list(Post , null, function(req,res,query,next)
+{
+	Post.getFeedFilter( req.session.passport.user ,function( obj )
+	{
+		if(query["group"] == null)
+		{
+			obj["author"].push(req.session.passport.user);
+			query["author"] = obj["author"] ;
+		}
+		next();
+	});
+}));
+
 router.get('/:id',api.logged, api.get(Post));
 router.put('/:id',api.logged,api.put(Post, null, function(req,res,post)
 	{

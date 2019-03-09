@@ -56,7 +56,7 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 
 	let postNew  = apiService.new({ id: "post-new", model: "post", method: "post", incomplete_default: "Can't post empty content." });
-	let postList = apiService.new({ id: "post-list", model: "post", method: "list", param: "sort=-date&group=$n_null&parent=$n_null" });
+	let postList = apiService.new({ id: "post-list", model: "post", method: "list", url: "post/feed", param: "sort=-date&group=$n_null&parent=$n_null" });
 	postNew.on("success",function()
 	{
 		postList.load();

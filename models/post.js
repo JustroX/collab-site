@@ -97,9 +97,22 @@ module.exports =
 
 	static:
 	{
-		getFeed : function ()
+		getFeedFilter : function(u,cb)
 		{
+			if(!User)
+				User =  require('./model_divider.js').model("User");
+			User.findById(u,function(err,model)
+			{
+				if(err) return res.send({ code: 500, err: "Database Error"});
+				let follows = [];
 
+				for(let i in model.toObject().follows)
+					follows.push(model.follows[i].user);
+				cb( { "author" : follows } );
+			});
 		}
 	}
 }
+
+
+var User;
