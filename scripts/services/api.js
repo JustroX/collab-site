@@ -242,16 +242,21 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
   behavior["post"] =  function(api){
     api.validate = function(payload)
     {
+
+        if(api.config.url != api.config.model)
+          return true;
+
         let required = schemaService.getRequired("post",api.config.model);
         let missing = [];
         if(!api.config.url)
         for(let field of required)
         {
-          if( (field.split(".").length > 1)? [NaN,undefined,null,""].includes(payload[field.split(".")[0]][field.split(".")[1]]) : [NaN,undefined,null,""].includes(payload[field])    )
+          if( (field.split(".").length > 1)? 
+            [NaN,undefined,null,""].includes(payload[field.split(".")[0]][field.split(".")[1]]) : 
+            [NaN,undefined,null,""].includes(payload[field])    )
             missing.push(field);
         }
         api.missing_fields  =missing;
-        console.log(missing);
         return !missing.length;
     }
   }

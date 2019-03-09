@@ -19,7 +19,13 @@ module.exports =
 			user : {type: Schema.Types.ObjectId, ref: "User"}
 		}],
 		
-		followed_by: [{type: Schema.Types.ObjectId, ref: "User"}],
+		followed_by:  
+		[{ 
+			user : {type: Schema.Types.ObjectId, ref: "User"}
+		}],
+		badges: [{
+			badge: {type: Schema.Types.ObjectId, ref: "Badge"}
+		}],
 
 		authorization: Object,
 		private:
@@ -105,6 +111,9 @@ module.exports =
 	   password: 4,
 
 	   follows: 13,
+	   followed_by: 13,
+
+	   badges: 13,
 	},
 	required:
 	{
@@ -121,16 +130,26 @@ module.exports =
 	},
 	endpoints:
 	{
-		follows:
+		followed_by:
+		{
+			_id: 1,
+			user: 3	
+		},
+
+		badges:
 		{
 			populate:
 			{
-				user: "name fullname email"
+				user: "name"
 			},
 
 			_id: 1,
-			user: 3	
+			badge: 3	
 		}
+	},
+	endpoint_permissions:
+	{
+		followed_by: 15,
 	},
 	methods:
 	{

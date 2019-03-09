@@ -468,6 +468,7 @@ exports.get_endpoint = function(Model,endpoint,cb)
 exports.post_endpoint = function(Model,endpoint,custom,cb,pre)
 {
 	let PERMISSIONS = Model.config.endpoints[endpoint];
+	console.log(endpoint,PERMISSIONS);
 	return function(req,res,next)
 	{
 		get_permission_endpoint(Model,endpoint,req,res,2,function()

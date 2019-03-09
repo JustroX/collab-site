@@ -299,6 +299,7 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 	
 	$scope.post_owned = function(i)
 	{
+		if(!i.author) return;
 		return i.author._id == session.getUser()._id ;
 	}
 });

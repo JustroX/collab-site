@@ -195,7 +195,6 @@ exports.validate_fields = function(req,res,PERMISSIONS)
 		}
 	}
 
-
 	if(!complete)
 		res.send({ code: 400, err: "Invalid request." });
 	return complete

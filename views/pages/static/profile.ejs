@@ -1,0 +1,137 @@
+<% include navbar %>
+<div ng-controller='profileController'>
+	<div  class="uk-animation-fade">	
+		<div>
+			<entity bind='profile'>
+				<handler bind='{{$ctrl.get.config.id}}' model='$ctrl.model'>
+					<div class="uk-animation-slide-bottom-small">
+						<div class="uk-section uk-section-secondary uk-light">
+						    <div class="uk-container">
+						        <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
+						            <div>
+						            </div>
+						            <div style="text-align: center;">
+						            	<div>
+							            	<img class="uk-border-circle" src="https://abs.twimg.com/sticky/default_profile_images/default_profile.png" style="width: 150px; height: 150px;">
+						            	</div>
+								        <h3 style="margin-bottom: 0px">{{ $ctrl.model.fullname }}</h3>
+								       	<i class="uk-text-meta" style="color: white; font-size: 15pt">{{ $ctrl.model.username }}</i>
+								       	<br><br>
+								       	<div ng-show='$ctrl.model._id != SESSION_USER._id '>
+									       	<button ng-hide='is_following($ctrl.model)' 	ng-click='follow( $ctrl.model) ' class="uk-button" style="border-radius: 5px; color: white; background: linear-gradient(45deg,#0086b3,#00b3b3); width: 150px;">Follow</button>
+									       	<button ng-show='is_following($ctrl.model)' 	ng-click='unfollow( $ctrl.model )' class="uk-button" style="border-radius: 5px; color: white; background: linear-gradient(45deg,#0086b3,#00b3b3); width: 150px;">Unfollow</button>
+							       	</div>
+						            </div>
+						            <div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+					</div>
+					<div class="uk-section uk-section-default">
+						    <div class="uk-container">
+
+
+						        <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
+						            <div>
+						            </div>
+						            <div style="text-align: center;">
+						                <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
+						                	<div>
+						                		<b>Following</b><br>
+						                		<big>{{$ctrl.model.follows.length}}</big>
+						                	</div>
+						                	<div>
+						                		<b>Followers</b><br>
+						                		<big>{{$ctrl.model.followed_by.length}}</big>
+						                	</div>
+						                	<div>
+						                		<b>Badges</b><br>
+						                		<big>{{$ctrl.model.badges.length}}</big>
+						                	</div>
+						                </div>
+
+								        <h3>About</h3>
+						                <p ng-show="$ctrl.model.bio" uk-scrollspy="cls: uk-animation-slide-bottom-small" class="uk-text-lead">{{$ctrl.model.bio  }}</p>
+						                <p ng-hide="$ctrl.model.bio" uk-scrollspy="cls: uk-animation-slide-bottom-small" class="uk-text-lead"> " Too shy to leave a bio " </p>
+
+						                <div class="uk-padding uk-padding-remove-vertical">
+						                	<p uk-scrollspy="cls: uk-animation-slide-bottom-small" class="uk-text-meta"> {{$ctrl.model.school }} </p>
+						                	<p ng-if='$ctrl.model.birthday' uk-scrollspy="cls: uk-animation-slide-bottom-small" class="uk-text-meta">Born on {{$ctrl.model.birthday | date: "MMMM d, y" }}</p>
+						                </div>
+						                <br>
+						                <hr>
+<!-- 
+						                <div ng-if='$ctrl.model.badges.length > 0'>
+									        <h3 style="margin-top: 0px">Badges</h3>
+							            	<div uk-scrollspy="target: > img; cls:uk-animation-fade; delay: 500">
+								            	<img uk-tooltip="title: Beginner's Badge" src="/assets/badge-sample.png" style="width: 100px; height: 100px">
+								            	<img uk-tooltip="title: Beginner's Badge" src="/assets/badge-sample.png" style="width: 150px; height: 150px">
+								            	<img uk-tooltip="title: Beginner's Badge" src="/assets/badge-sample.png" style="width: 100px; height: 100px">
+								            	<br>
+								            	<a class="uk-text-muted" href="javascript:void(0)">View more</a>
+							            	</div>
+							            	<hr>
+						                </div>
+						                <div ng-if='$ctrl.model.guilds.length > 0'>
+									        <h3 style="margin-top: 0px">Guilds</h3>
+							            	<div uk-scrollspy="target: > img; cls:uk-animation-fade; delay: 500">
+								            	<img uk-tooltip="title: Beginner's Guild" src="/assets/guild-blank.png" style="width: 100px; height: 100px">
+								            	<img uk-tooltip="title: Beginner's Guild" src="/assets/guild-blank.png" style="width: 150px; height: 150px">
+								            	<img uk-tooltip="title: Beginner's Guild" src="/assets/guild-blank.png" style="width: 100px; height: 100px">
+								            	<br>
+								            	<a class="uk-text-muted" href="javascript:void(0)">View more</a>
+							            	</div>
+							            	<br>
+							            	<hr>
+						                </div>
+ -->
+						            </div>
+						            <div>
+						            </div>
+						        </div>
+
+						    </div>
+					</div>
+				</handler>
+			</entity>
+
+		</div>
+	<!-- 
+		<div ng-show="subpage.here('main')" class="uk-child-width-1-3" uk-grid>
+			<div></div>
+			<div></div>
+			<div>
+				<div id='totop-sticky' style="text-align: center;padding-right: 30px" >
+					<div uk-sticky="offset: 600; top: 70vh">
+						<a href="#" uk-totop uk-scroll>Go to Top &nbsp;</a>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+		<div class="uk-animation-slide-bottom-small">
+			<div class="uk-text-center">
+				<h2>Recent Activity</h2>
+			</div>
+			<div>
+				<div class="uk-child-width-1-4" uk-grid>
+					<div></div>
+					<div class="uk-width-1-2">
+						<% include profile/feed %>
+					</div>
+				</div>
+			</div>
+			<div>
+			</div> 
+		</div>
+
+
+
+
+
+	</div>
+
+
+	<br><br><br><br><br><br>
+</div>

@@ -8,9 +8,8 @@
         </div>
 		<div class="uk-width-expand">
 			<div ng-click='feed_editor_toggle()' class="ex-boundary uk-text-muted" style="padding: 2px;padding-left: 10px; cursor: text;">
-				<small>Justine, write something...</small>
+				<small>{{ SESSION_USER.name.first }}, write something...</small>
 			</div>
-			<!-- <p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">Justine Che</p> -->
 		</div>
     </div>
 	<div id="feed-editor-block" style="display: none">
@@ -19,7 +18,7 @@
 			<div style="margin-top: 5px;padding-left: 5px">
 				<div class="uk-float-left">
 					<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
-		           	<small>Justine Che T. Romero</small>
+		           	<small>{{ SESSION_USER.fullname }}</small>
 				</div>
 				<div class="uk-float-right">
 					<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
@@ -49,8 +48,8 @@
 		                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
 		            </div>
 		            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
-		            	<a href="javascript:void(0)" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
-		            	<i><small><a class="uk-link-muted" href="javascript:void(0)">@{{i.author.username}}</a></small></i>
+		            	<a href="#!/profile/{{i.author._id}}" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
+		            	<i><small><a class="uk-link-muted" href="#!/profile/{{i.author._id}}">@{{i.author.username}}</a></small></i>
 		            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
 		            </div>
 		            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
@@ -91,7 +90,7 @@
 						<div style="margin-top: 5px;padding-left: 5px">
 							<div class="uk-float-left">
 								<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
-					           	<small>Justine Che T. Romero</small>
+					           	<small>{{ SESSION_USER.fullname }}</small>
 							</div>
 							<div class="uk-float-right">
 								<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
@@ -140,12 +139,19 @@
 					                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
 					            </div>
 					            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
-					            	<a href="javascript:void(0)" style="color: #2b2b2b"><small>{{$ctrl.model.author.fullname}}</small></a> &middot; 
-					            	<i><small><a class="uk-link-muted" href="javascript:void(0)">@{{$ctrl.model.author.username}}</a></small></i>
+					            	<a href="#!/profile/$ctrl.model.author._id" style="color: #2b2b2b"><small>{{$ctrl.model.author.fullname}}</small></a> &middot; 
+					            	<i><small><a class="uk-link-muted" href="#!/profile/$ctrl.model.author._id">@{{$ctrl.model.author.username}}</a></small></i>
 					            	<i><small>{{moment($ctrl.model.date).fromNow()}}</small></i> 
 					            </div>
-					            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
-				            		<a href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+				                <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
+				            		<a ng-show='post_owned($ctrl.model)' href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+			            		    <div uk-dropdown="mode: click; pos: bottom-right" style="padding: 15px;">
+			            		    	<ul class="uk-nav uk-dropdown-nav uk-text-left">
+											<li><a href="javascript:void(0)" ng-click='post_edit($ctrl.model)' ><i class="fas fa-pen"></i> Edit  </a>  </li>
+											<li><a href="javascript:void(0)" ng-click='post_delete($ctrl.model)' ><i class="fas fa-trash"></i> Delete</a> </li>
+											<li><a href="javascript:void(0)" ></a></li>
+										</ul>
+			            		    </div>
 					            </div>
 							</div>
 							<div style="padding: 5px;">
@@ -177,12 +183,20 @@
 							                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
 							            </div>
 							            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
-							            	<a href="javascript:void(0)" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
-							            	<i><small><a class="uk-link-muted" href="javascript:void(0)">@{{i.author.username}}</a></small></i>
+							            	<a href="#!/profile/{{i.author._id}}" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
+							            	<i><small><a class="uk-link-muted" href="#!/profile/{{i.author._id}}">@{{i.author.username}}</a></small></i>
 							            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
 							            </div>
+							            
 							            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
-						            		<a href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+						            		<a ng-show='post_owned(i)' href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+					            		    <div uk-dropdown="mode: click; pos: bottom-right" style="padding: 15px;">
+					            		    	<ul class="uk-nav uk-dropdown-nav uk-text-left">
+													<li><a href="javascript:void(0)" ng-click='post_edit(i)' ><i class="fas fa-pen"></i> Edit  </a>  </li>
+													<li><a href="javascript:void(0)" ng-click='post_delete(i)' ><i class="fas fa-trash"></i> Delete</a> </li>
+													<li><a href="javascript:void(0)" ></a></li>
+												</ul>
+					            		    </div>
 							            </div>
 									</div>
 								</div>
@@ -209,18 +223,18 @@
 				        </div>
 						<div class="uk-width-expand">
 							<div ng-click='reply_editor_toggle()' class="ex-boundary uk-text-muted" style="padding: 2px;padding-left: 10px; cursor: text;">
-								<small>Justine, so what do you think?</small>
+								<small>{{ SESSION_USER.name.first }}, so what do you think?</small>
 							</div>
-							<!-- <p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">Justine Che</p> -->
+							<!-- <p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">{{ SESSION_USER.name.first }} Che</p> -->
 						</div>
 				    </div>
 				    <div id="reply-editor-block" style="display: none; background: white">
 						<handler bind='reply-new' model='reply.model'>
-							<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_feed_editor_reply" style='height: 30vh;'></editor>
+							<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_reply_editor_reply" style='height: 30vh;'></editor>
 							<div style="margin-top: 5px;padding-left: 5px">
 								<div class="uk-float-left">
 									<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
-						           	<small>Justine Che T. Romero</small>
+						           	<small>{{ SESSION_USER.fullname }}</small>
 								</div>
 								<div class="uk-float-right">
 									<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>

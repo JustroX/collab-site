@@ -11,11 +11,11 @@
 			                <img class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
 			            </div>
 						<div class="uk-width-expand">
-							<p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">Justine Che</p>
+							<p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">{{ SESSION_USER.name.first }}</p>
 						</div>
 			        </div>
 			        <div class="uk-width-large" uk-dropdown>
-						Justine Che T. Romero
+						{{ SESSION_USER.fullname }}
 					    <div class="uk-dropdown-grid uk-child-width-1-2@m" uk-grid>
 					        <div>
 					            <ul class="uk-nav uk-dropdown-nav">

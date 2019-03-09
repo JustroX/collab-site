@@ -31,6 +31,9 @@ app.config(function($routeProvider) {
     .when("/module/:id/view/", {
         redirectTo: '/module/:id/view/0',  
     })
+    .when("/profile/:id/", {
+        templateUrl : "/page/profile",
+    })
     .when("/404", {
         templateUrl : "/page/404",
     })
