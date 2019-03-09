@@ -56,6 +56,7 @@ module.exports =
 		liked_by : 13,
 		shared_by : 13,
 		replies : 13,
+		parent: 3,
 	},
 	methods:
 	{
@@ -97,5 +98,13 @@ module.exports =
 	default:
 	{
 		permission: 15,
+	},
+
+	static:
+	{
+		getFeed : function ()
+		{
+
+		}
 	}
 }

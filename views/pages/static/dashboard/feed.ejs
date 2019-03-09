@@ -70,3 +70,117 @@
 
 	</div>
 </handler>
+
+<div>
+	<div id="reply-modal" uk-modal>
+		<div class="uk-modal-body uk-modal-dialog" style="background: rgba(0,0,0,0);">
+		    <div style="background: white;" class="ex-boundary">
+		    	<entity bind='post-view'>
+		    		<handler bind='{{ $ctrl.get.config.id }}' model='$ctrl.model' >
+		    			<div ng-show = '$ctrl.api.config.state.loading' class="uk-text-center uk-padding-small">
+		    				<div uk-spinner></div>
+		    			</div>
+				        <div ng-hide = '$ctrl.api.config.state.loading'>
+							<div uk-grid> 
+								<div class="uk-width-auto ">
+					                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+					            </div>
+					            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
+					            	<a href="javascript:void(0)" style="color: #2b2b2b"><small>{{$ctrl.model.author.fullname}}</small></a> &middot; 
+					            	<i><small><a class="uk-link-muted" href="javascript:void(0)">@{{$ctrl.model.author.username}}</a></small></i>
+					            	<i><small>{{moment($ctrl.model.date).fromNow()}}</small></i> 
+					            </div>
+					            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
+				            		<a href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+					            </div>
+							</div>
+							<div style="padding: 5px;">
+								<editor-view data='{{$ctrl.model.content}}' access='get_render'></editor-view>
+								<div class="uk-text-right">
+									<a ng-click='feedback( $ctrl.model ,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like($ctrl.model) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
+									<a ng-click='feedback( $ctrl.model ,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share($ctrl.model) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+									<a ng-click='feedback( $ctrl.model ,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
+								</div>
+							</div>
+						</div>
+		    		</handler>	
+		    	</entity>
+		    </div>
+	    	<handler bind='reply-list'>
+	    		<div class="uk-padding-small">
+			    	<div style="color: red;" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
+					<div style="color: white" ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+						<div uk-spinner></div>
+						Loading Replies...
+					</div>
+					<!-- <div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 150;"> -->
+
+						<div ng-show='!$ctrl.api.config.state.loading' style="background: white; margin-top: 5px;" class=" uk-card uk-card-body ex-boundary " ng-repeat='i in $ctrl.model' >
+							<div>
+								<div>
+									<div uk-grid> 
+										<div class="uk-width-auto ">
+							                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+							            </div>
+							            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
+							            	<a href="javascript:void(0)" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
+							            	<i><small><a class="uk-link-muted" href="javascript:void(0)">@{{i.author.username}}</a></small></i>
+							            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
+							            </div>
+							            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
+						            		<a href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+							            </div>
+									</div>
+								</div>
+								<div style="padding: 5px;">
+									<editor-view data='{{i.content}}'></editor-view>
+									<div class="uk-text-right">
+										<a ng-click='$ctrl.view(i,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like(i) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
+										<a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+										<a ng-click='$ctrl.view(i,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
+									</div>
+								</div>
+							</div>
+						</div>
+
+					<!-- </div> -->
+	    			
+	    		</div>
+	    	</handler>
+	    	<div>
+	    		<div  id="reply-editor-container" style="display: none;margin: 10px; background: white" class="uk-card uk-card-body ex-boundary">
+					<div id="reply-editor" style="display: none;" ng-show='!feed_editor_active' class="uk-grid-small uk-flex-middle" uk-grid>
+				        <div class="uk-width-auto ">
+				            <img class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+				        </div>
+						<div class="uk-width-expand">
+							<div ng-click='reply_editor_toggle()' class="ex-boundary uk-text-muted" style="padding: 2px;padding-left: 10px; cursor: text;">
+								<small>Justine, so what do you think?</small>
+							</div>
+							<!-- <p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">Justine Che</p> -->
+						</div>
+				    </div>
+				    <div id="reply-editor-block" style="display: none; background: white">
+						<handler bind='reply-new' model='reply.model'>
+							<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_feed_editor_reply" style='height: 30vh;'></editor>
+							<div style="margin-top: 5px;padding-left: 5px">
+								<div class="uk-float-left">
+									<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+						           	<small>Justine Che T. Romero</small>
+								</div>
+								<div class="uk-float-right">
+									<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+									<div ng-show='!$ctrl.api.config.state.loading'>
+										<button ng-click='reply_editor_toggle()' class="uk-button uk-button-small uk-button-default" style="border-radius: 4px">Cancel</button>
+										<button ng-class="{ 'ex-button uk-button-primary': $ctrl.model.content, 'uk-button-default': !$ctrl.model.content  }" ng-click='$ctrl.submit()' class="uk-button uk-button-small uk-button-primary ex-button ">Post</button>
+									</div>
+								</div>
+								<div class="uk-float-right" style="color: red; padding-right: 5px" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
+							</div>
+						</handler>
+					</div>
+	    		</div>
+	    	</div>
+		</div>
+	</div>
+</div>

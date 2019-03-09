@@ -32,6 +32,18 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 				$("#feed-editor").fadeToggle(500);
 			});
 	}
+	$scope.reply_editor_toggle = function()
+	{
+		if($("#reply-editor").is(":visible"))
+			$("#reply-editor").fadeToggle(500,function(){
+				$("#reply-editor-block").fadeToggle(500);
+				feed_editor.focus();
+			});
+		else
+			$("#reply-editor-block").fadeToggle(500,function(){
+				$("#reply-editor").fadeToggle(500);
+			});
+	}
 
 
 	$scope.on_feed_editor = function(quill)
@@ -44,7 +56,7 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 
 	let postNew  = apiService.new({ id: "post-new", model: "post", method: "post", incomplete_default: "Can't post empty content." });
-	let postList = apiService.new({ id: "post-list", model: "post", method: "list", param: "sort=-date," });
+	let postList = apiService.new({ id: "post-list", model: "post", method: "list", param: "sort=-date" });
 	postNew.on("success",function()
 	{
 		postList.load();
@@ -56,6 +68,8 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 		$("#feed-editor").fadeIn();
 		postList.load();
 	});
+
+	let replyList = apiService.new({ id: "reply-list", model: "post", method : "list" });
 
 	let postLikeNew    = apiService.new({ id: "post-like-new"   , model: "post", method: "post" });
 	let postLikeDelete = apiService.new({ id: "post-like-delete", model: "post", method: "delete" });
@@ -90,7 +104,16 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 	let postUtil = {};
 
+	$scope.feedback = function(u,type)
+	{
+		postUtil[type] && postUtil[type](u);
+	}
+
 	postList.on("selected",function(u,type)
+	{
+		postUtil[type] && postUtil[type](u);
+	});
+	replyList.on("selected",function(u,type)
 	{
 		postUtil[type] && postUtil[type](u);
 	});
@@ -161,6 +184,48 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 			});
 		}
 	}
+
+	let replyNew = apiService.new({ id: "reply-new", model: "post",  incomplete_default: "Can't post empty content." , method: "post"})
+	let reply_editor;
+	$scope.on_feed_editor_reply = function(quill)
+	{
+        reply_editor = quill;
+	}
+	replyNew.on("success",function()
+	{
+		$scope.reply_editor_toggle();
+		replyList.load();
+	});
+
+	$scope.reply  = {model: {}};
+
+	postUtil.reply = function(u)
+	{
+		UIkit.modal("#reply-modal").show();
+		post.load(u._id);
+
+		replyList.config.param =  "parent=" + u._id;
+		replyList.load();
+
+		$scope.reply.model.group  = u.group;
+		$scope.reply.model.parent = u._id;
+
+		$("#reply-editor-container").fadeIn();
+		$("#reply-editor").fadeIn();
+	}
+
+	let post = modelService.new({ id: "post-view" , model : "post"  });
+	let render;
+
+	$scope.get_render = function(cb)
+	{
+		render = cb;
+	}
+
+	post.on("loaded",function()
+	{
+		render();
+	});
 
 
 	let groupNew  = apiService.new({ id: "group-new", model: "group", method: "post", incomplete_default: "Please fill up all necessary information." });
