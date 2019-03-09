@@ -4,7 +4,13 @@ var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
 
-router.post('/', api.logged, api.post(Post,function(req,res,model)
+router.post('/', api.logged, function(req,res,next)
+{
+	req.body.group = req.body.group  || "$n_null";
+	req.body.parent = req.body.parent || "$n_null";
+	next();
+},
+api.post(Post,function(req,res,model)
 {
 	if(req.body.group == "self")
 	{
@@ -21,10 +27,19 @@ router.post('/', api.logged, api.post(Post,function(req,res,model)
 
 	return model;
 }));
-router.get('/', api.list(Post) );
-router.get('/:id', api.get(Post));
-router.put('/:id', api.put(Post));
-router.delete('/:id', api.delete(Post));
+router.get('/', api.logged, api.list(Post) );
+router.get('/:id',api.logged, api.get(Post));
+router.put('/:id',api.logged,api.put(Post, null, function(req,res,post)
+	{
+		if(!post.author.equals(req.session.passport.user))
+		{
+			res.send({ code: 403, err: "Permission Denied." });
+			return false;
+		}
+		return true;
+	}
+));
+router.delete('/:id',api.logged,api.delete(Post));
 
 
 //liked_by
@@ -48,12 +63,5 @@ router.post('/:id/shared_by/', api.logged , function(req,res,next)
 router.get('/:id/shared_by/:field_id', api.get_endpoint(Post , "shared_by"));
 router.put('/:id/shared_by/:field_id', api.put_endpoint(Post , "shared_by"));
 router.delete('/:id/shared_by/:field_id', api.logged, api.delete_endpoint(Post , "shared_by"));
-
-//replies
-router.get('/:id/replies/', api.list_endpoint(Post , "replies"));
-router.post('/:id/replies/', api.post_endpoint(Post , "replies"));
-router.get('/:id/replies/:field_id', api.get_endpoint(Post , "replies"));
-router.put('/:id/replies/:field_id', api.put_endpoint(Post , "replies"));
-router.delete('/:id/replies/:field_id', api.delete_endpoint(Post , "replies"));
 
 module.exports = router;

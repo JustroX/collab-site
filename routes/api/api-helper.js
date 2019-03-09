@@ -131,7 +131,12 @@ exports.filter = function(req,PERMISSIONS)
 		}
 		else
 		if(i.set)
-			query[i.field] = i.set;
+		{
+			if(i.set=="$n_null")
+				query[i.field] = null ;
+			else
+				query[i.field] = i.set;
+		}
 		else
 		{
 			query[i.field] = {};
@@ -185,8 +190,11 @@ exports.validate_fields = function(req,res,PERMISSIONS)
 		if(PERMISSIONS[i]&2)
 		{
 			complete &= body[i] != null
+			if(body[i] == "$n_null")
+				body[i] = null;
 		}
 	}
+
 
 	if(!complete)
 		res.send({ code: 400, err: "Invalid request." });

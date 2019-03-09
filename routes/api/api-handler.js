@@ -300,12 +300,14 @@ exports.list = function(Model,cb)
 			}
 			else
 			{
+				console.log(query);
 				let q = Model.find(query,fields.join(' ')).sort(sort).limit(limit).skip(limit*offset);
 				for(let i in POPULATE)
 					q = q.populate(i,POPULATE[i]);
 
 				q.exec(function(err,docs)
 				{
+					console.log(err);
 					if(err) return res.send({ err: "Database Error" , code: 500 });
 					if(cb)
 						cb(req,res,docs);

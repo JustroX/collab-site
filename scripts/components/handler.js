@@ -5,7 +5,7 @@ app.component('handler',{
       id: "@bind",  
       model : "=?" ,
       default :"=?",
-      reset : "@?"
+      reset : "@?",
     },
     controller: function(apiService,$timeout,$transclude,schemaService,$element)
     {
@@ -36,10 +36,10 @@ app.component('handler',{
           ctrl.api = apiService.find(ctrl.id).apis[0];
           ctrl.api.on("success",function(res)
           {
-            if(ctrl.api.config.method=="get" || ctrl.api.config.method=="list" )
-              ctrl.model = res;
-            if(ctrl.api.config.method=="post" && ctrl.reset)
-              ctrl.model = {};
+              if(ctrl.api.config.method=="get" || ctrl.api.config.method=="list" )
+                ctrl.model = res;
+              if(ctrl.api.config.method=="post" && ctrl.reset)
+                ctrl.model = {};
           });
 
           if( ctrl.api.config.method == "post" ||  ctrl.api.config.method == "put" )
@@ -47,6 +47,7 @@ app.component('handler',{
             ctrl.required = schemaService.getRequired(ctrl.api.config.method,ctrl.api.config.model);
             ctrl.fields = schemaService.getFields(ctrl.api.config.model);
           }
+
         }
 
         let wait = function(){  

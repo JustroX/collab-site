@@ -56,7 +56,7 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 
 	let postNew  = apiService.new({ id: "post-new", model: "post", method: "post", incomplete_default: "Can't post empty content." });
-	let postList = apiService.new({ id: "post-list", model: "post", method: "list", param: "sort=-date" });
+	let postList = apiService.new({ id: "post-list", model: "post", method: "list", param: "sort=-date&group=$n_null&parent=$n_null" });
 	postNew.on("success",function()
 	{
 		postList.load();
@@ -263,5 +263,42 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 		 groupListExplore.load();
 	});
 
+	let postEdit = modelService.new({ id: "post-edit" , model: "post" })
+	$scope.post_edit = function(u)
+	{
+		postEdit.load(u._id);
+		UIkit.modal("#editor-modal").show();
+	}
+	let edit_editor;
+	$scope.on_edit_editor  = function(q){ edit_editor = q; };
+	postEdit.on("loaded",function(res)
+	{
+		if(edit_editor)
+		edit_editor.setContents(JSON.parse( postEdit.value.model.content ));
+	});
+	postEdit.on("saved",function(res)
+	{
+		UIkit.modal("#editor-modal").hide();
+		postList.load();
+	});
 
+
+	postEdit.on("deleted",function(res)
+	{
+		UIkit.modal("#delete-modal").hide();
+		postList.load();
+	});
+
+
+	$scope.post_delete = function(u)
+	{
+		postEdit.load(u._id);
+		UIkit.modal("#delete-modal").show();
+	}
+
+	
+	$scope.post_owned = function(i)
+	{
+		return i.author._id == session.getUser()._id ;
+	}
 });

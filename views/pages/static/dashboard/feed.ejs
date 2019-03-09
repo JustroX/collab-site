@@ -14,7 +14,7 @@
 		</div>
     </div>
 	<div id="feed-editor-block" style="display: none">
-		<handler bind='post-new' model='{ group: "self" }'>
+		<handler bind='post-new' model='{ group: null, parent: null }'>
 			<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_feed_editor" style='height: 30vh;'></editor>
 			<div style="margin-top: 5px;padding-left: 5px">
 				<div class="uk-float-left">
@@ -35,14 +35,14 @@
 </div>
 
 <br>
-<handler bind='post-list'>
+<handler bind='post-list' refer='true'>
 	<div style="color: red;" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
 	<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
 		<div uk-spinner></div>
 	</div>
 	<div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 500;">
 
-		<div ng-show='!$ctrl.api.config.state.loading' class="uk-card uk-card-body ex-boundary " style="margin-top: 5px" ng-repeat='i in $ctrl.model'>
+		<div class="uk-card uk-card-body ex-boundary " style="margin-top: 5px" ng-repeat='i in $ctrl.model'>
 			<div>
 				<div uk-grid> 
 					<div class="uk-width-auto ">
@@ -54,7 +54,14 @@
 		            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
 		            </div>
 		            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
-	            		<a href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+	            		<a ng-show='post_owned(i)' href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+            		    <div uk-dropdown="mode: click; pos: bottom-right" style="padding: 15px;">
+            		    	<ul class="uk-nav uk-dropdown-nav uk-text-left">
+								<li><a href="javascript:void(0)" ng-click='post_edit(i)' ><i class="fas fa-pen"></i> Edit  </a>  </li>
+								<li><a href="javascript:void(0)" ng-click='post_delete(i)' ><i class="fas fa-trash"></i> Delete</a> </li>
+								<li><a href="javascript:void(0)" ></a></li>
+							</ul>
+            		    </div>
 		            </div>
 				</div>
 			</div>
@@ -72,6 +79,53 @@
 </handler>
 
 <div>
+	<entity bind='post-edit'>
+		<div id='editor-modal' uk-modal>
+			<div class="uk-modal-body uk-modal-dialog ex-boundary">
+				<div class="uk-text-center" ng-show='$ctrl.get.config.state.loading'>
+					<div uk-spinner></div>
+				</div>
+				<div ng-hide='$ctrl.get.config.state.loading'>
+					<handler bind='{{ $ctrl.put.config.id }}' model='$ctrl.model'>
+						<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_edit_editor" style='height: 30vh;'></editor>
+						<div style="margin-top: 5px;padding-left: 5px">
+							<div class="uk-float-left">
+								<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+					           	<small>Justine Che T. Romero</small>
+							</div>
+							<div class="uk-float-right">
+								<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+								<div ng-show='!$ctrl.api.config.state.loading'>
+									<button class="uk-button uk-button-small uk-button-default uk-modal-close" style="border-radius: 4px">Cancel</button>
+									<button ng-class="{ 'ex-button uk-button-primary': $ctrl.model.content, 'uk-button-default': !$ctrl.model.content  }" ng-click='$ctrl.submit()' class="uk-button uk-button-small uk-button-primary ex-button ">Save</button>
+								</div>
+							</div>
+							<div class="uk-float-right" style="color: red; padding-right: 5px" ng-show='$ctrl.api.config.feedback.error'>{{$ctrl.api.config.feedback.error}}</div>
+						</div>
+					</handler>			
+				</div>
+			</div>
+		</div>
+		<div id='delete-modal' uk-modal>
+			<div class="uk-modal-body uk-modal-dialog ex-boundary">
+				<div class="uk-text-center" ng-show='$ctrl.get.config.state.loading || $ctrl.delete.config.state.loading'>
+					<div uk-spinner></div>
+				</div>
+				<div ng-hide='$ctrl.get.config.state.loading || $ctrl.delete.config.state.loading'>
+					<handler bind='{{ $ctrl.delete.config.id }}' model='$ctrl.model'>
+						<div class="uk-padding">
+							Are you sure you want to delete this post? <br>
+							<i style="color: red">Note: this can not be undone.</i>
+						</div>
+						<div class="uk-padding-small">
+							<button class="uk-modal-close uk-button uk-button-small uk-button-default" style="border-radius: 4px;"> Cancel </button>
+							<button ng-click='$ctrl.submit()' class="uk-button uk-button-small uk-button-primary ex-button ">Delete</button>
+						</div>
+					</handler>			
+				</div>				
+			</div>
+		</div>
+	</entity>	
 	<div id="reply-modal" uk-modal>
 		<div class="uk-modal-body uk-modal-dialog" style="background: rgba(0,0,0,0);">
 		    <div style="background: white;" class="ex-boundary">
@@ -115,7 +169,7 @@
 					</div>
 					<!-- <div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 150;"> -->
 
-						<div ng-show='!$ctrl.api.config.state.loading' style="background: white; margin-top: 5px;" class=" uk-card uk-card-body ex-boundary " ng-repeat='i in $ctrl.model' >
+						<div style="background: white; margin-top: 5px;" class=" uk-card uk-card-body ex-boundary " ng-repeat='i in $ctrl.model' >
 							<div>
 								<div>
 									<div uk-grid> 

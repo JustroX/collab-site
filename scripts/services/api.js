@@ -111,7 +111,7 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
         event: {}
       }
 
-
+      this.value = null;
       for(let i in config)
         this.config[i] = config[i];
       behavior[this.config.method](this);
@@ -158,6 +158,7 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
               return;
             }
             event.emit("success",res);
+            event.value = res;
             cb && cb(res);
           },
           function(err)

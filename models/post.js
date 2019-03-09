@@ -21,11 +21,6 @@ module.exports =
 	   		// group:  { type: Schema.Types.ObjectId, ref: 'User'}  ,
 	   		// wall: Boolean
 	   	}],
-	   replies   : 
-	   [{ 
-			post:{ type: Schema.Types.ObjectId, ref: 'Post'},
-		}],
-
 	   parent    : {type: Schema.Types.ObjectId, ref: 'Post'}
 	},
   	required:
