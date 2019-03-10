@@ -1,0 +1,90 @@
+<div class="ex-boundary">
+	<div>
+		<div class="uk-padding">
+			<h2>Settings</h2>
+
+				<entity bind='settings'>
+					<div ng-show='$ctrl.get.config.state.loading' class="uk-text-center"> <div uk-spinner></div></div>
+					<div ng-hide='$ctrl.get.config.state.loading'>
+						<handler bind='{{ $ctrl.put.config.id }}' model='$ctrl.value.model'>
+							<div >
+								<div class="uk-animation-fade">
+									<hr>
+										<div style="width: 100%">
+											<b style="text-align: left;">Profile</b>
+										</div>
+										<br>
+										<div class="uk-padding-small">
+											<div class="uk-child-width-1-3" uk-grid>
+												<div></div>
+												<div class="uk-width-auto uk-text-center">
+													<img id="image-preview" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg" style="width: 150px;height: 150px" width="150" height="150" class="uk-border-circle" >
+													<br>
+													<small>Profile Picture</small> <br>
+													<div class="js-upload" uk-form-custom>
+													    <input onchange='angular.element(this).scope().image_change()' ng-model='temp' id="image-input" type="file" accept="image/*" >
+													    <button class="uk-button uk-button-default" type="button" tabindex="-1">Upload new pic</button>
+													</div>
+												</div>
+												<div class="uk-width-expand">
+												</div>
+											</div>
+											
+										</div>
+									</div>
+									<br>
+									<div>
+									<form ng-submit='$ctrl.submit()'>
+										<div style="width: 100%">
+											<b style="text-align: left;">Personal</b>
+										<div>
+										<br>
+										<b class="uk-text-meta">Name</b>
+										<br>		
+										<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-model='$ctrl.model.name.first'  placeholder="First name" >
+										<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-model='$ctrl.model.name.last'  placeholder="Middle name" >
+										<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-model='$ctrl.model.name.last'  placeholder="Last name" >
+										<br>
+										<b class="uk-text-meta">Bio</b> <br>
+										<textarea class="uk-textarea" style="width: 200px; height: 100px; border-radius: 3px" ng-model='$ctrl.model.bio'></textarea>
+										<br>
+										<b class="uk-text-meta">School</b> <br>	
+										<input required style="border-radius: 5px; width: 250px" type="text" class="uk-input" ng-model='$ctrl.model.school'  placeholder="School" ><br>
+										<b class="uk-text-meta">Birthday</b><br>	
+										<input required style="border-radius: 5px; width: 200px" type="date" class="uk-input" ng-model='$ctrl.model.birthday'  placeholder="Birthday" ><br>
+										<b class="uk-text-meta">Sex</b><br>	
+										<select required style="width: 150px; border-radius: 5px" class="uk-input uk-select" style="border-radius: 5px" ng-model="$ctrl.model.sex">
+											<option selected value="male">Male</option>
+											<option value="female">Female</option>
+										</select>
+										<br>
+										<b class="uk-text-meta">Identification</b>
+										<br>		
+										<input required style="width: 200px; border-radius: 5px" type="email" class="uk-input" ng-model='$ctrl.model.email'  placeholder="Email" >
+										<br>
+										<input required style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.username'  placeholder="Username" >
+										<br><br>
+										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.old_password'  placeholder="Old Password" >
+										<br>
+										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
+										<br>
+										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
+										<br><br>
+										<div>
+											<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+											<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>
+												{{ $ctrl.api.config.feedback.error }}
+											</div>
+											<button ng-hide='$ctrl.api.config.state.loading' class="uk-button uk-button-small uk-button-primary uk-float-right ex-button" type="submit">Save</button>
+										</div>
+									</form>
+								</div>
+								
+							</div>
+						</handler>
+					</div>
+				</entity>
+
+		</div>
+	</div>
+</div>

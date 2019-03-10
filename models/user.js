@@ -14,6 +14,8 @@ module.exports =
 		sex: String,
 		confirmed: Boolean,
 
+		profile_pic: String,
+
 		follows: 
 		[{ 
 			user : {type: Schema.Types.ObjectId, ref: "User"}
@@ -88,7 +90,7 @@ module.exports =
 			},
 			set: function(val)
 			{
-				this.set("private.local.password",this.generateHash(val));
+				this.set("private.local.password",val);
 			}
 		}
 	},
@@ -104,6 +106,8 @@ module.exports =
 	   sex: 5,
 	   confirmed: 1,
 	   email: 5,
+
+	   profile_pic: 5,
 
 	   private: 0,
 	   fullname: 1,

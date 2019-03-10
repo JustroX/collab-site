@@ -37,7 +37,7 @@ module.exports =
 	},
 	populate:
 	{
-		"author" : "name username email"
+		"author" : "name username email profile_pic"
 	},
 	permissions:
 	{

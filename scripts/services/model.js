@@ -126,6 +126,13 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 			model.api.get.on("success",function(res){
 				model.value.persistent = remove_population( model.config.model ,res);
 				model.value.model = res;
+
+				if(model.config.dates)
+				for(let i of model.config.dates)
+				{
+					model.value.model[i] = new Date(model.value.model[i]); 
+				}
+
 				model.emit("loaded",res);
 			});
 			model.api.put.on("preload",function(res){
@@ -136,6 +143,13 @@ app.service('modelService', function($http,$timeout,$rootScope,apiService,schema
 			model.api.put.on("success",function(res){
 				model.value.persistent = remove_population( model.config.model ,res);
 				model.value.model = res;
+
+				if(model.config.dates)
+				for(let i of model.config.dates)
+				{
+					model.value.model[i] = new Date(model.value.model[i]); 
+				}
+
 				model.api.get.load();
 				model.emit("saved",res);
 			});

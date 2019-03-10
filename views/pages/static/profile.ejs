@@ -12,7 +12,7 @@
 						            </div>
 						            <div style="text-align: center;">
 						            	<div>
-							            	<img class="uk-border-circle" src="https://abs.twimg.com/sticky/default_profile_images/default_profile.png" style="width: 150px; height: 150px;">
+							            	<img class="uk-border-circle" src="{{ $ctrl.model.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}" style="width: 150px; height: 150px;">
 						            	</div>
 								        <h3 style="margin-bottom: 0px">{{ $ctrl.model.fullname }}</h3>
 								       	<i class="uk-text-meta" style="color: white; font-size: 15pt">{{ $ctrl.model.username }}</i>

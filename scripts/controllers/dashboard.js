@@ -69,6 +69,68 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 		postList.load();
 	});
 
+	let user =  modelService.new({ id: "settings" , model: "user", dates: ["birthday"] });
+
+	user.on("loaded",function()
+	{
+		var preview = document.getElementById('image-preview');
+		preview.src  = user.value.model.profile_pic || "https://abs.twimg.com/sticky/default_profile_images/default_profile.png";
+
+	});
+
+	subpage.onload("settings",function()
+	{
+		user.load($scope.SESSION_USER._id);
+	});
+	$scope.temp = {};
+	$scope.image_change = function()
+	{
+		var preview = document.getElementById('image-preview');
+	    var file    = document.getElementById('image-input').files[0];
+	    var reader  = new FileReader();
+  
+  	    reader.addEventListener("load", function () {
+  	      preview.src = reader.result;
+  	      let img = new Image();
+  	      img.onload = function()
+  	      {
+	          var canvas = document.createElement('canvas'),
+		            max_size = 544,// TODO : pull max size from a site config
+		            width = img.width,
+		            height = img.height;
+		        if (width > height) {
+		            if (width > max_size) {
+		                height *= max_size / width;
+		                width = max_size;
+		            }
+		        } else {
+		            if (height > max_size) {
+		                width *= max_size / height;
+		                height = max_size;
+		            }
+		        }
+		        canvas.width = width;
+		        canvas.height = height;
+		        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+		        var dataUrl = canvas.toDataURL('image/jpeg');
+			  user.value.model.profile_pic = ""+ dataUrl;
+  	      }
+
+  	      img.src = reader.result;
+
+  	    }, false);
+  
+  	    if (file) {
+  	      reader.readAsDataURL(file);
+	    }
+
+	}
+
+
+
+	//posts
+
+
 	let replyList = apiService.new({ id: "reply-list", model: "post", method : "list" });
 
 	let postLikeNew    = apiService.new({ id: "post-like-new"   , model: "post", method: "post" });

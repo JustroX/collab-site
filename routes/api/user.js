@@ -17,7 +17,73 @@ router.get('/self', api.logged, function(req,res,next)
 }, api.get(User));
 
 router.get('/:id', api.get(User));
-router.put('/:id', api.put(User));
+
+router.put('/:id', function(req,res,next)
+{
+	let PERMISSIONS   = User.config.PERMISSIONS;
+	let user_id = req.params.id;
+	let query = lib.sanitize(req,PERMISSIONS);
+
+	User.findById(user_id, function(err, user)
+	{
+		if(err) return res.send({ err: "Database Error" , code: 500 });
+
+		let proceed = function(){
+
+			for(let i in query)
+			{
+				if(i=="password") continue;
+				user[i] = query[i];
+			}
+			if(req.body.password!=req.body.confirm_password)
+			{
+				return res.send({err: "Passwords doesn't match." , code: 403});	
+			}
+			if(req.body.password)
+			{
+				if( !user.validPassword(req.body.old_password) )
+					return res.send({err: "Password is incorrect" , code: 403});
+				user.password = user.generateHash(req.body.password);
+			}
+			if(req.body.email)
+				user.email = req.body.email;
+
+			user.save(function(err, updatedUser)
+			{
+				if(err) throw err;
+
+				let output = lib.hide_fields(updatedUser,PERMISSIONS);
+
+				res.send(output);
+			});
+
+		};
+
+		let proceed_to_email = function()
+		{
+			if(req.body.private && req.body.private.local && req.body.private.local.email)
+				User.find({ "private.local.email" : req.body.private.local.email , _id : { $ne : user_id } }).exec(function(err,docs)
+				{
+					if(err) return res.send({err: "Database Error", code: 500});
+					if(docs.length >0) return res.send({err: "Email is not available."});
+					proceed();			
+				});
+			else
+				proceed();
+		}
+
+		if(query.username)
+			User.find({ "username" : query.username , _id : { $ne : user_id } }).exec(function(err,docs)
+			{
+				if(err) return res.send({err: "Database Error", code: 500});
+				if(docs.length >0) return res.send({err: "Username is not available."});
+				proceed_to_email();			
+			});
+		else
+			proceed_to_email();
+	});
+});
+
 router.delete('/:id', api.delete(User));
 
 
