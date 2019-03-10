@@ -8,8 +8,7 @@
 				<div class="uk-background-muted ex-boundary ">
 					<div class="uk-grid-small uk-flex-middle uk-animation-slide-bottom-small" uk-grid>
 			            <div class="uk-width-auto ">
-			                <img class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
-			            </div>
+		            	       <img style="width: 25px; height: 25px;" class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">   </div>
 						<div class="uk-width-expand">
 							<p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">{{ SESSION_USER.name.first }}</p>
 						</div>

@@ -105,7 +105,7 @@ module.exports =
 		{
 			populate:
 			{
-				"user": "name fullname email"
+				"user": "name fullname email profile_pic"
 			},
 			_id: 1,
 			user: 7,
@@ -122,7 +122,7 @@ module.exports =
 		{
 			populate:
 			{
-				user: "name fullname email"
+				user: "name fullname email profile_pic"
 			},
 			_id: 1,
 			user: 7,

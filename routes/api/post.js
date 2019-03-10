@@ -54,7 +54,15 @@ router.put('/:id',api.logged,api.put(Post, null, function(req,res,post)
 		return true;
 	}
 ));
-router.delete('/:id',api.logged,api.delete(Post));
+router.delete('/:id',api.logged,api.delete(Post,null,function(req,res,post)
+	{
+		if(!post.author.equals(req.session.passport.user))
+		{
+			res.send({ code: 403, err: "Permission Denied." });
+			return false;
+		}
+		return true;
+	}));
 
 
 //liked_by
