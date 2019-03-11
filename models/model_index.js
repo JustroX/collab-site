@@ -10,6 +10,7 @@ module.exports =
 		"Invitation",
 		"Badge",
 		"Post",
-		"Submission"
+		"Submission",
+		"Invitation"
 	]
 }

@@ -15,6 +15,7 @@ module.exports =
 	},
 	permissions:
 	{
+		_id: 1,
 		email : 3,
 		invited_by : 1,
 		createdAt: 1,
@@ -36,7 +37,7 @@ module.exports =
 	},
 	default:
 	{
-		permission : 7,
+		permission : 15,
 	},
 	endpoints:
 	{
