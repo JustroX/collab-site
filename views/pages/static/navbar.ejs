@@ -43,11 +43,11 @@
                     <a style="min-height: 20px;padding-top:15px" href="javascript:void(0)"><span uk-navbar-toggle-icon></span> </a>
                     <div class="uk-navbar-dropdown">
                         <ul class="uk-nav uk-navbar-dropdown-nav">
-                            <li><a ng-click='settings()' href="javascript:void(0)">Settings</a></li>
-                            <li><a ng-click='profile()' href="javascript:void(0)">Profile</a></li>
-                            <li><a href="#/guild">Guilds</a></li>
-                            <li><a href="#">Administration</a></li>
-                            <li><a ng-click='badge()' href="javascript:void(0)">Forge Badges</a></li>
+                            <li><a href='#!/dashboard/settings' >Settings</a></li>
+                            <li><a href='#!/profile/{{SESSION_USER._id}}' >Profile</a></li>
+                            <li><a href="#">Guilds</a></li>
+                            <!-- <li><a href="#">Administration</a></li> -->
+                            <li><a href="#!/badge">Forge Badges</a></li>
                             <hr>
                             <li><a href="#">Cookie Use Policy</a></li>
                             <li><a href="#">Privacy Policy</a></li>

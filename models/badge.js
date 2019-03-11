@@ -10,7 +10,7 @@ module.exports =
 	{
 		name: String,
 		description: String,
-		asset: Buffer,
+		asset: String,
 		created_by: { type:Schema.Types.ObjectId ,ref:"User"},
 		date: { type: Date ,  default: Date.now }
 	},
@@ -18,7 +18,8 @@ module.exports =
 	{
 		_id: 1,
 		name: 7,
-		description: 7,
+		asset: 5,
+		description: 5,
 		asset: 5,
 		created_by: 1,
 		date: 1
@@ -41,7 +42,7 @@ module.exports =
 	},
 	default:
 	{
-		permission : 7,
+		permission : 15,
 		self: 5,
 	},
 	endpoints:

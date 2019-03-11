@@ -7,7 +7,7 @@ function permit(endpoint,num)
 {
 	return function(req,res,model)
 	{
-		return model.is_authorized(req,res,endpoint,num);
+		return model.is_authorized_sync(req,res,endpoint,num);
 	}
 }
 

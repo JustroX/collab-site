@@ -24,6 +24,7 @@ app.component('editor',{
 
             [{ 'font': [] }],
             [{ 'align': [] }],
+            ['video','image'],
 
             ['clean']                                         // remove formatting button
           ];
@@ -74,7 +75,7 @@ app.component('editor',{
 
 
 app.component('editorView',{
-    controller: function(schemaService,modelService,$timeout,$element,$sanitize)
+    controller: function(schemaService,modelService,$timeout,$element,$sanitize,$sce)
     {
       const ctrl = this;
       ctrl.$onInit = function()
@@ -95,11 +96,29 @@ app.component('editorView',{
             {
                 $(e).replaceWith('<pre class="ql-syntax"><code>' + $(e).html() +'</code></pre>');
             });
+            $(doc).find('iframe.ql-video').each(function(i,e)
+            {
+                $(e).replaceWith('<p class="vid">' + $(e).attr("src") +'</p>');
+            });
+
             $(doc).find('pre.ql-syntax').each(function(i,e)
             {
                 hljs.highlightBlock(e);
             });
-            ctrl.value =  $sanitize(tempQuill.root.innerHTML);
+            
+            let value =  $sanitize(tempQuill.root.innerHTML);
+            // console.log(value);
+
+            let ndoc = document.createElement("div");
+            $(ndoc).html(value);            
+            $(ndoc).find('p.vid').each(function(i,e)
+            {
+                $(e).replaceWith(`<iframe style='width: 600px; height: 400px' class="ql-video" frameborder="0" allowfullscreen="true" src="`+$(e).html()+`"></iframe>`);
+            });
+            ctrl.value = $sce.trustAsHtml($(ndoc).html());
+            // console.log(ctrl.value)
+            // ctrl.value  =value;
+
             $timeout(function()
             {
               $("pre.ql-syntax").each(function(i,e)

@@ -97,6 +97,10 @@ module.exports =
 		is_authorized: function(req,res,field,num,cb)
 		{
 			cb((this.get_permission(req.session.passport.user,field)&num)? true : false);
+		},
+		is_authorized_sync:function(req,res,field,num)
+		{
+			return (this.get_permission(req.session.passport.user,field)&num)? true : false;
 		}
 	},
 	endpoints:
