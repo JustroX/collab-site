@@ -30,7 +30,7 @@ app.controller("navbarController",function($scope,$http,$location,$timeout,$root
 
 	invitationNew.on("success",function(res)
 	{
-		$scope.invitation.link  = window.location.protocol +"//"+ window.location.host + "/#/invitation/" + res._id;
+		$scope.invitation.link  = window.location.protocol +"//"+ window.location.host + "/#!/invitation/" + res._id;
 	});
 
 

@@ -1,0 +1,184 @@
+<div style="text-align: center;"  ng-controller='invitationController'>
+	<div ng-show='subpage.Ispage("main")' class="uk-animation-slide-bottom-small" >
+		<div  id="static-invitation-main">
+			<br><br><br>
+			<img style="width: 300px" src="https://storage.googleapis.com/neris/public/images/system/home/home-16personalities-community.svg">
+			<div class="uk-padding" style="padding-top: 0px">
+				<h1>Welcome to the community!</h1>
+				<p style="margin-bottom: 0px">
+					Your friend, <b>{{  invitation.invited_by.fullname }}</b> invited you to join Bicol Programming Guild.
+				</p>
+				<p style="margin: 0px;" class="uk-text-meta">
+					Start learning <i>Computer Science</i>, <i>IT</i> and <i>Programming</i> now. 
+				</p><br>
+				<button ng-click="gotoRegister()" class="uk-button uk-hover uk-animation-scale-up" style="border-radius: 5px; color: white; background: linear-gradient(45deg,#0086b3,#00b3b3);">Customize my Profile</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="static-invitation-register">	
+		<div ng-show='subpage.Ispage("register")' class="uk-animation-slide-bottom-small" >
+			<div class="uk-padding uk-padding-remove-top uk-margin-remove-top uk-margin">
+				<handler bind='user-new-invite' model='new_user_model'>
+					<form ng-submit='$ctrl.submit()'>
+						<div class="uk-grid uk-child-width-1-4 uk-animation-slide-top-small">
+							<div></div>
+							<div class="uk-padding uk-width-1-2">
+								<div style="height: 80vh; text-align: center;">
+									<div class="uk-padding">
+										<h3>Create your Account</h3>
+										
+										<img  width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-male.svg" >	
+										<br><br>	
+										<input style="width: 200px; border-radius: 5px" type="email" class="uk-input" ng-model='$ctrl.model.email'  placeholder="Email" >
+										<br>
+										<input style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.username'  placeholder="Username" >
+										<br><br>
+										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
+										<br>
+										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
+										<br><br>
+										<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+										<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>
+										    <a class="uk-alert-close" uk-close></a>
+											{{ $ctrl.api.config.feedback.error }}
+										</div>
+										<button type="submit" ng-show='!$ctrl.api.config.state.loading' class="uk-button uk-button-primary" style="color: white;background: linear-gradient(45deg,#0086b3,#00b3b3); border-radius: 5px">Next</button>
+									</div>
+								</div>
+							</div>
+							<div></div>
+						</div>
+					</form>
+				</handler>
+			</div>
+		</div>
+	</div>
+
+	<div id="static-invitation-register-edit">
+		<div ng-show='subpage.Ispage("register-edit")' class="uk-animation-slide-bottom-small" >
+
+
+			<entity bind='user-invite-model'>
+				<handler bind='{{ $ctrl.put.config.id }}' model = '$ctrl.value.model'>
+					<form ng-submit='validateForm1()'>
+						<div  id='component-user-edit-1' ng-show="subpage.here('register-edit/1')" class="uk-padding uk-padding-remove-top uk-margin-remove-top uk-margin ">
+								<div class="uk-grid uk-child-width-1-4">
+									<div></div>
+									<div class="uk-padding uk-width-1-2">
+										<div style="height: 80vh; text-align: center;">
+											<div class="uk-padding">
+												<h3>Create your Account</h3>
+												
+												<img  width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-male.svg" >	
+												<br><br>	
+												<input required style="width: 200px; border-radius: 5px" type="email" class="uk-input" ng-model='$ctrl.model.email'  placeholder="Email" >
+												<br>
+												<input required style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.username'  placeholder="Username" >
+												<br><br>
+												<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
+												<br>
+												<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
+												<br><br>
+												<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+												<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>
+													{{ $ctrl.api.config.feedback.error }}
+												</div>
+												<button type="submit" ng-show='!$ctrl.api.config.state.loading' class="uk-button uk-button-primary" style="color: white;background: linear-gradient(45deg,#0086b3,#00b3b3); border-radius: 5px">Next</button>
+											</div>
+										</div>
+									</div>
+									<div></div>
+								</div>
+						</div>
+					</form>
+					<form ng-submit='$ctrl.submit()'>
+						<div id='component-user-edit-2'  ng-show="subpage.here('register-edit/2')" class="uk-padding uk-padding-remove-top uk-margin-remove-top uk-margin ">
+							<div class="uk-grid uk-child-width-1-4">
+								<div></div>
+								<div class="uk-padding uk-width-1-2">
+									<div style="height: 80vh; text-align: center;">
+
+										<a class="uk-link-muted" href="javascript:void(0)" ng-click='gotoPage1()' >Back to Page 1</a> <br>
+										<h3 style="margin-top: 0px;">Create your Account</h3>
+										<img ng-show=" $ctrl.model.sex != 'female' " width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-male.svg" >	
+										<img ng-show=" $ctrl.model.sex == 'female' " width="100px" src="https://storage.googleapis.com/neris/public/images/types/faces/ISFP-female.svg" > 	
+										<br><br>
+										<b class="uk-text-meta">Name</b>
+										<br>		
+										<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-model='$ctrl.model.name.first'  placeholder="First name" >
+										<input required style="border-radius: 5px; width: 150px; 	" type="text" class="uk-input" ng-model='$ctrl.model.name.last'  placeholder="Last name" >
+										<br>
+										<b class="uk-text-meta">School</b> <br>	
+										<input required style="border-radius: 5px; width: 250px" type="text" class="uk-input" ng-model='$ctrl.model.school'  placeholder="School" ><br>
+										<b class="uk-text-meta">Birthday</b><br>	
+										<input required style="border-radius: 5px; width: 200px" type="date" class="uk-input" ng-model='$ctrl.model.birthday'  placeholder="Birthday" ><br>
+										<b class="uk-text-meta">Sex</b><br>	
+										<select required style="width: 150px; border-radius: 5px" class="uk-input uk-select" style="border-radius: 5px" ng-model="$ctrl.model.sex">
+											<option selected value="male">Male</option>
+											<option value="female">Female</option>
+										</select>
+										<br><br>
+										
+										<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>
+											{{ $ctrl.api.config.feedback.error }}
+										</div>
+										<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
+										<button ng-click='$ctrl.submit()' ng-show='!$ctrl.api.config.state.loading' type="submit" class="uk-button uk-button-default" style="color: white;background: linear-gradient(45deg,#0086b3,#00b3b3); border-radius: 5px">DONE</button> <br>
+									</div>
+								</div>
+								<div></div>
+							</div>
+						</div>
+					</form>
+				</handler>
+			</entity>
+		</div>
+	</div>
+
+	<div ng-show="subpage.Ispage('done')">
+		<div class="uk-padding uk-margin">
+			<div class="uk-grid uk-child-width-1-4">
+				<div></div>
+				<div class="uk-width-1-2">
+					<br><br>
+					<img style="width: 700px;" src="https://storage.googleapis.com/neris/public/images/types/scenes/sentinels_Logistician_ISTJ_introduction.svg">
+					<h2 style="margin-bottom: 0px;">Just one last step...</h2>
+					<h4 style="margin-top: 3px">Please check your email.</h4>
+					<a class="uk-text-meta" href="/">or confirm later and login.</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="subpage.Ispage('error')">
+		<div class="uk-padding uk-margin">
+			<div class="uk-grid uk-child-width-1-4">
+				<div></div>
+				<div class="uk-width-1-2">
+					<br><br>
+					<img style="width: 700px;" src="https://storage.googleapis.com/neris/public/images/types/scenes/analysts_Logician_INTP_introduction.svg">
+					<h2 style="margin-bottom: 0px;">It seems that your invitation is not valid.</h2>
+					<h4 style="margin-top: 3px">Maybe it's already expired.</h4>
+					<a class="uk-text-meta" href="/#/">Go Back to Landing Page</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+
+	<br><br><br><br>
+	<div>
+        <div style="text-align: center;">
+        	<small class="uk-text-meta"> &copy; Justine Che T. Romero &nbsp;&nbsp; </small>
+            <a class="uk-text-meta" href="">FAQ</a> &middot;
+            <a class="uk-text-meta" href="">About</a> &middot;
+            <a class="uk-text-meta" href="">Cookie</a> &middot;
+            <a class="uk-text-meta" href="">Terms</a> &middot;
+            <a class="uk-text-meta" href="">Privacy</a> 
+        </div>
+	</div>
+	
+</div>

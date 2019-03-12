@@ -98,14 +98,14 @@ module.exports =
 	permissions:
 	{
 	   _id: 1, 
-	   name: 7,
+	   name: 5,
 	   bio: 5,
 	   birthday: 5,
 	   school: 5,
-	   username: 5,
+	   username: 7,
 	   sex: 5,
 	   confirmed: 1,
-	   email: 5,
+	   email: 7,
 
 	   profile_pic: 5,
 

@@ -1,5 +1,7 @@
 var router = require('express').Router();
-var User = require('../../models/model_divider.js').model("User");
+var Divider = require('../../models/model_divider.js');
+var User = Divider.model("User");
+var Invitation = Divider.model("Invitation");
 var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
@@ -7,7 +9,33 @@ var api = require('./api-handler.js');
 
 
 
-router.post('/', api.post(User));
+router.post('/', api.logged, api.post(User));
+
+router.post('/register',  function(req,res,next)
+{
+	Invitation.findById(req.body.invitation , function(err,mod)
+	{
+		if(err) return res.send({ err: "Database Error", code: 500 });
+		if(!mod || (mod && mod.confirmed ) ) return res.send({ err: "Invalid invitation" });
+		next();
+	} );
+}, 
+api.post_override(User,null,function(req,res,out)
+{
+	Invitation.findById(req.body.invitation , function(err,mod)
+	{
+		if(err) return res.send({ err: "Database Error", code: 500 });
+		mod.user = out._id;
+		mod.save(function(err)
+		{
+			if(err) return res.send({ err: "Database Error", code: 500 });
+			return res.send(out);	
+		});
+	} );
+
+})
+);
+
 router.get('/', api.list(User) );
 
 router.get('/self', api.logged, function(req,res,next)

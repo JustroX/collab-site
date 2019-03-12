@@ -10,16 +10,18 @@ module.exports =
 	{
 		email : String,
 		invited_by : { type: Schema.Types.ObjectId , ref: "User"},
-		createdAt: { type: Date, expires: '3d', default: Date.now },
+		user       : { type: Schema.Types.ObjectId , ref: "User"},
+		createdAt  : { type: Date, expires: '3d', default: Date.now },
 		confirmed: Boolean,
 	},
 	permissions:
 	{
 		_id: 1,
 		email : 3,
-		invited_by : 1,
+		invited_by : 3,
 		createdAt: 1,
-		confirmed: 1,
+		confirmed: 7,
+		user: 1,
 	},
 	config:
 	{
@@ -29,7 +31,7 @@ module.exports =
 	virtual: {},
 	populate: 
 	{
-		"user" : "name username fullname email",
+		"invited_by" : "name username fullname email",
 	},
 	required:
 	{
