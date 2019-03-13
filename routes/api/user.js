@@ -23,7 +23,7 @@ router.post('/register',  function(req,res,next)
 api.post_override(User,function(req,res,user,temp)
 {
 	user.password = user.generateHash(req.body.password);
-	user.authorization = {};
+	user.authorization = { try: "autofill" };
 	return user;
 },function(req,res,out)
 {
