@@ -20,7 +20,7 @@ module.exports.init = function()
 	{
 		global.divider.DEFINITIONS[model] = require("./"+model.toLowerCase()+".js");
 	}
-	if(true || old_model!=JSON.stringify(model_index))
+	if(old_model!=JSON.stringify(model_index))
 	{
 		console.log("DIVIDER: Models have been modified.");
 
