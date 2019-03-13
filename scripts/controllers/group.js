@@ -21,14 +21,12 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	$scope.admin_permission = function(field,num)
 	{
-		console.log($scope.group);
 		for(let i in $scope.group.value.model.users)
 		{
 			let obj  =$scope.group.value.model.users[i];
 			if(obj.user == $scope.SESSION_USER._id)
 			{
 				let a = $scope.get_rank_permission(obj.rank)[field] & num;	
-				console.log(a);
 				return a;
 			}
 		}	
