@@ -103,6 +103,7 @@ exports.get = function(Model,cb)
 			{
 				if(err) return res.send({code: 500, err: 'Database error'});
 				if(!docs.length) return res.send({ code: 500 , err: 'Doc not found.' });
+				console.log("LOOK HERE ", docs, PERMISSIONS)
 				let output = lib.hide_fields(docs[0],PERMISSIONS);
 				if(cb)
 					cb(req,res,output);
