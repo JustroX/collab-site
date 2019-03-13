@@ -52,7 +52,6 @@ module.exports =
 	},
 	populate:
 	{
-		users: "name",
 		created_by: "fullname email",
 		"badges_required.badge": "name description"
 	},
