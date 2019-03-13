@@ -22,11 +22,10 @@ app.component('editor',{
             
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-            [{ 'font': [] }],
+            [{ 'font': [] },'clean'],
             [{ 'align': [] }],
-            ['video','image'],
+            [ 'link' ,'video','image'],
 
-            ['clean']                                         // remove formatting button
           ];
 
           let quill = new Quill('#'+ctrl.idx, 
