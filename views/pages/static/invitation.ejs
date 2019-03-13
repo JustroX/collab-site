@@ -35,9 +35,9 @@
 										<br>
 										<input style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.username'  placeholder="Username" >
 										<br><br>
-										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
+										<input style="width: 200px; border-radius: 5px" type="password" required class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
 										<br>
-										<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
+										<input style="width: 200px; border-radius: 5px" type="password" required class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
 										<br><br>
 										<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
 										<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>
@@ -77,9 +77,9 @@
 												<br>
 												<input required style="width: 200px; border-radius: 5px" type="text" class="uk-input" ng-model='$ctrl.model.username'  placeholder="Username" >
 												<br><br>
-												<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
+												<input style="width: 200px; border-radius: 5px" type="password" required class="uk-input" ng-model='$ctrl.model.password'  placeholder="Password" >
 												<br>
-												<input style="width: 200px; border-radius: 5px" type="password" class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
+												<input style="width: 200px; border-radius: 5px" type="password" required class="uk-input" ng-model='$ctrl.model.confirm_password'  placeholder="Confirm Password" >
 												<br><br>
 												<div ng-show='$ctrl.api.config.state.loading' uk-spinner></div>
 												<div ng-show='$ctrl.api.config.feedback.error' class="uk-alert uk-alert-danger" uk-alert>

@@ -20,7 +20,11 @@ router.post('/register',  function(req,res,next)
 		next();
 	} );
 }, 
-api.post_override(User,null,function(req,res,out)
+api.post_override(User,function(req,res,user,temp)
+{
+	user.password = user.generateHash(req.body.password);
+	return user;
+},function(req,res,out)
 {
 	Invitation.findById(req.body.invitation , function(err,mod)
 	{
