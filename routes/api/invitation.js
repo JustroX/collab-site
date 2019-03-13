@@ -10,8 +10,8 @@ router.post('/', api.logged, function(req,res,next) {
 	next();
 }, api.post(Invitation));
 router.get('/', api.list(Invitation) );
-router.get('/:id', api.get(Invitation));
+router.get('/:id',  api.get(Invitation));
 router.put('/:id', api.put(Invitation));
-router.delete('/:id', api.delete(Invitation));
+router.delete('/:id', api.logged, api.delete(Invitation));
 
 module.exports = router;

@@ -15,7 +15,13 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 	$scope.$on('ready',function()
 	{
-		subpage.goto($routeParams.subpage);
+		$http.get('/auth/login').then((res)=>
+		{
+			if(!res.data)
+				$location.path('/');
+			else
+			subpage.goto($routeParams.subpage);
+		});
 	});
 
 	$scope.feed_editor_active = false;
@@ -56,12 +62,13 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 
 	let postNew  = apiService.new({ id: "post-new", model: "post", method: "post", incomplete_default: "Can't post empty content." });
-	let postList = apiService.new({ id: "post-list", model: "post", method: "list", url: "post/feed", param: "sort=-date&group=$n_null&parent=$n_null" });
+	let postList = apiService.new({ id: "post-list", model: "post", method: "list", url: "post/feed", param: "sort=-date&group=$n_null&parent=$n_null" , limit: 10000000000000000 });
 	postNew.on("success",function()
 	{
 		postList.load();
 		$scope.feed_editor_toggle();
 	});
+
 	subpage.onload("feed",function()
 	{
 		$("#feed-editor-container").fadeIn();
@@ -131,7 +138,7 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 	//posts
 
 
-	let replyList = apiService.new({ id: "reply-list", model: "post", method : "list" });
+	let replyList = apiService.new({ id: "reply-list", model: "post", method : "list" , limit: 1000000000000000 });
 
 	let postLikeNew    = apiService.new({ id: "post-like-new"   , model: "post", method: "post" });
 	let postLikeDelete = apiService.new({ id: "post-like-delete", model: "post", method: "delete" });
@@ -364,4 +371,13 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 		if(!i.author) return;
 		return i.author._id == session.getUser()._id ;
 	}
+
+	// $(window).scroll(function() {
+	//    if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+	//    	$timeout(function()
+	//    	{
+	//    		postList.append_next();
+	//    	},1);
+	//    }
+	// });
 });

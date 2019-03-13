@@ -11,7 +11,7 @@ app.controller("landingController",function($scope,$http,$location,$timeout,$roo
 
 	});
 	$scope.logged = function()
-	{
+	{		
 		session.load(function()
 		{
 			user = session.getUser();

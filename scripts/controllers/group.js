@@ -46,7 +46,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	//FEED
 	let postNew  = apiService.new({ id: "post-new-group", model: "post", method: "post", incomplete_default: "Can't post empty content." });
-	let postList = apiService.new({ id: "post-list-group", model: "post", method: "list", url: "post/feed", param: "group="+$scope.group_id+"&sort=-date&parent=$n_null" });
+	let postList = apiService.new({ id: "post-list-group", model: "post", method: "list", url: "post/feed", param: "group="+$scope.group_id+"&sort=-date&parent=$n_null" , limit: 10000000000000000000000000 });
 	postNew.on("success",function()
 	{
 		postList.load();
@@ -299,7 +299,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 
 	
-	let replyList = apiService.new({ id: "reply-list", model: "post", method : "list" });
+	let replyList = apiService.new({ id: "reply-list", model: "post", method : "list", limit : 100000000000000000000000000 });
 
 	let postLikeNew    = apiService.new({ id: "post-like-new"   , model: "post", method: "post" });
 	let postLikeDelete = apiService.new({ id: "post-like-delete", model: "post", method: "delete" });

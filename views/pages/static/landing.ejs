@@ -65,8 +65,10 @@
 										</span> -->
 									</div>
 					    			
-
-									<button class="uk-button uk-button-default">Log In</button>
+									<div ng-show='$ctrl.form.loading' class="uk-text-center">
+										<div uk-spinner></div>
+									</div>
+									<button ng-hide='$ctrl.form.loading' class="uk-button uk-button-default">Log In</button>
 
 					    		</form>
 					    	</div>
@@ -118,34 +120,42 @@
 		        <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
 		   			<div></div>
 		            <div >
-			    		<form ng-submit='login()'>
-							
-					    	<p>Log In with your credentials</p>
+		            	<auth success='logged'>
+				    		<form ng-submit='$ctrl.login()' >
+		            		
+						    	<p>Log In with your credentials</p>
 
-					    	<div class="uk-margin">
-								<div ng-show='form.error' class="uk-text-danger">
-								    <p>{{form.error}}</p>
+						    	<div class="uk-margin">
+									<div ng-show='$ctrl.form.error' class="uk-text-danger">
+									    <p>{{$ctrl.form.error}}</p>
+									</div>
+						    	</div>
+
+							    <div class="uk-margin">
+							        <div class="uk-inline">
+							            <span class="uk-form-icon" uk-icon="icon: user"></span>
+							            <input required ng-model='$ctrl.form.email' class="uk-input" type="email" placeholder="Email">
+							        </div>
+							    </div>
+
+							    <div class="uk-margin">
+							        <div class="uk-inline">
+							            <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+							            <input required ng-model='$ctrl.form.password' class="uk-input" type="password" placeholder="Password">
+							        </div>
+							    </div>
+
+
+								<div ng-show='$ctrl.form.loading' class="uk-text-center">
+									<div uk-spinner></div>
 								</div>
-					    	</div>
+								<button ng-hide='$ctrl.form.loading' class="uk-button uk-button-default">Log In</button>
+				    			
 
-						    <div class="uk-margin">
-						        <div class="uk-inline">
-						            <span class="uk-form-icon" uk-icon="icon: user"></span>
-						            <input required ng-model='form.email' class="uk-input" type="email" placeholder="Email">
-						        </div>
-						    </div>
 
-						    <div class="uk-margin">
-						        <div class="uk-inline">
-						            <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
-						            <input required ng-model='form.password' class="uk-input" type="password" placeholder="Password">
-						        </div>
-						    </div>
-			    			
-
-							<button class="uk-button uk-button-default">Log In</button>
-
-			    		</form>
+				    		</form>
+		            	</auth>
+							
 		            </div>
 
 		        </div>

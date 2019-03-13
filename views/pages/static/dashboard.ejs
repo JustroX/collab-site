@@ -15,27 +15,14 @@
 			        </div>
 			        <div class="uk-width-large" uk-dropdown>
 						{{ SESSION_USER.fullname }}
-					    <div class="uk-dropdown-grid uk-child-width-1-2@m" uk-grid>
+					    <div class="uk-dropdown-grid uk-child-width-1-4@m" uk-grid>
 					        <div>
 					            <ul class="uk-nav uk-dropdown-nav">
-					                <li class="uk-active"><a href="#">Active</a></li>
-					                <li><a href="#">Item</a></li>
-					                <li class="uk-nav-header">Header</li>
-					                <li><a href="#">Item</a></li>
-					                <li><a href="#">Item</a></li>
-					                <li class="uk-nav-divider"></li>
-					                <li><a href="#">Item</a></li>
-					            </ul>
-					        </div>
-					        <div>
-					            <ul class="uk-nav uk-dropdown-nav">
-					                <li class="uk-active"><a href="#">Active</a></li>
-					                <li><a href="#">Item</a></li>
-					                <li class="uk-nav-header">Header</li>
-					                <li><a href="#">Item</a></li>
-					                <li><a href="#">Item</a></li>
-					                <li class="uk-nav-divider"></li>
-					                <li><a href="#">Item</a></li>
+					                <li class="uk-active"><a href="javascript:void(0)">{{SESSION_USER.username}}</a></li>
+					                <li><a href="javascript:void(0)">{{SESSION_USER.email}}</a></li>
+					                <li><a href="javascript:void(0)">{{ SESSION_USER.school }}</a></li>
+					                <!-- <li class="uk-nav-header"></li> -->
+					                <!-- <li><a href="javascript:void(0)">{{ SESSION_USER. }}</a></li> -->
 					            </ul>
 					        </div>
 					    </div>

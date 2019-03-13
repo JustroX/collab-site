@@ -238,6 +238,26 @@ app.service('apiService', function($http,$timeout,$rootScope,schemaService)
         api.page = (api.page <= 0) ? 0 : (api.page - 1);
         api.load();
       }
+
+      api.feed =  [];
+      api.append_next =  function()
+      {
+        api.page+=1;
+        api.load(null,null,function(res)
+        {
+            api.feed.push(...res);
+            let present = {};
+            for(let i=0; i<api.feed.length; i++)
+            {
+              if(present[api.feed[i]._id])
+              {
+                api.feed.splice(i--,1);
+              }
+              else
+                present[api.feed[i]._id] =true;
+            }
+        });
+      }
   }
   behavior["post"] =  function(api){
     api.validate = function(payload)

@@ -37,6 +37,9 @@ app.config(function($routeProvider) {
     .when("/invitation/:id", {
         templateUrl : "/page/invitation",
     })
+    .when("/static/:location", {
+        templateUrl : "/page/static",
+    })
     .when("/badge/", {
         templateUrl : "/page/badge",
     })

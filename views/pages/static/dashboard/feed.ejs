@@ -17,7 +17,7 @@
 			<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_feed_editor" style='min-height: 30vh;'></editor>
 			<div style="margin-top: 5px;padding-left: 5px">
 				<div class="uk-float-left">
-					<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="https://storage.googleapis.com/neris/public/images/types/faces/ESFJ-male.svg">
+					<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 		           	<small>{{ SESSION_USER.fullname }}</small>
 				</div>
 				<div class="uk-float-right">
@@ -39,8 +39,8 @@
 	<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
 		<div uk-spinner></div>
 	</div>
-	<div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 500;">
-
+	<!-- <div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 500;"> -->
+	<div>
 		<div class="uk-card uk-card-body ex-boundary " style="margin-top: 5px" ng-repeat='i in $ctrl.model'>
 			<div>
 				<div uk-grid> 
@@ -68,7 +68,7 @@
 				<editor-view data='{{i.content}}'></editor-view>
 				<div class="uk-text-right">
 					<a ng-click='$ctrl.view(i,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like(i) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
-					<a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+					<!-- <a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp; -->
 					<a ng-click='$ctrl.view(i,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
 				</div>
 			</div>
@@ -158,7 +158,7 @@
 								<editor-view data='{{$ctrl.model.content}}' access='get_render'></editor-view>
 								<div class="uk-text-right">
 									<a ng-click='feedback( $ctrl.model ,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like($ctrl.model) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
-									<a ng-click='feedback( $ctrl.model ,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share($ctrl.model) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+									<!-- <a ng-click='feedback( $ctrl.model ,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share($ctrl.model) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp; -->
 									<a ng-click='feedback( $ctrl.model ,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
 								</div>
 							</div>
@@ -204,7 +204,7 @@
 									<editor-view data='{{i.content}}'></editor-view>
 									<div class="uk-text-right">
 										<a ng-click='$ctrl.view(i,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like(i) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
-										<a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp;
+										<!-- <a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp; -->
 										<a ng-click='$ctrl.view(i,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
 									</div>
 								</div>
