@@ -21,6 +21,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	$scope.admin_permission = function(field,num)
 	{
+		console.log($scope.group);
 		for(let i in $scope.group.value.model.users)
 		{
 			let obj  =$scope.group.value.model.users[i];
