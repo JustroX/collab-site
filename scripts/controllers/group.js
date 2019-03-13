@@ -27,6 +27,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 			if(obj.user == $scope.SESSION_USER._id)
 			{
 				let a = $scope.get_rank_permission(obj.rank)[field] & num;	
+				console.log(a);
 				return a;
 			}
 		}	
