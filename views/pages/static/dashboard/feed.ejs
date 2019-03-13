@@ -4,7 +4,7 @@
 
 	<div id="feed-editor" style="display: none;" ng-show='!feed_editor_active' class="uk-grid-small uk-flex-middle" uk-grid>
         <div class="uk-width-auto ">
-            <img class="uk-border-circle uk-animation-scale-up" width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+            <img class="uk-border-circle uk-animation-scale-up" style='width: 25px; height: 25px' width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
         </div>
 		<div class="uk-width-expand">
 			<div ng-click='feed_editor_toggle()' class="ex-boundary uk-text-muted" style="padding: 2px;padding-left: 10px; cursor: text;">
@@ -17,7 +17,7 @@
 			<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_feed_editor" style='min-height: 30vh;'></editor>
 			<div style="margin-top: 5px;padding-left: 5px">
 				<div class="uk-float-left">
-					<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+					<img  class="uk-border-circle uk-animation-scale-up" style='width: 25px; height: 25px' width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 		           	<small>{{ SESSION_USER.fullname }}</small>
 				</div>
 				<div class="uk-float-right">
@@ -45,7 +45,7 @@
 			<div>
 				<div uk-grid> 
 					<div class="uk-width-auto ">
-		                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" ng-src="{{ i.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+		                <img  class="uk-border-circle " style='border: 1px solid #dadada; width: 25px; height: 25px' width="25" height="25" ng-src="{{ i.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 		            </div>
 		            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
 		            	<a href="#!/profile/{{i.author._id}}" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
@@ -89,7 +89,7 @@
 						<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_edit_editor" style='height: 30vh;'></editor>
 						<div style="margin-top: 5px;padding-left: 5px">
 							<div class="uk-float-left">
-								<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+								<img  class="uk-border-circle uk-animation-scale-up" style='width: 25px; height: 25px' width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 					           	<small>{{ SESSION_USER.fullname }}</small>
 							</div>
 							<div class="uk-float-right">
@@ -136,7 +136,7 @@
 				        <div ng-hide = '$ctrl.api.config.state.loading'>
 							<div uk-grid> 
 								<div class="uk-width-auto ">
-					                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" ng-src="{{ $ctrl.model.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+					                <img  class="uk-border-circle " style='border: 1px solid #dadada; width: 25px; height: 25px' width="25" height="25" ng-src="{{ $ctrl.model.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 					            </div>
 					            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
 					            	<a href="#!/profile/$ctrl.model.author._id" style="color: #2b2b2b"><small>{{$ctrl.model.author.fullname}}</small></a> &middot; 
@@ -180,7 +180,7 @@
 								<div>
 									<div uk-grid> 
 										<div class="uk-width-auto ">
-							                <img  style="border: 1px solid #dadada" class="uk-border-circle " width="25" height="25" ng-src="{{ i.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+							                <img  class="uk-border-circle " style='border: 1px solid #dadada; width: 25px; height: 25px' width="25" height="25" ng-src="{{ i.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 							            </div>
 							            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
 							            	<a href="#!/profile/{{i.author._id}}" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
@@ -219,7 +219,7 @@
 	    		<div  id="reply-editor-container" style="display: none;margin: 10px; background: white" class="uk-card uk-card-body ex-boundary">
 					<div id="reply-editor" style="display: none;" ng-show='!feed_editor_active' class="uk-grid-small uk-flex-middle" uk-grid>
 				        <div class="uk-width-auto ">
-				            <img class="uk-border-circle uk-animation-scale-up" width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+				            <img class="uk-border-circle uk-animation-scale-up" style='width: 25px; height: 25px' width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 				        </div>
 						<div class="uk-width-expand">
 							<div ng-click='reply_editor_toggle()' class="ex-boundary uk-text-muted" style="padding: 2px;padding-left: 10px; cursor: text;">
@@ -233,7 +233,7 @@
 							<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_reply_editor_reply" style='height: 30vh;'></editor>
 							<div style="margin-top: 5px;padding-left: 5px">
 								<div class="uk-float-left">
-									<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+									<img  class="uk-border-circle uk-animation-scale-up" style='width: 25px; height: 25px' width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 						           	<small>{{ SESSION_USER.fullname }}</small>
 								</div>
 								<div class="uk-float-right">
