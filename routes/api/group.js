@@ -1,5 +1,7 @@
 var router = require('express').Router();
-var Group = require('../../models/model_divider.js').model("Group");
+var Divider= require('../../models/model_divider.js');
+var Group = Divider.model("Group");
+var User = Divider.model("User");
 var lib = require('./api-helper.js');
 var api = require('./api-handler.js');
 
@@ -7,7 +9,9 @@ function permit(endpoint,num)
 {
 	return function(req,res,model)
 	{
-		return model.is_authorized_sync(req,res,endpoint,num);
+		let permission = model.is_authorized_sync(req,res,endpoint,num); 
+		if(!permission) res.send({ code: 403, err: "Permission Denied." });
+		return permission;
 	}
 }
 
@@ -44,6 +48,59 @@ router.delete('/:id/ranks/:field_id',api.logged, api.delete_endpoint(Group , "ra
 
 //users
 router.get('/:id/users/', api.list_endpoint(Group , "users"));
+router.post('/:id/users/join', api.logged, 
+function(req,res,next)
+{
+	req.body.user = req.session.passport.user;
+	req.body.rank = 1;
+	next();
+}, api.post_endpoint_async(Group , "users" ,function(req,res,model,done)
+{
+	User.findById(req.session.passport.user,function(err,user)
+	{
+		if(err) return res.send({ err: "Database Error" , code : 500 });
+
+		if(model.is_badge_complete(user))
+		{
+			let count = 0;
+			for(let i in model.toObject().users)
+			{
+				let obj = model.users[i];
+				if(obj.user._id.equals(req.body.user))
+					count++;
+			}
+			if(count >1)
+			{	
+				res.send({ err: "User is already a member.", code : 403});
+				return false;
+			}
+
+			for(let i in model.toObject().users)
+			{
+				let obj = model.users[i];
+				if(obj.user._id.equals(req.body.user))
+					model.users[i].rank = model.get_default_rank();
+			}
+
+			for(let i in model.toObject().users_pending)
+			{
+				let obj = model.users_pending[i];
+				if(obj.user._id.equals(req.body.user))
+				{
+					model.users_pending.splice(i,1);
+					break;
+				}
+			}
+
+			done();
+		}
+		else
+			return res.send({ err: "Your badges is incomplete.", code: 403 });
+	});
+}));
+
+
+
 router.post('/:id/users/', api.logged, api.post_endpoint(Group , "users" ,function(req,res,model)
 {
 	let count = 0;
@@ -79,12 +136,16 @@ router.delete('/:id/users/:field_id', api.logged, api.delete_endpoint(Group , "u
 
 //users_pending
 router.get('/:id/users_pending/', api.list_endpoint(Group , "users_pending"));
-router.post('/:id/users_pending/', api.logged, api.post_endpoint(Group , "users_pending"));
+router.post('/:id/users_pending/', api.logged, function(req,res,next)
+{
+	req.body.user = req.session.passport.user;
+	next();
+}, api.post_endpoint(Group , "users_pending"));
 router.get('/:id/users_pending/:field_id', api.get_endpoint(Group , "users_pending"));
 
 
-router.put('/:id/users_pending/:field_id', api.logged,    api.put_endpoint   (Group , "users_pending", null, null, permit("users_pending", 2)));
-router.delete('/:id/users_pending/:field_id', api.logged, api.delete_endpoint(Group , "users_pending", null, null, permit("users_pending", 4)));
+router.put('/:id/users_pending/:field_id', api.logged,    api.put_endpoint   (Group , "users_pending", null, null, permit("users", 2)));
+router.delete('/:id/users_pending/:field_id', api.logged, api.delete_endpoint(Group , "users_pending", null, null, permit("users", 4)));
 
 
 //badges_required

@@ -100,6 +100,25 @@ module.exports =
 		is_authorized_sync:function(req,res,field,num)
 		{
 			return (this.get_permission(req.session.passport.user,field)&num)? true : false;
+		},
+		is_badge_complete: function(user)
+		{
+			let complete =true;
+			for(let i of this.badges_required)
+			{
+				for(let j of user.badges)
+					if(i.badge == j.badge)
+						continue;
+				complete = false;
+				break;
+			}
+			return complete;
+		},
+		get_default_rank : function()
+		{
+			for(let i of this.ranks)
+				if(i.default)
+					return i._id;
 		}
 	},
 	endpoints:
@@ -112,6 +131,7 @@ module.exports =
 			},
 			_id: 1,
 			user: 7,
+			message: 7,
 			badges_required: 1,
 		},
 		ranks:

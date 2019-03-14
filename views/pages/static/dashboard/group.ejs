@@ -131,14 +131,29 @@
 								</div>
 	    					</div>
 	    				</div>
-	    				<button style="margin-top: 4px" class="uk-button uk-button-secondary ex-button">Join</button>
+	    				<handler bind='group-join'>
+	    					<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+	    						<div uk-spinner></div>
+	    					</div>
+	    					<div ng-hide='$ctrl.api.config.state.loading'>
+				    			<button ng-click='$ctrl.submit()' style="margin-top: 4px" class="uk-button uk-button-secondary ex-button">Join</button>
+	    					</div>
+
+	    				</handler>
 	    			</div>
 	    			<div class="uk-animation-slide-bottom-small" ng-show="modal_subpage.here('request')">
-	    				<small>Group moderators will review your request first before you can join.</small>
-	    				<div>
-	    					<textarea style="width: 400px; height: 100px; border-radius: 5px" type="text" class="uk-input" placeholder="I should be in this group because ..." ></textarea>
-	    				</div>
-	    				<button style="margin-top: 10px" class="uk-button uk-button-secondary ex-button uk-animation-scale-up">Send Request</button>
+	    				<handler bind='group-join-pending'>
+		    				<small>Group moderators will review your request first before you can join.</small>
+		    				<div>
+		    					<textarea ng-model='$ctrl.model.message' style="width: 400px; height: 100px; border-radius: 5px" type="text" class="uk-input" placeholder="I should be in this group because ..." ></textarea>
+		    				</div>
+	    					<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+	    						<div uk-spinner></div>
+	    					</div>
+	    					<div ng-hide='$ctrl.api.config.state.loading'>
+			    				<button ng-click='$ctrl.submit()' style="margin-top: 10px" class="uk-button uk-button-secondary ex-button uk-animation-scale-up">Send Request</button>
+			    			</div>
+	    				</handler>
 	    			</div>
 
 	    		</div>

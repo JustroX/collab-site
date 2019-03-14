@@ -34,6 +34,14 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	let page_info_loaded = false;
 	$scope.group.on("loaded",function()
 	{
+		let user = $scope.SESSION_USER._id;
+		let found = false;
+		for(let i in $scope.group.value.model.users)
+			if($scope.group.value.model.users[i].user==user)
+				found = true;
+		if(!found)
+			$location.path("/dashboard");
+
 		if(!page_info_loaded)
 			subpage.goto($routeParams.subpage);
 		page_info_loaded = true;
@@ -513,4 +521,33 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 			});
 	}
 
+	let requestApprove = apiService.new({ id: "request-approve", method: "post"  , model: "group", url : "group/"+$routeParams.id+"/users"  });
+	let requestReject  = apiService.new({ id: "request-reject" , method: "delete", model: "group", url : "group/"+$routeParams.id+"/users_pending"  });
+
+	requestReject.on("success",function()
+	{
+		pendingList.load();
+	});
+	requestApprove.on("success",function()
+	{
+		memberList.load();
+		pendingList.load();
+	});
+
+
+	$scope.accept = function(u)
+	{
+		let model =  { user: u._id };
+		for(let i in $scope.group.value.model.ranks)
+			if($scope.group.value.model.ranks[i].default )
+			{
+				model.rank = $scope.group.value.model.ranks[i]._id;
+			}
+		requestApprove.load(model);
+	}
+	$scope.reject = function(i)
+	{
+		requestReject.config.target = i._id;
+		requestReject.load();
+	}
 });

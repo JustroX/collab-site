@@ -540,6 +540,50 @@ exports.post_endpoint = function(Model,endpoint,custom,cb,pre)
 	}
 }
 
+exports.post_endpoint_async = function(Model,endpoint,custom,cb,pre)
+{
+	let PERMISSIONS = Model.config.endpoints[endpoint];
+	console.log(endpoint,PERMISSIONS);
+	return function(req,res,next)
+	{
+		get_permission_endpoint(Model,endpoint,req,res,2,function()
+		{
+			if(! lib.validate_fields(req,res,PERMISSIONS)) return;
+			Model.findById(req.params.id,function(err,model)
+			{
+				if(err) return res.send({ code: 500, err: "Database Error."});
+				if(!model) return res.send({ code: 500, err: "Model not found" });
+
+				if(pre && !pre(req,res,model))
+					return;
+				if(!model) return;
+
+				let temp_query = {};
+				for(let i in PERMISSIONS)
+					if(PERMISSIONS[i]&2)
+						temp_query[i] = req.body[i];
+
+				model[endpoint].push(temp_query);
+				function done()
+				{
+					model.save(function(err,model)
+					{
+						if(err) return res.send({ code: 500, err: 'Database Error' });
+						let output = lib.hide_fields(model[endpoint][model[endpoint].length-1],PERMISSIONS);
+						if(cb) cb(req,res,output); else res.send(output);
+					});
+				}
+
+				if(custom)
+					custom(req,res,model,done);
+				else
+					done();
+
+			});		
+		});
+	}
+}
+
 
 exports.put_endpoint = function(Model,endpoint,custom,cb,pre)
 {

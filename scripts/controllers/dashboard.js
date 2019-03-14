@@ -302,6 +302,10 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 	let groupListExplore = apiService.new({ id: "group-list-not-own", model: "group", method: "list" });
 
 	let groupView = apiService.new({ id: "group-view", model: "group", method: "get" });
+	let groupJoin  = apiService.new({ id: "group-join", model: "group", method: "post" });
+
+	let groupPending = apiService.new({ id: "group-join-pending", model:"group", method: "post"});
+
 
 	groupNew.on("success",function(res)
 	{
@@ -311,17 +315,35 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 			$location.path("/group/"+res._id+"/member");
 		},10);
 	});
+	let target_group;
 	groupListExplore.on("selected",function(i)
 	{
 		groupView.config.target = i._id;
 		groupView.load();
 
+		groupJoin.config.url = "group/"+i._id+"/users/join"; 
+		target_group  = i._id;
+		
+		groupPending.config.url = "group/"+i._id+"/users_pending"; 
+
 		UIkit.modal("#modal-group-viewer").show();
 		modal_subpage.goto("badge");
+	});
+
+	groupPending.on("success",function(res)
+	{
+		UIkit.modal("#modal-group-viewer").hide();
+		UIkit.notification("Your request has been sent.","success");
 	});
 	groupList.on("selected",function(i)
 	{
 		$location.path("/group/"+i._id+'/feed');
+	});
+
+	groupJoin.on("success",function(res)
+	{
+		$location.path("/group/"+target_group+'/feed');
+		UIkit.modal("#modal-group-viewer").hide();
 	});
 
 	subpage.onload("group",function()
