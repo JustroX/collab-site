@@ -203,7 +203,9 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
 	{
 		UIkit.modal("#modal-submission-confirm").hide();
 		submissionList.load();
+
 		UIkit.switcher("#switcher-submission").show(1);
+		scrollTo("switcher-submission");
 		submission.load(res._id);
 	});
 
