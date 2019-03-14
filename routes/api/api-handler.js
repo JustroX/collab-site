@@ -551,6 +551,7 @@ exports.post_endpoint_async = function(Model,endpoint,custom,cb,pre)
 			if(! lib.validate_fields(req,res,PERMISSIONS)) return;
 			Model.findById(req.params.id,function(err,model)
 			{
+				if(err) console.log(err);
 				if(err) return res.send({ code: 500, err: "Database Error."});
 				if(!model) return res.send({ code: 500, err: "Model not found" });
 
@@ -568,6 +569,7 @@ exports.post_endpoint_async = function(Model,endpoint,custom,cb,pre)
 				{
 					model.save(function(err,model)
 					{
+						if(err) console.log(err);
 						if(err) return res.send({ code: 500, err: 'Database Error' });
 						let output = lib.hide_fields(model[endpoint][model[endpoint].length-1],PERMISSIONS);
 						if(cb) cb(req,res,output); else res.send(output);
