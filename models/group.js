@@ -119,6 +119,7 @@ module.exports =
 			for(let i of this.ranks)
 				if(i.default)
 					return i._id;
+			console.log("default rank not found");
 		}
 	},
 	endpoints:
