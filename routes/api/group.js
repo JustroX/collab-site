@@ -58,7 +58,11 @@ function(req,res,next)
 {
 	User.findById(req.session.passport.user,function(err,user)
 	{
-		if(err) return res.send({ err: "Database Error" , code : 500 });
+		if(err) 
+		{
+			console.log(err);
+			return res.send({ err: "Database Error" , code : 500 });
+		}
 
 		if(model.is_badge_complete(user))
 		{
