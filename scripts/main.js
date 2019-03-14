@@ -53,3 +53,7 @@ app.config(function($routeProvider) {
 
 
 // var quill ;
+
+hljs.configure({   // optionally configure hljs
+  languages: ['javascript', 'ruby', 'python', 'cpp' , 'c']
+});
