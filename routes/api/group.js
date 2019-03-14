@@ -101,6 +101,10 @@ function(req,res,next)
 		else
 			return res.send({ err: "Your badges is incomplete.", code: 403 });
 	});
+},null,function(req,res,model)
+{
+	delete req.body["rank"];
+	return true;
 }));
 
 
