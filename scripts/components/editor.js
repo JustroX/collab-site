@@ -3,6 +3,8 @@
   id
   template
 */
+Quill.register('modules/markdownShortcuts', MarkdownShortcuts)
+
 
 app.component('editor',{
     controller: function(schemaService,modelService,$timeout,$element)
