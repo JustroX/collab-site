@@ -199,10 +199,12 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
 
 	let submission = modelService.new({ id: "submission", model: "submission" });
 
-	submissionNew.on("success",function()
+	submissionNew.on("success",function(res)
 	{
 		UIkit.modal("#modal-submission-confirm").hide();
 		submissionList.load();
+		UIkit.switcher("#switcher-submission").show(1);
+		submission.load(res._id);
 	});
 
 	let submissionList = apiService.new({ id: "submission-list", model: "submission", method: "list" });
