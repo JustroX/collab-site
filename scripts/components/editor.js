@@ -24,7 +24,7 @@ app.component('editor',{
 
             [{ 'font': [] },'clean'],
             [{ 'align': [] }],
-            [ 'link' ,'video','image'],
+            [ 'link' ,'video','image','formula'],
 
           ];
 
@@ -33,7 +33,8 @@ app.component('editor',{
             theme: 'snow',
             modules: 
             {
-              toolbar: toolbarOptions
+              toolbar: toolbarOptions,
+              markdownShortcuts: {}
             },
           });
 
