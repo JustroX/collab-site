@@ -26,9 +26,9 @@ router.post('/', api.logged, api.post(Group ,function(req,res,model)
 	model.ranks.push({ name: "member", permissions: 
 	{
 		group: 1,
-		users: 0,
-		module: 0,
-		post: 0,		
+		users: 1,
+		module: 1,
+		post: 1,		
 	}, default: true, persistent: true   });
 	model.users.push({ user: req.session.passport.user, rank: model.ranks[0]._id});
 	return model;
