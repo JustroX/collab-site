@@ -50,10 +50,10 @@ app.component('editor',{
             });
           });
 
-          ctrl.api && ctrl.api.on("success",function()
-          {
-            quill.setText("");
-          });
+          // ctrl.api && ctrl.api.on("success",function()
+          // {
+          //   quill.setText("");
+          // });
 
           ctrl.access && ctrl.access(quill);
         },1);

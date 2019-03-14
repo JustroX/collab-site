@@ -132,8 +132,7 @@
 										<div class="uk-alert uk-alert-danger" ng-show='$ctrl.api.feedback.error'>{{api.error}}</div>
 									    <p class="uk-article-meta">Written by <a ng-repeat='u in $ctrl.model.authors track by $index' href="#/user/{{u.user._id}}" target="_blank" >{{ u.user.fullname + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{ $ctrl.model.module.name }}</a></p>
 									    
-
-										<editor api='$ctrl.api' bind='$ctrl.model.content' access='page_editor.access'  style='min-height: 90vh;'></editor>
+										<editor api='$ctrl.api' bind='$ctrl.model.content' access='page_editor.access_article'  style='min-height: 90vh;'></editor>
 									</article>
 								</div>
 							</handler>
@@ -198,7 +197,7 @@
 										    <p class="uk-article-meta">Written by <a ng-repeat='u in $ctrl.model.authors track by $index' href="#/user/{{u.user._id}}" target="_blank" >{{ u.user.fullname + ' ' }}</a>. Posted in <a href="javascript:void(0)">{{ $ctrl.model.module.name }}</a></p>
 										    
 
-											<editor api='$ctrl.api' bind='$ctrl.model.content' access='page_editor.access'  style='min-height: 90vh;'></editor>
+											<editor api='$ctrl.api' bind='$ctrl.model.content' access='page_editor.acces_challenge'  style='min-height: 90vh;'></editor>
 										</article>
 									</div>
 

@@ -179,7 +179,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		if(challenge.value.model.content)
 		{
 			try{
-				editor.setContents(JSON.parse(challenge.value.model.content));
+				editor_challenge.setContents(JSON.parse(challenge.value.model.content));
 			}
 			catch(e)
 			{
@@ -187,7 +187,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 			}
 		}
 		else
-			editor.setText("");
+			editor_challenge.setText("");
 	});
 	challenge.on("deleted",function()
 	{
@@ -206,7 +206,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 		if(article.value.model.content)
 		{
 			try{
-				editor.setContents(JSON.parse(article.value.model.content));
+				editor_article.setContents(JSON.parse(article.value.model.content));
 			}
 			catch(e)
 			{
@@ -214,7 +214,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 			}
 		}
 		else
-			editor.setText("");
+			editor_article.setText("");
 	});
 	article.on("deleted",function()
 	{
@@ -243,10 +243,14 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 	$scope.page_editor  = {  type: null };
 	$scope.page_editor.loading = false;
 
-	let editor;
-	$scope.page_editor.access = function(quill)
+	let editor_challenge, editor_article;
+	$scope.page_editor.access_challenge = function(quill)
 	{
-		editor  = quill;
+		editor_challenge  = quill;
+	}
+	$scope.page_editor.access_article = function(quill)
+	{
+		editor_article  = quill;
 	}
 
 
