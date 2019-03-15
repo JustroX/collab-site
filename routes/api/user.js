@@ -80,7 +80,7 @@ router.put('/:id', function(req,res,next)
 			}
 			if(req.body.email)
 				user.email = req.body.email;
-
+			console.log(user);
 			user.save(function(err, updatedUser)
 			{
 				if(err) throw err;
