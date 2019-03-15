@@ -163,7 +163,12 @@ module.exports =
 		},
 		validPassword: function(password)
 		{
-			return bcrypt.compareSync(password,this.private.local.password);
+			console.log(password);
+			 if(this.password != null) {
+		        return bcrypt.compareSync(password, this.password);
+		    } else {
+		        return false;
+		    }
 		}
 	}
 }
