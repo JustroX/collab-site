@@ -163,7 +163,7 @@ module.exports =
 		},
 		validPassword: function(password)
 		{
-			console.log(password);
+			console.log(password,this.password);
 			 if(this.password != null) {
 		        return bcrypt.compareSync(password, this.password);
 		    } else {
