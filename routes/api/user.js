@@ -74,13 +74,13 @@ router.put('/:id', function(req,res,next)
 			}
 			if(req.body.password)
 			{
+				console.log(user);
 				if( !user.validPassword(req.body.old_password) )
 					return res.send({err: "Password is incorrect" , code: 403});
 				user.password = user.generateHash(req.body.password);
 			}
 			if(req.body.email)
 				user.email = req.body.email;
-			console.log(user);
 			user.save(function(err, updatedUser)
 			{
 				if(err) throw err;
