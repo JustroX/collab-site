@@ -142,7 +142,24 @@ router.post('/:id/followed_by/', api.logged,
 					res.send(output);
 				});
 			});
-		})
+		},
+		function(req,res,model)
+		{
+			let found = false;
+			for(let i in model.toObject().followed_by)
+			{
+				let a = model.followed_by[i];
+				if(a.user.equals(req.session.passport.user))
+				{
+					console.log(a.user,req.session.passport.user);
+					res.send({ err: "Already following" , code: 403 });
+					return false;
+				}
+			}
+			console.log("reached");
+			return true;
+		}
+		)
 	);
 router.get('/:id/followed_by/:field_id', api.logged, api.get_endpoint(User , "followed_by"));
 router.put('/:id/followed_by/:field_id', api.logged, api.put_endpoint(User , "followed_by"));
