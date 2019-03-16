@@ -169,10 +169,13 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	});
 
 
-	memberList.on("selected",function(u)
+	memberList.on("selected",function(u,type)
 	{
-		UIkit.modal("#modal-view-member").show();
-		memberView.load(u._id);
+		if(type == "edit")
+		{
+			UIkit.modal("#modal-view-member").show();
+			memberView.load(u._id);
+		}
 	});
 
 

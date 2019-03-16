@@ -1,5 +1,5 @@
 <handler bind='group-pending'>
-	<div ng-show='$ctrl.api.config.state.loading || $ctrl.model.length' class="uk-padding uk-padding-remove-top">
+	<div ng-show='($ctrl.api.config.state.loading || $ctrl.model.length ) && admin_permission("users",2)' class="uk-padding uk-padding-remove-top">
 		<div  class="uk-text-meta">
 			Pending Requests
 		</div>
@@ -67,7 +67,8 @@
 							<i class="uk-text-meta uk-text-capitalize">{{ get_rank_name(i.rank) }}</i>
 						</small>
 						<hr style="margin-bottom: 0px">
-						<button ng-click='$ctrl.view(i)' class="uk-button uk-button-small uk-button-text"><small>Edit</small></button>
+						<button ng-show='admin_permission("users",2)' ng-click='$ctrl.view(i,"edit")' class="uk-button uk-button-small uk-button-text"><small>Edit</small></button>
+						<button ng-show='!admin_permission("users",2) && (i.user._id == SESSION_USER._id)' ng-click='$ctrl.view(i,"hide")' class="uk-button uk-button-small uk-button-text"><small>Leave Group</small></button>
 					</div>
 				</div>
 			</div>
