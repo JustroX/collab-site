@@ -126,6 +126,8 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
 	}
  	access_models.challenge.on("loaded",function()
  	{
+ 		submissionList.config.param = "author="+$scope.SESSION_USER._id+"&challenge="+access_models.challenge.value.model._id;
+ 		submissionList.load();
  		$scope.languages = access_models.challenge.value.model.settings.languages;
  		$scope.submission_new_model.language = $scope.languages[0];
  		$scope.change_language($scope.submission_new_model.language);
