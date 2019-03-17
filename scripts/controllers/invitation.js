@@ -90,7 +90,7 @@ app.controller("invitationController",function($scope,$http,$location,$timeout,$
 
 	$scope.gotoMain = function()
 	{
-		ukAnimate.play("#static-invitation-register","uk-animation-slide-bottom-small uk-animation-reverse",function()
+		ukAnimate.play("#static-invitation-register",true,function()
 		{
 			$scope.subpage.goto("main");
 		});
@@ -98,8 +98,9 @@ app.controller("invitationController",function($scope,$http,$location,$timeout,$
 
 	$scope.gotoRegister = function()
 	{
-		ukAnimate.play("#static-invitation-main","uk-animation-slide-bottom-small uk-animation-reverse",function()
+		ukAnimate.play("#static-invitation-main",true,function()
 		{
+			ukAnimate.play("#static-invitation-register");
 			$scope.subpage.goto("register");
 		});
 	}
@@ -107,29 +108,29 @@ app.controller("invitationController",function($scope,$http,$location,$timeout,$
 	$scope.gotoPage2 = function()
 	{
 		user.api.put.config.feedback.error = "";
-		ukAnimate.play("#component-user-edit-1","uk-animation-slide-bottom-small uk-animation-reverse",function()
+		ukAnimate.play("#component-user-edit-1",true,function()
 		{
+			ukAnimate.play("#component-user-edit-2");
 			$scope.subpage.goto('register-edit/2');
-			ukAnimate.play("#component-user-edit-2","uk-animation-slide-bottom-small",function(){});
 		});
 	}
 
 	
 	$scope.gotoPage1 = function()
 	{
-		ukAnimate.play("#component-user-edit-2","uk-animation-slide-bottom-small uk-animation-reverse",function()
+		ukAnimate.play("#component-user-edit-2",true,function()
 		{
+			ukAnimate.play("#component-user-edit-1");
 			$scope.subpage.goto('register-edit/1');
-			ukAnimate.play("#component-user-edit-1","uk-animation-slide-bottom-small",function(){});
 		});
 	}
 
 	$scope.gotoDone = function()
 	{
-		ukAnimate.play("#component-user-edit-2","uk-animation-slide-bottom-small uk-animation-reverse",function()
+		ukAnimate.play("#component-user-edit-2",true,function()
 		{
 			$scope.subpage.goto("done");
-			ukAnimate.play("#static-invitation-done-1","uk-animation-slide-bottom-small",function(){});
+			ukAnimate.play("#static-invitation-done-1");
 		});
 	}
 

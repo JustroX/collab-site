@@ -3,6 +3,7 @@ app.controller("profileController",function($scope,$http,$location,$timeout,$roo
 
 	apiService.free();
 	modelService.free();
+	$scope.HASH  = Math.random().toString(36).substring(7);
 
 	const subpage=subpageService.Page();
 	const modal_subpage = subpageService.Page();
@@ -91,7 +92,7 @@ app.controller("profileController",function($scope,$http,$location,$timeout,$roo
 
 	postUtil.reply = function(u)
 	{
-		UIkit.modal("#profile-reply-modal").show();
+		UIkit.modal("#profile-reply-modal-"+$scope.HASH).show();
 		post.load(u._id);
 
 		replyList.config.param =  "parent=" + u._id;
@@ -100,8 +101,8 @@ app.controller("profileController",function($scope,$http,$location,$timeout,$roo
 		$scope.reply.model.group  = u.group;
 		$scope.reply.model.parent = u._id;
 
-		$("#profile-reply-editor-container").fadeIn();
-		$("#profile-reply-editor").fadeIn();
+		$("#profile-reply-editor-container-"+$scope.HASH).fadeIn();
+		$("#profile-reply-editor-"+$scope.HASH).fadeIn();
 	}
 
 	let post = modelService.new({ id: "post-view" , model : "post"  });
@@ -228,14 +229,14 @@ app.controller("profileController",function($scope,$http,$location,$timeout,$roo
 
 	$scope.reply_editor_toggle = function()
 	{
-		if($("#profile-reply-editor").is(":visible"))
-			$("#profile-reply-editor").fadeToggle(500,function(){
-				$("#profile-reply-editor-block").fadeToggle(500);
+		if($("#profile-reply-editor-"+$scope.HASH).is(":visible"))
+			$("#profile-reply-editor-"+$scope.HASH).fadeToggle(500,function(){
+				$("#profile-reply-editor-block-"+$scope.HASH).fadeToggle(500);
 				reply_editor.focus();
 			});
 		else
-			$("#profile-reply-editor-block").fadeToggle(500,function(){
-				$("#profile-reply-editor").fadeToggle(500);
+			$("#profile-reply-editor-block-"+$scope.HASH).fadeToggle(500,function(){
+				$("#profile-reply-editor-"+$scope.HASH).fadeToggle(500);
 			});
 	}
 

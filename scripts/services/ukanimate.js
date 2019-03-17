@@ -1,17 +1,18 @@
 app.service('ukAnimate', function($http,$timeout) 
 {
-	this.play = function(id,animation,cb=()=>{;})
+	this.play = function(id,reverse,cb=()=>{;})
 	{
 		$component = $(id);
-		$component.addClass(animation);
-		$component.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',function()
+		if(!reverse)
 		{
-			$timeout(function()
-			{
-				$component.removeClass(animation);
-				cb();
-			},1);
-	    });
+			$component.fadeIn(500);
+			$timeout(cb,500);
+		}
+		else
+		{
+			$component.fadeOut(500);
+			$timeout(cb,500);
+		}
 	}
 });
 
