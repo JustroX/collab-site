@@ -88,6 +88,7 @@ app.component('editorView',{
             let tempQuill=new Quill(doc);
             try
             {
+              console.log(JSON.parse(ctrl.data));
               tempQuill.setContents(JSON.parse(ctrl.data));
             }
             catch(e)

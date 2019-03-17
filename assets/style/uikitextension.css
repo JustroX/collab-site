@@ -46,7 +46,8 @@
 
 body
 {
-	background: linear-gradient(135deg,	#ffffff ,#e6ffff)
+	background: linear-gradient(135deg,	#ffffff ,#e6ffff);
+	min-height:  100vh;
 }
 
 .ex-red

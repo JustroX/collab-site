@@ -46,6 +46,13 @@
 		<div class="uk-width-1-2@m uk-width-2-3@s">
 			<br>
 
+			<div ng-show='subpage.Ispage("discover")' class="uk-animation-slide-bottom-small">
+				<div class="uk-padding uk-text-center">
+					<h1>Coming soon ...</h1>
+					<a href="javascript:void(0)" ng-click='subpage.goto("feed")' class="uk-text-muted">Back to feed.</a>
+				</div>
+			</div>
+
 			<div ng-show='subpage.Ispage("feed")' class="uk-animation-slide-bottom-small">
 				<% include dashboard/feed %>
 			</div>
@@ -55,6 +62,7 @@
 			<div ng-show='subpage.Ispage("settings")' class="uk-animation-slide-bottom-small">
 				<% include dashboard/settings %>
 			</div>
+			
 
 		</div>
 		<div class="uk-width-1-4">

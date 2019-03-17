@@ -183,6 +183,7 @@ app.controller("moduleEditController",function($scope,$http,$location,$timeout,$
 			}
 			catch(e)
 			{
+				console.log(e);
 				console.log("Error parsing content.");
 			}
 		}
