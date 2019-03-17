@@ -43,6 +43,9 @@ app.config(function($routeProvider) {
     .when("/badge/", {
         templateUrl : "/page/badge",
     })
+    .when("/mobile/", {
+        templateUrl : "/page/mobile",
+    })
     .when("/404", {
         templateUrl : "/page/404",
     })

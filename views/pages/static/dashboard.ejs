@@ -54,7 +54,9 @@
 			</div>
 
 			<div ng-show='subpage.Ispage("feed")' class="uk-animation-slide-bottom-small">
-				<% include dashboard/feed %>
+				<div class="uk-padding-small">
+					<% include dashboard/feed %>
+				</div>
 			</div>
 			<div ng-show='subpage.Ispage("group")' class="uk-animation-slide-bottom-small">
 				<% include dashboard/group %>
@@ -69,4 +71,22 @@
 		</div>
 	</div>
 	<br><br><br><br><br><br>
+
+	<div id="modal-device" uk-modal>
+	    <div class="uk-modal-dialog">
+	        <button class="uk-modal-close-default" type="button" uk-close></button>
+	        <div class="uk-modal-body uk-text-center">
+	        	<h2>Device Alert</h2>
+	            <b>Please use your PC for best experience.</b>
+	            <br><br>
+	            <div class="uk-text-center">
+		            <img style="width: 60%" src="assets/pc.svg">
+	            </div>
+	            <br>
+	            <small>Our mobile version is currently on alpha state. Some functions may not work properly. We encourage you to use your PC.</small>
+	            <br><br>
+	            <button class="uk-button uk-button-primary ex-button uk-modal-close" type="button">Proceed anyway</button>
+	        </div>
+	    </div>
+	</div>
 </div>

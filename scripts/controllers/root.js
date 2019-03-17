@@ -23,4 +23,11 @@ app.controller("rootController",function($scope,$http,$location,$timeout,$rootSc
 		});
 	});
 
+
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) 
+	{
+		$scope.ON_MOBILE = true;
+		$location.path('/mobile');
+	}
+
 });

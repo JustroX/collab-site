@@ -387,6 +387,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 		$("#group-reply-editor-container-"+$scope.HASH).fadeIn();
 		$("#group-reply-editor-"+$scope.HASH).fadeIn();
+		$("#group-reply-editor-block-"+$scope.HASH).fadeOut();
 	}
 
 	let post = modelService.new({ id: "post-view" , model : "post"  });

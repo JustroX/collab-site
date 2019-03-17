@@ -103,6 +103,7 @@ app.controller("profileController",function($scope,$http,$location,$timeout,$roo
 
 		$("#profile-reply-editor-container-"+$scope.HASH).fadeIn();
 		$("#profile-reply-editor-"+$scope.HASH).fadeIn();
+		$("#profile-reply-editor-block-"+$scope.HASH).fadeOut();
 	}
 
 	let post = modelService.new({ id: "post-view" , model : "post"  });

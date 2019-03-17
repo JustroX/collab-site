@@ -24,6 +24,18 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 			else
 			subpage.goto($routeParams.subpage);
 		});
+
+
+		UIkit.util.on("#reply-modal-"+$scope.HASH,'beforehide',function()
+		{
+			console.log("closing");
+			if($scope.feed_editor_active)
+			{
+				$("#reply-editor-block-"+$scope.HASH).hide();
+				$("#reply-editor-"+$scope.HASH).hide();
+			}
+		});
+
 	});
 
 	$scope.feed_editor_active = false;
@@ -283,6 +295,7 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 		$("#reply-editor-container-"+$scope.HASH).fadeIn();
 		$("#reply-editor-"+$scope.HASH).fadeIn();
+		$("#reply-editor-block-"+$scope.HASH).fadeOut();
 	}
 
 	let post = modelService.new({ id: "post-view" , model : "post"  });
@@ -404,4 +417,12 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 	//    	},1);
 	//    }
 	// });
+
+
+	///mobile
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) 
+	{
+		$scope.ON_MOBILE = true;
+	 	UIkit.modal("#modal-device").show();
+	}
 });
