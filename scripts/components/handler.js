@@ -6,6 +6,7 @@ app.component('handler',{
       model : "=?" ,
       default :"=?",
       reset : "@?",
+      report: "=?"
     },
     controller: function(apiService,$timeout,$transclude,schemaService,$element)
     {
@@ -28,6 +29,10 @@ app.component('handler',{
       };
       ctrl.$onInit = function()
       {
+
+        if(ctrl.report)
+          console.log("I am being reinitialized");
+
         ctrl.model  = ctrl.model || {};
         ctrl.default  = ctrl.default || {};
 

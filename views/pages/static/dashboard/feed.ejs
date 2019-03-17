@@ -125,7 +125,7 @@
 			</div>
 		</div>
 	</entity>	
-	<div id="reply-modal" uk-modal>
+	<div id="reply-modal-{{HASH}}" uk-modal>
 		<div class="uk-modal-body uk-modal-dialog" style="background: rgba(0,0,0,0);">
 		    <div style="background: white;" class="ex-boundary">
 		    	<entity bind='post-view'>
@@ -216,8 +216,8 @@
 	    		</div>
 	    	</handler>
 	    	<div>
-	    		<div  id="reply-editor-container" style="display: none;margin: 10px; background: white" class="uk-card uk-card-body ex-boundary">
-					<div id="reply-editor" style="display: none;" ng-show='!feed_editor_active' class="uk-grid-small uk-flex-middle" uk-grid>
+	    		<div  id="reply-editor-container-{{HASH}}" style="display: none;margin: 10px; background: white" class="uk-card uk-card-body ex-boundary">
+					<div id="reply-editor-{{HASH}}" style="display: none;" ng-show='!feed_editor_active' class="uk-grid-small uk-flex-middle" uk-grid>
 				        <div class="uk-width-auto ">
 				            <img class="uk-border-circle uk-animation-scale-up" style='width: 25px; height: 25px' width="25" height="25" ng-src="{{ SESSION_USER.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
 				        </div>
@@ -228,7 +228,7 @@
 							<!-- <p class="uk-text-truncate" style="font-size: 12pt; font-family: 'Roboto', sans-serif">{{ SESSION_USER.name.first }} Che</p> -->
 						</div>
 				    </div>
-				    <div id="reply-editor-block" style="display: none; background: white">
+				    <div id="reply-editor-block-{{HASH}}" style="display: none; background: white">
 						<handler bind='reply-new' model='reply.model'>
 							<editor api='$ctrl.api' bind='$ctrl.model.content' access="on_reply_editor_reply" style='height: 30vh;'></editor>
 							<div style="margin-top: 5px;padding-left: 5px">

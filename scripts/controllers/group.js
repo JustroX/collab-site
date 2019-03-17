@@ -6,7 +6,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	apiService.free();
 	modelService.free();
 	
-
+	$scope.HASH  = Math.random().toString(36).substring(7);
 
 	$scope.subpage  = subpage;
 	$scope.moment = moment;
@@ -376,7 +376,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	postUtil.reply = function(u)
 	{
-		UIkit.modal("#group-reply-modal").show();
+		UIkit.modal("#group-reply-modal-"+$scope.HASH).show();
 		post.load(u._id);
 
 		replyList.config.param =  "parent=" + u._id;
@@ -385,8 +385,8 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 		$scope.reply.model.group  = u.group;
 		$scope.reply.model.parent = u._id;
 
-		$("#group-reply-editor-container").fadeIn();
-		$("#group-reply-editor").fadeIn();
+		$("#group-reply-editor-container-"+$scope.HASH).fadeIn();
+		$("#group-reply-editor-"+$scope.HASH).fadeIn();
 	}
 
 	let post = modelService.new({ id: "post-view" , model : "post"  });
@@ -411,6 +411,7 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	postList.on("selected",function(u,type)
 	{
+		console.log("I am selected");
 		postUtil[type] && postUtil[type](u);
 	});
 	replyList.on("selected",function(u,type)
@@ -513,14 +514,14 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 
 	$scope.reply_editor_toggle = function()
 	{
-		if($("#group-reply-editor").is(":visible"))
-			$("#group-reply-editor").fadeToggle(500,function(){
-				$("#group-reply-editor-block").fadeToggle(500);
+		if($("#group-reply-editor-"+$scope.HASH).is(":visible"))
+			$("#group-reply-editor-"+$scope.HASH).fadeToggle(500,function(){
+				$("#group-reply-editor-block-"+$scope.HASH).fadeToggle(500);
 				feed_editor.focus();
 			});
 		else
-			$("#group-reply-editor-block").fadeToggle(500,function(){
-				$("#group-reply-editor").fadeToggle(500);
+			$("#group-reply-editor-block-"+$scope.HASH).fadeToggle(500,function(){
+				$("#group-reply-editor-"+$scope.HASH).fadeToggle(500);
 			});
 	}
 
