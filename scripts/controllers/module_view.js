@@ -142,10 +142,12 @@ app.controller("moduleViewController",function($scope,$http,$location,$timeout,$
  	$scope.page_next = function()
  	{
  		$scope.access_page($scope.page + 1);
+ 		scrollTop();
  	}
  	$scope.page_prev = function()
  	{
  		$scope.access_page($scope.page - 1);
+ 		scrollTop();
  	}
 
  	let code_editor;
@@ -324,4 +326,11 @@ function scrollTo(tag_id)
    $('html, body').animate({
          scrollTop: $('#'+tag_id).offset().top
     }, 'slow');
+}
+
+function scrollTop()
+{
+	$('html, body').animate({
+         scrollTop: 0
+    }, 'slow');	
 }
