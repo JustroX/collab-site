@@ -52,7 +52,18 @@ router.get('/:id', api.get(Challenge,function(req,res,output)
 	//hide hidden testcase
 
 }));
-router.put('/:id', api.put(Challenge));
+router.put('/:id', api.putAsync(Challenge,function(req,res,model,done)
+{
+	let user = req.session.passport.user;
+	let found = false;
+	for(let i in model.toObject().authors)
+		found |= (model.authors[i].equals(user));
+	if(!found)
+		model.authors.push({ user: user});
+	done();
+}));
+
+
 router.delete('/:id',  api.deleteAsync(Challenge,null,function(req,res,model,done)
 {
 	Module.findById(model.module,function(err,mod)

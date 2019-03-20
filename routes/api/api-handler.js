@@ -234,6 +234,46 @@ exports.put = function(Model,custom,pre,cb)
 
 }
 
+exports.putAsync = function(Model,custom,pre,cb)
+{
+	let PERMISSIONS = Model.config.PERMISSIONS;
+	return function(req,res,next)
+	{
+		get_permission(Model,req,res,4,PERMISSIONS,function(PERMISSIONS)
+		{
+			let target_id = req.params.id;
+			let query = lib.sanitize(req,PERMISSIONS);
+
+			Model.findById(target_id, function(err, model)
+			{
+				if(err) return res.send({ code: 500, err: 'Database Error' });	
+				if(!model) return res.send({ code: 500 , err: 'Doc not found.' });
+				if(pre && !pre(req,res,model)) 
+					return;
+				model.set(query);
+				if(custom)
+					custom(req,res,model,done);
+				else
+					done();
+
+
+				function done()
+				{
+					model.save(function(err, updatedModel)
+					{
+						if(err) return res.send({ code: 500, err: 'Database Error' });
+						let output = lib.hide_fields(updatedModel,PERMISSIONS);
+						if(cb) cb(req,res,updatedModel);
+						else res.send(output);
+					});
+				}
+
+			});
+		});
+	}
+
+}
+
 exports.delete = function(Model,cb,pre)
 {
 	let PERMISSIONS = Model.config.PERMISSIONS;

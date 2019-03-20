@@ -33,7 +33,16 @@ router.post('/', api.logged, api.postAsync(Article,function(req,res,model,done)
 }));
 router.get('/', api.list(Article) );
 router.get('/:id', api.get(Article));
-router.put('/:id', api.put(Article));
+router.put('/:id',api.putAsync(Article,function(req,res,model,done)
+{
+	let user = req.session.passport.user;
+	let found = false;
+	for(let i in model.toObject().authors)
+		found |= (model.authors[i].equals(user));
+	if(!found)
+		model.authors.push({ user: user});
+	done();
+}));
 router.delete('/:id', api.deleteAsync(Article,null,function(req,res,model,done)
 {
 	Module.findById(model.module,function(err,mod)

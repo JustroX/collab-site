@@ -3,7 +3,8 @@
   id
   template
 */
-Quill.register('modules/markdownShortcuts', MarkdownShortcuts)
+Quill.register('modules/markdownShortcuts', MarkdownShortcuts);
+hljs.configure({ languages: ["python"] });
 
 
 app.component('editor',{
@@ -106,6 +107,7 @@ app.component('editorView',{
 
             $(doc).find('pre.ql-syntax').each(function(i,e)
             {
+                $(e).addClass("python");
                 hljs.highlightBlock(e);
             });
             
@@ -126,7 +128,7 @@ app.component('editorView',{
             {
               $("pre.ql-syntax").each(function(i,e)
               {
-                  $(e).css("padding","5px");
+                $(e).css("padding","5px");
               });
             },1);
         };
