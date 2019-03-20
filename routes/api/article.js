@@ -38,7 +38,7 @@ router.put('/:id',api.putAsync(Article,function(req,res,model,done)
 	let user = req.session.passport.user;
 	let found = false;
 	for(let i in model.toObject().authors)
-		found |= (model.authors[i].equals(user));
+		found |= (model.authors[i].user.equals(user));
 	if(!found)
 		model.authors.push({ user: user});
 	done();
