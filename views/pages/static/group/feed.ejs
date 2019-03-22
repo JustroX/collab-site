@@ -42,36 +42,44 @@
 	<div>
 	<!-- <div uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div; delay: 500;"> -->
 
-		<div ng-show='!$ctrl.api.config.state.loading' class="uk-card uk-card-body ex-boundary " style="margin-top: 5px" ng-repeat='i in $ctrl.model'>
-			<div>
-				<div uk-grid> 
-					<div class="uk-width-auto ">
-		                <img  style="border: 1px solid #dadada; width: 25px; height: 25px" class="uk-border-circle "  width="25" height="25" ng-src="{{ i.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
-		            </div>
-		            <div class="uk-width-expand" style="padding: 0px; padding-left: 15px;">
-		            	<a href="#!/profile/{{i.author._id}}" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
-		            	<i><small><a class="uk-link-muted" href="#!/profile/{{i.author._id}}">@{{i.author.username}}</a></small></i>
-		            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
-		            </div>
-		            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
-	            		<a ng-show='post_owned(i)' href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
-            		    <div uk-dropdown="mode: click; pos: bottom-right" style="padding: 15px;">
-            		    	<ul class="uk-nav uk-dropdown-nav uk-text-left">
-								<li><a href="javascript:void(0)" ng-click='post_edit(i)' ><i class="fas fa-pen"></i> Edit  </a>  </li>
-								<li><a href="javascript:void(0)" ng-click='post_delete(i)' ><i class="fas fa-trash"></i> Delete</a> </li>
-								<li><a href="javascript:void(0)" ></a></li>
-							</ul>
-            		    </div>
-		            </div>
+		<div ng-repeat='i in $ctrl.model'>
+			<div ng-show='!$ctrl.api.config.state.loading' class="uk-card uk-card-body ex-boundary " style="margin-top: 5px" >
+				<div>
+					<div class="uk-child-width-1-3" uk-grid> 
+						<div class="uk-width-auto ">
+			                <img  style="border: 1px solid #dadada; width: 25px; height: 25px" class="uk-border-circle "  width="25" height="25" ng-src="{{ i.author.profile_pic || 'https://abs.twimg.com/sticky/default_profile_images/default_profile.png'}}">
+			            </div>
+			            <div class="uk-width-1-3 uk-width-expand" style="padding: 0px; padding-left: 15px;">
+			            	<a href="#!/profile/{{i.author._id}}" style="color: #2b2b2b"><small>{{i.author.fullname}}</small></a> &middot; 
+			            	<i><small><a class="uk-link-muted" href="#!/profile/{{i.author._id}}">@{{i.author.username}}</a></small></i>
+			            	<i><small>{{moment(i.date).fromNow()}}</small></i> 
+			            </div>
+			            <div class="uk-width-expand uk-text-right " style="padding-right: 15px;">
+		            		<a ng-show='i.pinned' href="javascript:void(0)"><i class="fas fa-thumbtack uk-text-right ex-post-feedback"></i> <small><b class="ex-post-feedback">PINNED</b></small></a>
+		            		<a ng-show='post_owned(i)' href="javascript:void(0)"><i class="fas fa-angle-down uk-text-right ex-post-feedback"></i></a>
+	            		    <div uk-dropdown="mode: click; pos: bottom-right" style="padding: 15px;">
+	            		    	<ul class="uk-nav uk-dropdown-nav uk-text-left">
+									<li><a href="javascript:void(0)" ng-click='post_edit(i)' ><i class="fas fa-pen"></i> Edit  </a>  </li>
+									<li><a href="javascript:void(0)" ng-click='post_delete(i)' ><i class="fas fa-trash"></i> Delete</a> </li>
+									<li><a href="javascript:void(0)" ></a></li>
+								</ul>
+	            		    </div>
+			            </div>
+					</div>
+				</div>
+				<div style="padding: 5px;">
+					<editor-view data='{{i.content}}'></editor-view>
+					<div class="uk-text-right">
+						<a ng-click='$ctrl.view(i,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like(i) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
+						<!-- <a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp; -->
+						<a ng-click='$ctrl.view(i,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
+					</div>
 				</div>
 			</div>
-			<div style="padding: 5px;">
-				<editor-view data='{{i.content}}'></editor-view>
-				<div class="uk-text-right">
-					<a ng-click='$ctrl.view(i,"like")' href="javascript:void(0)"><i ng-class='{ "ex-red": post_check_like(i) }' class="fas fa-heart  ex-post-feedback"></i></a> &nbsp;&nbsp;
-					<!-- <a ng-click='$ctrl.view(i,"share")' href="javascript:void(0)"><i ng-class='{ "ex-green": post_check_share(i) }'  class="fas fa-retweet ex-post-feedback"></i></a> &nbsp;&nbsp; -->
-					<a ng-click='$ctrl.view(i,"reply")' href="javascript:void(0)"><i class="fas fa-share ex-post-feedback"></i></a> &nbsp;&nbsp;
-				</div>
+			<div class="uk-text-center" ng-show='i.pinned'>
+				<br><br>
+				<small class="ex-feedback-post">Community Posts</small>
+				<br><br>
 			</div>
 		</div>
 

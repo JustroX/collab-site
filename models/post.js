@@ -10,6 +10,7 @@ module.exports =
 	   date : Date,
 	   author    : { type: Schema.Types.ObjectId, ref: 'User'},
 	   wall : Boolean,
+	   pinned: Boolean,
 	   
 	   liked_by  : 
 	   [{ 
@@ -47,6 +48,7 @@ module.exports =
 		wall: 1,
 		author: 1,
 		date: 1,
+		pinned: 1,
 
 		liked_by : 13,
 		shared_by : 13,
