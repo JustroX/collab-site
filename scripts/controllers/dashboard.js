@@ -361,6 +361,13 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 		UIkit.modal("#modal-group-viewer").hide();
 	});
 
+	groupJoin.on("error",function(err)
+	{
+		// $location.path("/group/"+target_group+'/feed');
+		UIkit.modal("#modal-group-viewer").hide();
+		UIkit.notification(err,'danger');
+	});
+
 	subpage.onload("group",function()
 	{
 		 groupList.config.param ="users.user="+session.getUser()._id;

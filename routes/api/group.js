@@ -99,7 +99,7 @@ function(req,res,next)
 			done();
 		}
 		else
-			return res.send({ err: "Your badges is incomplete.", code: 403 });
+			return res.send({ err: "Your badges are incomplete.", code: 403 });
 	});
 },null,function(req,res,model)
 {
