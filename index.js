@@ -32,6 +32,18 @@ app.use(urlencodedParser);
 app.use(cookieParser());
 app.use(bodyParser.json());
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+
+app.use(allowCrossDomain);
+// app.configure(function() {
+    //some other code
+// });   
+
 //required for passport
 app.use(session({ secret : '18BB2B8E71D3D158F759B6A7C98D0EC2B3BF80189296C0198FD36761781FDE4C' ,
     maxAge: new Date(Date.now() + 3600000),
