@@ -31,7 +31,7 @@
 
 				</div>
 				<br>
-				<div class="uk-background-muted ex-boundary">
+				<div id='group-navigation-tour' class="uk-background-muted ex-boundary">
 					<small class="uk-text-muted">Group</small>
 					<ul class="uk-nav uk-nav-default uk-animation-slide-bottom-small">
 			            <li><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("module") }'ng-click='subpage.goto("module")' href="javascript:void(0)"><i class="fab fa-hubspot"></i> Modules</a></li>
@@ -60,7 +60,7 @@
 		<div class="uk-width-1-2@m uk-width-2-3@s">
 			<br>
 
-			<div ng-show='subpage.Ispage("feed")' class="uk-animation-slide-bottom-small">
+			<div id='group-feed-tour' ng-show='subpage.Ispage("feed")' class="uk-animation-slide-bottom-small">
 				<% include group/feed %>
 			</div>
 			<div ng-show='subpage.Ispage("member")' class="uk-animation-slide-bottom-small">

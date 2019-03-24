@@ -43,6 +43,21 @@ api.post_override(User,function(req,res,user,temp)
 
 router.get('/', api.list(User) );
 
+
+router.get('/tour', api.logged, function(req,res,next)
+{
+	let path = req.query.path;
+	User.findById(req.session.passport.user,function(err,user)
+	{
+		// console.log("Path is",path);
+		user.tour[path] = true;
+		user.save(function(err,u)
+		{
+			res.send({ code: 200, message: "User updated." });
+		});
+	});
+});
+
 router.get('/self', api.logged, function(req,res,next)
 {
 	req.params.id = req.session.passport.user;
