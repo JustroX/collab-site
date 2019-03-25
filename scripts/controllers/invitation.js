@@ -66,15 +66,9 @@ app.controller("invitationController",function($scope,$http,$location,$timeout,$
 	{
 		if(done) return;
 		if(new_user)
-		{
-			gotoPage2();
-			// $scope.subpage.goto('register-edit/2');
-		}
+			$scope.subpage.goto('register-edit/2');
 		else
-		{
-			gotoPage1();
-			// $scope.subpage.goto('register-edit/1');
-		}
+			$scope.subpage.goto('register-edit/1');
 	});
 
 	let confirm_invitation =  apiService.new({ model: "invitation", method: "put", target: $routeParams.id});
