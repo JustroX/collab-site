@@ -30,11 +30,11 @@
 
 				</div>
 				<br>
-				<div class="uk-background-muted ex-boundary">
+				<div id='dashboard-navigation-tour' class="uk-background-muted ex-boundary">
 					<ul class="uk-nav uk-nav-default uk-animation-slide-bottom-small">
-			            <li><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("feed") }' 	ng-click='subpage.goto("feed")' 	href="javascript:void(0)"><i class="fas fa-coffee"></i> Feeds</a></li>
-			            <li><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("group") }' 	ng-click='subpage.goto("group")' 	href="javascript:void(0)"><i class="fas fa-campground"></i> Groups</a></li>
-			            <li><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("discover") }'ng-click='subpage.goto("discover")' href="javascript:void(0)"><i class="fab fa-envira"></i> Discover</a></li>
+			            <li id='dashboard-navigation-feed-tour'><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("feed") }' 	ng-click='subpage.goto("feed")' 	href="javascript:void(0)"><i class="fas fa-coffee"></i> Feeds</a></li>
+			            <li id='dashboard-navigation-group-tour'><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("group") }' 	ng-click='subpage.goto("group")' 	href="javascript:void(0)"><i class="fas fa-campground"></i> Groups</a></li>
+			            <li id='dashboard-navigation-discover-tour'><a style="padding: 0px"  ng-class='{ "uk-active" : subpage.Ispage("discover") }'ng-click='subpage.goto("discover")' href="javascript:void(0)"><i class="fab fa-envira"></i> Discover</a></li>
 			            <li class="uk-nav-divider"></li>
 			            <li><a style="padding: 0px" ng-class='{ "uk-active" : subpage.Ispage("settings") }'ng-click='subpage.goto("settings")'  href="javascript:void(0)"><i class="fas fa-cog"></i> Settings</a></li>
 			         </ul>					
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 
-			<div ng-show='subpage.Ispage("feed")' class="uk-animation-slide-bottom-small">
+			<div id='dashboard-feed-tour' ng-show='subpage.Ispage("feed")' class="uk-animation-slide-bottom-small">
 				<div class="uk-padding-small">
 					<% include dashboard/feed %>
 				</div>

@@ -55,6 +55,12 @@ module.exports =
 		        email        : String,
 		        name         : String
 		    }
+		},
+
+		tour:
+		{
+			dashboard: Boolean,
+			group: Boolean,
 		}
 	},
 	config:
@@ -118,6 +124,8 @@ module.exports =
 	   followed_by: 13,
 
 	   badges: 13,
+
+	   tour: 1,
 	},
 	required:
 	{

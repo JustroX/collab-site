@@ -36,32 +36,33 @@
 
 	<hr>
 
+	<div id='dashboard-group-not-own-tour'>
 	<h7>Discover Groups</h7>
 
 
-
-	<handler bind="group-list-not-own" >
-		<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
-			<div uk-spinner></div>
-		</div>
-		<div uk-scrollspy="target: > div; cls:uk-animation-slide-bottom-small; delay: 400">
-			<div ng-hide='$ctrl.api.config.state.loading' ng-repeat='i in $ctrl.model' style="margin-top: 5px" class="ex-boundary">
-				<div class="uk-child-width-1-4" uk-grid>
-					<div class="uk-width-auto">
-						<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="/assets/group.svg"> 
-					</div>
-					<div class="uk-width-1-2">
-						<p class="uk-panel uk-panel-box uk-text-truncate">
-							{{i.name}} &middot; <small>{{i.description}}</small>
-						</p>
-					</div>
-					<div class="uk-text-right uk-width-expand">
-						<a href="javascript:void(0)" ng-click='$ctrl.view(i)' class="uk-button uk-button-default uk-button-small" style="border-radius: 7px">JOIN</a>
+		<handler bind="group-list-not-own" >
+			<div ng-show='$ctrl.api.config.state.loading' class="uk-text-center">
+				<div uk-spinner></div>
+			</div>
+			<div uk-scrollspy="target: > div; cls:uk-animation-slide-bottom-small; delay: 400">
+				<div ng-hide='$ctrl.api.config.state.loading' ng-repeat='i in $ctrl.model' style="margin-top: 5px" class="ex-boundary">
+					<div class="uk-child-width-1-4" uk-grid>
+						<div class="uk-width-auto">
+							<img  class="uk-border-circle uk-animation-scale-up" width="25" height="25" src="/assets/group.svg"> 
+						</div>
+						<div class="uk-width-1-2">
+							<p class="uk-panel uk-panel-box uk-text-truncate">
+								{{i.name}} &middot; <small>{{i.description}}</small>
+							</p>
+						</div>
+						<div class="uk-text-right uk-width-expand">
+							<a href="javascript:void(0)" ng-click='$ctrl.view(i)' class="uk-button uk-button-default uk-button-small" style="border-radius: 7px">JOIN</a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</handler>
+		</handler>
+	</div>
 
 </div>
 

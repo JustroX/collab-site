@@ -15,6 +15,71 @@ app.controller("groupController",function($scope,$http,$location,$timeout,$rootS
 	$scope.$on('ready',function()
 	{
 		$scope.group.load($routeParams.id);
+
+		if($scope.tour) return;
+
+				let tour = new Tour({
+		  storage: false,
+		  steps: [
+		  {
+		    orphan: true,
+		    delay: 5000,
+		    title: "Introduction",
+		    backdrop: true,
+		    content: `<b>`+$scope.SESSION_USER.name.first+` , welcome to your first group!</b> <p>Groups are where the main activity in the website is happening. Groups specialize in various topics and offer modules related to it.</p>`
+		  },
+		  {
+		  	element: "#group-feed-tour",
+		  	title: "Feed",
+		  	backdrop: true,
+		  	content: `<p>The group feed contains the latest updates and activities in the groups.</p>
+		  			  <p> Pinned posts are where the group moderators welcome new members and establish group rules.</p> `
+
+		  },
+		  {
+		  	element: '#group-feed-editor-container',
+		  	title: "Post",
+		  	content: `<p> In all groups, it is expected that all new members introduce themselves and be interactive. </p>
+		  			<p>So go be engaging and write something. Don't be shy, group moderators are kind 😊.</p> <small>Click next only if you are done posting.</small>`,
+		  },
+		  {
+		  	element: '#group-navigation-tour',
+		  	title: "Navigation",
+		  	backdrop : true,
+		  	content: `And lastly, Here are the group's navigational links. Here is where you can access the group's modules.`,
+		  	template: `<div class='popover tour'>
+						  <div class='arrow'></div>
+						  <h3 class='popover-title'></h3>
+						  <div class='popover-content'></div>
+						  <div class='popover-navigation'>
+						    <button class='btn btn-default' data-role='end'>End tour</button>
+						  </div>
+						</div>` 
+		  },
+		],
+
+		onEnd: function()
+		{
+			$http.get('/api/user/tour?path=group').then((res)=>
+				{
+					if(!$scope.SESSION_USER.tour) $scope.SESSION_USER.tour = {};
+					$scope.SESSION_USER.tour.group = true;
+				});
+		}
+
+		});
+
+
+		if(!($scope.SESSION_USER.tour && $scope.SESSION_USER.tour.group))
+		{
+			// Initialize the tour
+			tour.init();
+			$scope.tour = tour;
+
+			// Start the tour
+			tour.start();
+		}
+
 	});
 	$scope.group  = modelService.new({id:"group-model",model:"group"});
 	$scope.group_id = $routeParams.id;

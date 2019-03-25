@@ -36,7 +36,139 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 			}
 		});
 
+
+		//tour
+		if($scope.tour) 
+		{
+			console.log(duplicate);
+			return;
+		}
+
+
+		let tour = new Tour({
+		  storage: false,
+		  steps: 
+		  [
+		  {
+		    orphan: true,
+		    delay: 2000,
+		    title: "",
+		    backdrop: true,
+		    content: `<h3>Welcome to the Guild!</h3><p style='padding: 10px'> Hello `+$scope.SESSION_USER.name.first+`, <br> To introduce you with the website's features and capabilities, here's a quick tour. </p>`
+		  },
+		  {
+		  	element: "#dashboard-feed-tour",
+		  	backdrop: true,
+		  	title: "Feed",
+		  	placement: 'auto right',
+		  	content: `Here is the feed where you can see the latest updates and posts of all people and events you follow.`
+		  },
+		  {
+		  	element: "#feed-editor-container",
+		  	// backdrop: true,
+		  	title: "Post",
+		  	placement: 'auto right',
+		  	content: `<p>Here is the content editor where you can post your ideas / inquiries or anything you want.</p> <p> To check that everything is working, go ahead and share something about yourself. </p> <pre style='padding: 5px;'>Hello, I am `+$scope.SESSION_USER.name.first+` and I like ... </pre> <p>Please click next if you've already posted.</p> `
+		  },
+		  {
+		  	element: '#dashboard-navigation-tour',
+		  	backdrop: true,
+		  	title: "Navigation",
+		  	placement: 'auto right',
+		  	content: `Here is the main navigation.`
+		  },
+		  {
+		  	element: '#dashboard-navigation-feed-tour',
+		  	backdrop: true,
+		  	title: "Feed Navigation",
+		  	placement: 'auto right',
+		  	content: `You can check out your main feed by clicking this.`
+		  },
+		  {
+		  	element: '#dashboard-navigation-group-tour',
+		  	backdrop: true,
+		  	title: "Group Navigation",
+		  	placement: 'auto right',
+		  	content: `Join or View your groups by clicking here.`
+		  },
+		  {
+		  	element: '#dashboard-navigation-discover-tour',
+		  	backdrop: true,
+		  	title: "Discover Navigation",
+		  	placement: 'auto right',
+		  	content: `And discover latest events and contests by clicking here.`
+		  },
+		  {
+		  	element: '#dashboard-navigation-group-tour',
+		  	// backdrop: true,
+		  	title: "View groups",
+		  	placement: 'auto right',
+		  	content: `Now, let's go to the groups. Click the <b><i class="fas fa-campground"></i> Groups</b> text`,
+	  		template: `<div class='popover tour'>
+					  <div class='arrow'></div>
+					  <h3 class='popover-title'></h3>
+					  <div class='popover-content'></div>
+					  <div class='popover-navigation'>
+					    </div>
+					</div>`
+		  	// duration: 4500,
+		  },
+		  {
+		  	orphan: true,
+		  	backdrop: true,
+		  	delay: 2000,
+		  	title: "Groups",
+		  	// placement: 'auto right',
+		  	content: `<p> Groups are the integral part of Bicol Programmer's Guild. It is where most of the action is happening. </p>
+		  			<p> Groups contain <b>modules</b>, <b> field-specific community </b> and connection opportunities.  </p>`
+		  },
+		  {
+		  	element : "#dashboard-group-not-own-tour",
+		  	backdrop: true,
+		  	title: "Discover Groups",
+		  	content: "Here you can see the list of groups available to you. "
+		  },
+		  {
+		  	element : "#dashboard-group-not-own-tour",
+		  	// backdrop: true,
+		  	placement: "right",
+		  	title: "Join Group",
+		  	content: "Go ahead and join the Beginner's Hub. ",
+		  	template: `<div class='popover tour'>
+						  <div class='arrow'></div>
+						  <h3 class='popover-title'></h3>
+						  <div class='popover-content'></div>
+						  <div class='popover-navigation'>
+						    <button class='btn btn-default' data-role='end'>End tour</button>
+						  </div>
+						</div>`
+		  },
+
+		],
+
+		onEnd: function()
+			{
+				console.log("I am called.");
+				$http.get('/api/user/tour?path=dashboard').then((res)=>
+				{
+					if(!$scope.SESSION_USER.tour) $scope.SESSION_USER.tour = {};
+					$scope.SESSION_USER.tour.dashboard = true;
+				})
+			}
+		});
+
+
+		// Start the tour
+		if(!($scope.SESSION_USER.tour && $scope.SESSION_USER.tour.dashboard))
+		{
+			// Initialize the tour
+			tour.init();
+			$scope.tour = tour;
+			tour.start();
+		}
+
 	});
+
 
 	$scope.feed_editor_active = false;
 
@@ -370,6 +502,10 @@ app.controller("dashboardController",function($scope,$http,$location,$timeout,$r
 
 	subpage.onload("group",function()
 	{
+		if($scope.tour && $scope.tour.getCurrentStep() ==7 )
+		{
+			$scope.tour.next();
+		}
 		 groupList.config.param ="users.user="+session.getUser()._id;
 		 groupListExplore.config.param ="users.user=ne_"+session.getUser()._id;
 		 groupList.load();
