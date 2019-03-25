@@ -78,7 +78,8 @@ router.put('/:id', function(req,res,next)
 
 		let proceed = function(){
 
-			let old_name = user.name;
+			let old_name = JSON.parse(JSON.stringify(user.name));
+			// console.log(old_name.first);
 
 			for(let i in query)
 			{
@@ -92,7 +93,7 @@ router.put('/:id', function(req,res,next)
 			if(req.body.password)
 			{
 				console.log(user);
-				if( !user.validPassword(req.body.old_password) && old_name )
+				if( !user.validPassword(req.body.old_password) && old_name.first )
 					return res.send({err: "Password is incorrect" , code: 403});
 				user.password = user.generateHash(req.body.password);
 			}
