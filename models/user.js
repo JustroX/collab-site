@@ -171,8 +171,7 @@ module.exports =
 		},
 		validPassword: function(password)
 		{
-			console.log(password,this.private.local.password);
-			 if(this.private.local.password) {
+			 if(this.private.local.password && password) {
 		        return bcrypt.compareSync(password, this.private.local.password);
 		    } else {
 		        return false;

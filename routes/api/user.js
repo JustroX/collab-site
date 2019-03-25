@@ -90,7 +90,7 @@ router.put('/:id', function(req,res,next)
 			if(req.body.password)
 			{
 				console.log(user);
-				if( !user.validPassword(req.body.old_password) )
+				if( !user.validPassword(req.body.old_password) && user.name )
 					return res.send({err: "Password is incorrect" , code: 403});
 				user.password = user.generateHash(req.body.password);
 			}
