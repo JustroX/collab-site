@@ -26,7 +26,7 @@ var configDB = DATABASE_URI  || require('./config/database.js');
 var MongoStore = require('connect-mongo')(session);
 mongoose.connect(configDB.url);
 
-require('./config/passport.js')(passport);
+require('./passport.js')(passport);
 
 app.use(urlencodedParser);
 app.use(cookieParser());
