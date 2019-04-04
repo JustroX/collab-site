@@ -22,7 +22,7 @@ var urlencodedParser = bodyParser.urlencoded({extended: true});
 require("./models/model_divider.js").init();
 
 
-var configDB = DATABASE_URI  || require('./config/database.js');
+var configDB = { url: DATABASE_URI}  || require('./config/database.js');
 var MongoStore = require('connect-mongo')(session);
 mongoose.connect(configDB.url);
 
